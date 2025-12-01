@@ -50,7 +50,7 @@ CREATE TABLE `nguoi_dung` (
 INSERT INTO `nguoi_dung` (`id`, `ho_ten`, `email`, `mat_khau`, `so_dien_thoai`, `id_quyen`) VALUES
 ('ND1', 'Nguyen Van A', 'a@gmail.com', '123456', '0123456789', 'Q2'),
 ('ND2', 'Tran Thi B', 'b@gmail.com', '123456', '0987654321', 'Q2'),
-('ND3', 'Admin', 'admin@gmail.com', 'admin', '0123000000', 'Q1');
+('ND3', 'Admin', 'admin@gmail.com', 'admin', '$2y$10$UB2c7uUxIj1XGsYQc2rKb.RKxrNPrY3cynCqrZR7O1r2.4Bo.Shw.', 'Q1');
 
 -- --------------------------------------------------------
 -- Table structure for table `bai_hoc`
