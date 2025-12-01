@@ -1,0 +1,165 @@
+1. Bảng phan_quyen
+Chức năng:
+
+Quản lý vai trò người dùng trong hệ thống (Admin, Giáo viên, Người học…).
+
+Tên cột	Kiểu dữ liệu	Mô tả
+id	INT PK AI	Mã quyền
+ten_quyen	VARCHAR(50)	Tên quyền, ví dụ: “admin”, “hoc_vien”
+2. Bảng nguoi_dung
+Chức năng:
+
+Lưu thông tin tài khoản người dùng và phân quyền để đăng nhập, thi, quản lý.
+
+Tên cột	Kiểu dữ liệu	Mô tả
+id	INT PK AI	Mã người dùng
+ho_ten	VARCHAR(100)	Họ tên
+email	VARCHAR(150) UNIQUE	Email đăng nhập
+mat_khau	VARCHAR(255)	Mật khẩu (đã mã hóa)
+so_dien_thoai	VARCHAR(20)	Số điện thoại
+anh_dai_dien	VARCHAR(255)	Ảnh đại diện
+id_quyen	INT FK	Khóa tới bảng phan_quyen
+ngay_tao	DATETIME	Ngày tạo tài khoản
+3. Bảng bai_hoc
+Chức năng:
+
+Lưu danh sách bài học, dùng để gắn với đề thi tương ứng.
+
+Tên cột	Kiểu dữ liệu	Mô tả
+id	INT PK AI	Mã bài học
+tieu_de	VARCHAR(255)	Tiêu đề bài học
+noi_dung	TEXT	Nội dung mô tả
+anh_bai_hoc	VARCHAR(255)	Thumbnail
+link_bai_hoc	VARCHAR(255)	File/video bài học
+ngay_tao	DATETIME	Ngày tạo
+4. Bảng tap_tin_bai_hoc
+Chức năng:
+
+Quản lý nhiều tài liệu/file/video đính kèm cho 1 bài học.
+
+Tên cột	Kiểu dữ liệu	Mô tả
+id	INT PK AI	
+id_bai_hoc	INT FK	Thuộc bài học nào
+duong_dan	VARCHAR(255)	Đường dẫn file
+loai_tap_tin	VARCHAR(20)	pdf/image/video
+5. Bảng de_thi
+Chức năng:
+
+Lưu thông tin đề thi, cấu trúc, thời gian và thang điểm (10, 100, 200…).
+
+Tên cột	Kiểu dữ liệu	Mô tả
+id	INT PK AI	Mã đề thi
+ten_de_thi	VARCHAR(255)	Tên đề thi
+mo_ta	TEXT	Mô tả
+thoi_gian	INT	Thời gian làm bài (phút)
+id_bai_hoc	INT FK	Đề thi gắn với bài học
+thang_diem	INT DEFAULT 10	Tổng điểm của đề thi
+ngay_tao	DATETIME	Ngày tạo
+6. Bảng cau_hoi
+Chức năng:
+
+Chứa toàn bộ câu hỏi của từng đề thi.
+
+Tên cột	Kiểu dữ liệu	Mô tả
+id	INT PK AI	
+id_de_thi	INT FK	Thuộc đề thi nào
+noi_dung	TEXT	Nội dung câu hỏi
+hinh_anh	VARCHAR(255)	Ảnh minh họa
+muc_do	VARCHAR(20)	Dễ / Trung bình / Khó
+7. Bảng lua_chon
+Chức năng:
+
+Chứa danh sách đáp án của từng câu hỏi.
+
+Tên cột	Kiểu dữ liệu	Mô tả
+id	INT PK AI	
+id_cau_hoi	INT FK	Thuộc câu hỏi nào
+noi_dung	TEXT	Nội dung đáp án
+dung_sai	TINYINT(1)	1 = đúng, 0 = sai
+8. Bảng ket_qua_thi
+Chức năng:
+
+Lưu điểm tổng cuối cùng sau khi người dùng hoàn thành bài thi.
+
+Tên cột	Kiểu dữ liệu	Mô tả
+id	INT PK AI	
+id_nguoi_dung	INT FK	Người làm bài
+id_de_thi	INT FK	Bài thi đã làm
+diem_so	FLOAT	Điểm tổng
+thoi_gian_nop	DATETIME	Thời điểm nộp bài
+9. Bảng lich_su_lam_bai
+Chức năng:
+
+Lưu lại từng câu hỏi người dùng chọn để:
+
+Tính điểm
+
+Xem lại đáp án
+
+Review sau khi thi
+
+Tên cột	Kiểu dữ liệu	Mô tả
+id	INT PK AI	
+id_ket_qua	INT FK	Thuộc kết quả thi
+id_cau_hoi	INT FK	Câu hỏi nào
+id_lua_chon	INT FK	Đáp án đã chọn
+dung_sai	TINYINT(1)	1 đúng – 0 sai
+
+II. Chức năng tổng thể của hệ thống
+🔹 Quản lý người dùng
+
+Đăng ký / đăng nhập
+
+Phân quyền Admin / User
+
+🔹 Hệ thống bài học
+
+Xem bài học
+
+Xem video, tài liệu PDF
+
+Tải tài liệu kèm theo
+
+🔹 Hệ thống đề thi
+
+Tạo đề
+
+Gán bài học
+
+Chọn thang điểm (10 / 100 / 200…)
+
+Quản lý thời gian
+
+🔹 Hệ thống câu hỏi
+
+Thêm / sửa / xóa câu hỏi
+
+Import hình ảnh
+
+Phân loại mức độ
+
+Quản lý đáp án
+
+🔹 Làm bài trắc nghiệm
+
+Đồng hồ đếm ngược
+
+Tự động lưu tiến trình
+
+Nộp bài
+
+Tính điểm dựa vào tỷ lệ đúng
+
+🔹 Xem kết quả
+
+Điểm tổng
+
+Review từng câu
+
+Thống kê đúng/sai
+
+🔹 Lịch sử học tập
+
+Xem lại các đề đã làm
+
+Xem tiến bộ theo thời gian
