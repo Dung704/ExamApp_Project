@@ -30,7 +30,7 @@ $ngay_tao     = $_SESSION['ngay_tao'] ?? '---';
     </div>
 
     <div class="text-center mt-4">
-        <a href="#" class="btn btn-primary">Chỉnh sửa thông tin</a>
+        <a href="./chinh_sua_thong_tin.php" class="btn btn-primary">Chỉnh sửa thông tin</a>
     </div>
 </div>
 
