@@ -1,6 +1,6 @@
 <?php
 session_start(); // Bắt đầu session
-include_once('../app/config.php');
+include_once('_includes/config.php');
 $page = isset($_GET['page']) ? $_GET['page'] : null;
 // Nếu chưa có page, redirect sang dashboard
 if (!$page) {

@@ -1,8 +1,8 @@
 <?php
-session_start();
-include_once('../app/config.php');
+// session_start();
+include_once('../app/config/config.php');
 $page_title = 'Register';
-include('includes/header.php');
+// include('includes/header.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // 1. Lấy dữ liệu từ form
@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["Ma_nhan_vien"] = $user["Ma_nhan_vien"];
 
         // 4. Chuyển hướng theo quyền
-        header("Location: index.php");
+        header("Location: index_admin.php");
         exit();
     } else {
         echo "<div class='alert alert-danger text-center'>Sai username hoặc password!</div>";
