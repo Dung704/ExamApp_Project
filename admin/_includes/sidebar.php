@@ -1,6 +1,6 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
     <!-- Sidebar - Brand -->
-    <?php if (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q1'): ?>
+    <?php if (isset($_SESSION['id_quyen']) && $_SESSION['id_quyen'] == 'Q1'): ?>
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index_admin.php?page=dashboard">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
@@ -36,7 +36,7 @@
     <!-- Divider -->
     <hr class="sidebar-divider" />
 
-    <?php if (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q1'): ?>
+    <?php if (isset($_SESSION['id_quyen']) && $_SESSION['id_quyen'] == 'Q1'): ?>
         <!-- Admin: full menu -->
         <div class="sidebar-heading">Quản lý</div>
 
@@ -106,7 +106,7 @@
             </div>
         </li>
 
-    <?php elseif (isset($_SESSION['ma_quyen']) && $_SESSION['ma_quyen'] == 'Q2'): ?>
+    <?php elseif (isset($_SESSION['id_quyen']) && $_SESSION['id_quyen'] == 'Q2'): ?>
         <!-- Nhân viên: chỉ danh sách hóa đơn -->
         <div class="sidebar-heading">Quản lý</div>
         <li class="nav-item">
@@ -147,3 +147,4 @@
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
 </ul>
+<script src="_assets\admin\js\sb-admin-2.min.js"></script>

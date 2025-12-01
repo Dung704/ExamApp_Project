@@ -3,16 +3,12 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 01, 2025 at 09:04 AM
+-- Generation Time: Dec 01, 2025 at 10:06 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
--- Xóa database nếu đã tồn tại
 DROP DATABASE IF EXISTS quanlydethitracnghiem;
 CREATE DATABASE quanlydethitracnghiem CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 USE quanlydethitracnghiem;
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +20,9 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
-
+--
+-- Database: `quanlydethitracnghiem`
+--
 
 -- --------------------------------------------------------
 
@@ -38,16 +36,17 @@ CREATE TABLE `bai_hoc` (
   `noi_dung` text DEFAULT NULL,
   `anh_bai_hoc` varchar(255) DEFAULT NULL,
   `link_bai_hoc` varchar(255) DEFAULT NULL,
-  `ngay_tao` datetime DEFAULT current_timestamp()
+  `ngay_tao` datetime DEFAULT current_timestamp(),
+  `id_danh_muc` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `bai_hoc`
 --
 
-INSERT INTO `bai_hoc` (`id`, `tieu_de`, `noi_dung`, `anh_bai_hoc`, `link_bai_hoc`, `ngay_tao`) VALUES
-('BH1', 'Bài học 1', 'Nội dung bài học 1', 'bai1.jpg', 'link1.html', '2025-12-01 04:37:38'),
-('BH2', 'Bài học 2', 'Nội dung bài học 2', 'bai2.jpg', 'link2.html', '2025-12-01 04:37:38');
+INSERT INTO `bai_hoc` (`id`, `tieu_de`, `noi_dung`, `anh_bai_hoc`, `link_bai_hoc`, `ngay_tao`, `id_danh_muc`) VALUES
+('BH1', 'Bài học 1', 'Nội dung bài học 1', 'bai1.jpg', 'link1.html', '2025-12-01 04:37:38', 3),
+('BH2', 'Bài học 2', 'Nội dung bài học 2', 'bai2.jpg', 'link2.html', '2025-12-01 04:37:38', 1);
 
 -- --------------------------------------------------------
 
@@ -116,7 +115,7 @@ CREATE TABLE `de_thi` (
 
 INSERT INTO `de_thi` (`id`, `id_danh_muc`, `ten_de_thi`, `mo_ta`, `thoi_gian`, `id_bai_hoc`, `thang_diem`, `ngay_tao`) VALUES
 ('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 30, 'BH1', 10, '2025-12-01 04:37:38'),
-('DT2', 1, 'Đề thi 2', 'Mô tả đề thi 2', 45, 'BH2', 10, '2025-12-01 04:37:38');
+('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 'BH2', 10, '2025-12-01 04:37:38');
 
 -- --------------------------------------------------------
 
@@ -212,11 +211,10 @@ CREATE TABLE `nguoi_dung` (
 --
 
 INSERT INTO `nguoi_dung` (`id`, `ho_ten`, `email`, `mat_khau`, `so_dien_thoai`, `anh_dai_dien`, `id_quyen`, `ngay_tao`) VALUES
-('ND1', 'Hv', 'hv@gmail.com', '$2y$10$IKwGeijwumwxkIJRQdIvuOiEXqHAv4iYbNhy3XWjjyDtKErCpxYIy', '0123456789', NULL, 'Q3', '2025-12-01 04:37:38'),
-('ND2', 'Gv', 'gv@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0987654321', NULL, 'Q2', '2025-12-01 04:37:38'),
-('ND3', 'Admin', 'admin@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0123000000', NULL, 'Q1', '2025-12-01 04:37:38'),
+('ND1', 'Hv', 'hv@gmail.com', '$2y$10$IKwGeijwumwxkIJRQdIvuOiEXqHAv4iYbNhy3XWjjyDtKErCpxYIy', '0123456789', '1764572609_DeGK_04.png', 'Q3', '2025-12-01 04:37:38'),
+('ND2', 'Gv', 'gv@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0987654321', '1764572609_DeGK_04.png', 'Q2', '2025-12-01 04:37:38'),
+('ND3', 'Admin', 'admin@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0123000000', '1764572609_DeGK_04.png', 'Q1', '2025-12-01 04:37:38'),
 ('ND6', 'Trúc Mai', 'trucmai124@gmail.com', '$2y$10$/eKlII/ePr30VH0Cnj/zxO07ejKnivbp33XNTLCz3uWBWk.cGJyIO', '35341962145', '1764572136_329153497_1527737297736766_819603327207651751_n.jpg', 'Q2', '2025-12-01 07:01:15');
-
 -- --------------------------------------------------------
 
 --
@@ -236,6 +234,7 @@ INSERT INTO `phan_quyen` (`id`, `ten_quyen`) VALUES
 ('Q1', 'admin'),
 ('Q2', 'giang_vien'),
 ('Q3', 'hoc_vien');
+
 -- --------------------------------------------------------
 
 --
@@ -265,7 +264,8 @@ INSERT INTO `tap_tin_bai_hoc` (`id`, `id_bai_hoc`, `duong_dan`, `loai_tap_tin`) 
 -- Indexes for table `bai_hoc`
 --
 ALTER TABLE `bai_hoc`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_baihoc_danhmuc` (`id_danh_muc`);
 
 --
 -- Indexes for table `cau_hoi`
@@ -347,6 +347,12 @@ ALTER TABLE `danh_muc_de_thi`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `bai_hoc`
+--
+ALTER TABLE `bai_hoc`
+  ADD CONSTRAINT `fk_baihoc_danhmuc` FOREIGN KEY (`id_danh_muc`) REFERENCES `danh_muc_de_thi` (`id`);
 
 --
 -- Constraints for table `cau_hoi`

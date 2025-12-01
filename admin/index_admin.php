@@ -1,13 +1,15 @@
 <?php
-session_start(); // Bắt đầu session
+session_start();
 include_once('_includes/config.php');
+
 $page = isset($_GET['page']) ? $_GET['page'] : null;
-// Nếu chưa có page, redirect sang dashboard
+
+// Nếu chưa có page, redirect sang list_bill
 if (!$page) {
   header('Location: index_admin.php?page=list_bill');
   exit();
 }
-// --- Mảng ánh xạ page => file ---
+
 $pages = [
   'list_product' => 'product_manager/list_product.php',
   'add_product' => 'product_manager/add_product.php',
@@ -34,6 +36,7 @@ $pages = [
   'add_account_employee' => 'authorization_acount_manager/add_account_employee.php',
   'dashboard' => 'dashboard_manager/dashboard.php'
 ];
+
 // Kiểm tra page hợp lệ
 $isValidPage = isset($pages[$page]) && file_exists($pages[$page]);
 $q2_allowed_pages = [
@@ -46,7 +49,6 @@ $q2_allowed_pages = [
 
 // Kiểm tra đã đăng nhập chưa
 if (!isset($_SESSION['email'])) {
-  include('../user/header.php');
   include('../user/login.php'); // chưa đăng nhập → bắt login
   exit();
 }
@@ -70,6 +72,7 @@ if ($_SESSION['id_quyen'] == 'Q2') {
 }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -83,27 +86,28 @@ if ($_SESSION['id_quyen'] == 'Q2') {
   <title>Admin</title>
 
   <!-- Custom fonts for this template-->
-  <link href="../_assets/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
+  <link href="_assets/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
   <link
     href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
     rel="stylesheet" />
 
   <!-- Custom styles for this template-->
-  <link href="../_assets/admin/css/sb-admin-2.min.css" rel="stylesheet" />
+  <link href="_assets/admin/css/sb-admin-2.min.css" rel="stylesheet" />
 
   <!-- Bootstrap core JavaScript-->
-  <script src="../_assets/admin/vendor/jquery/jquery.min.js"></script>
-  <script src="../_assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="_assets/admin/vendor/jquery/jquery.min.js"></script>
+  <script src="_assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Core plugin JavaScript-->
-  <script src="../_assets/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="_assets/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
   <!-- Nếu có dashboard dùng biểu đồ -->
-  <script src="../_assets/admin/custom_js/chart.js"></script>
+  <script src="_assets/admin/custom_js/chart.js"></script>
 
   <!-- jQuery UI cho autocomplete -->
-  <link rel="stylesheet" href="../_assets/admin/custom_js/jquery-ui.css">
-  <script src="../_assets/admin/custom_js/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="_assets/admin/custom_js/jquery-ui.css">
+  <script src="_assets/admin/custom_js/jquery-ui.min.js"></script>
+
 </head>
 
 <?php if ($isValidPage): ?>
@@ -146,8 +150,8 @@ if ($_SESSION['id_quyen'] == 'Q2') {
     <a class="scroll-to-top rounded" href="#page-top">
       <i class="fas fa-angle-up"></i>
     </a>
-    <!-- Logout Modal-->
-    <?php include('_includes/logout_modal.php') ?>
+
+
   </body>
 
 <?php else: ?>
@@ -157,6 +161,5 @@ if ($_SESSION['id_quyen'] == 'Q2') {
 <?php endif; ?>
 
 </html>
-
 <!-- Custom scripts for all pages-->
-<script src="../_assets/admin/js/sb-admin-2.min.js"></script>
+<script src="_assets\admin\js\sb-admin-2.min.js"></script>
