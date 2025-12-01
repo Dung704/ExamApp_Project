@@ -45,24 +45,25 @@ $q2_allowed_pages = [
 ];
 
 // Kiểm tra đã đăng nhập chưa
-if (!isset($_SESSION['username'])) {
-  include('_includes/_login.php'); // chưa đăng nhập → bắt login
+if (!isset($_SESSION['email'])) {
+  include('../user/header.php');
+  include('../user/login.php'); // chưa đăng nhập → bắt login
   exit();
 }
 
 // Kiểm tra quyền
-if (!isset($_SESSION['ma_quyen'])) {
+if (!isset($_SESSION['id_quyen'])) {
   include('./_includes/index_404.php');
   exit();
 }
 
-if ($_SESSION['ma_quyen'] == 'Q2') {
+if ($_SESSION['id_quyen'] == 'Q2') {
   // Q2 chỉ được phép truy cập các page trong danh sách
   if (!in_array($page, $q2_allowed_pages)) {
     include('./_includes/index_404.php');
     exit();
   }
-} elseif ($_SESSION['ma_quyen'] != 'Q1') {
+} elseif ($_SESSION['id_quyen'] != 'Q1') {
   // Những quyền khác ngoài Q1 và Q2 → 404
   include('./_includes/index_404.php');
   exit();

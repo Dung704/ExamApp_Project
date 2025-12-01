@@ -1,8 +1,5 @@
  <?php
-    $maNV = $_SESSION["Ma_nhan_vien"];
-    $query_TenTK = "select Ten_nhan_vien from nhan_vien where Ma_nhan_vien = '$maNV'";
-    $query_TenTK_result = mysqli_query($conn, $query_TenTK);
-    $tenTK = mysqli_fetch_assoc($query_TenTK_result);
+    $tenNV = $_SESSION["ho_ten"];
     ?>
  <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
      <!-- Sidebar Toggle (Topbar) -->
