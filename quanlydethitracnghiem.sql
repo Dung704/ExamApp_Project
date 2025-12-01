@@ -34,9 +34,27 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `quanlydethitracnghiem`
---
+-- --------------------------------------------------------
+-- Table structure for table `nguoi_dung`
+-- --------------------------------------------------------
+CREATE TABLE `nguoi_dung` (
+  `id` varchar(10) NOT NULL,
+  `ho_ten` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `mat_khau` varchar(255) NOT NULL,
+  `so_dien_thoai` varchar(20) DEFAULT NULL,
+  `anh_dai_dien` varchar(255) DEFAULT NULL,
+  `id_quyen` varchar(10) DEFAULT NULL,
+  `ngay_tao` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  KEY `fk_nguoidung_quyen` (`id_quyen`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `nguoi_dung` (`id`, `ho_ten`, `email`, `mat_khau`, `so_dien_thoai`, `id_quyen`) VALUES
+('ND1', 'Nguyen Van A', 'a@gmail.com', '123456', '0123456789', 'Q2'),
+('ND2', 'Tran Thi B', 'b@gmail.com', '123456', '0987654321', 'Q2'),
+('ND3', 'Admin', 'admin@gmail.com', 'admin', '$2y$10$UB2c7uUxIj1XGsYQc2rKb.RKxrNPrY3cynCqrZR7O1r2.4Bo.Shw.', 'Q1');
 
 -- --------------------------------------------------------
 
