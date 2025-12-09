@@ -19,6 +19,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['id_quyen'] = $row['id_quyen'];
                 $_SESSION['anh_dai_dien'] = $row['anh_dai_dien'];
                 $_SESSION['ngay_tao'] = $row['ngay_tao'];
+                $_SESSION['email'] = $row['email'];
+                $_SESSION['so_dien_thoai'] = $row['so_dien_thoai'];
                 header("Location: index.php");
                 exit();
             } else {
