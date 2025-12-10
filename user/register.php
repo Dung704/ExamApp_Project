@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mat_khau = isset($_POST['mat_khau']) ? trim($_POST['mat_khau']) : '';
     $re_mat_khau = isset($_POST['re_mat_khau']) ? trim($_POST['re_mat_khau']) : '';
     $so_dien_thoai = isset($_POST['so_dien_thoai']) ? trim($_POST['so_dien_thoai']) : '';
-    $id_quyen = "Q2"; 
+    $id_quyen = "Q2";
     $ngay_tao = date("Y-m-d H:i:s");
 
     if ($mat_khau !== $re_mat_khau) {
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $res = mysqli_query($dbc, "SELECT id FROM nguoi_dung ORDER BY id DESC LIMIT 1");
             if (mysqli_num_rows($res) > 0) {
                 $row = mysqli_fetch_assoc($res);
-                $last_id = $row['id']; 
+                $last_id = $row['id'];
                 $num = intval(substr($last_id, 2)) + 1;
                 $new_id = "ND" . $num;
             } else {

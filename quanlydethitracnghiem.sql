@@ -211,9 +211,9 @@ CREATE TABLE `nguoi_dung` (
 --
 
 INSERT INTO `nguoi_dung` (`id`, `ho_ten`, `email`, `mat_khau`, `so_dien_thoai`, `anh_dai_dien`, `id_quyen`, `ngay_tao`) VALUES
-('ND1', 'Hv', 'hv@gmail.com', '$2y$10$IKwGeijwumwxkIJRQdIvuOiEXqHAv4iYbNhy3XWjjyDtKErCpxYIy', '0123456789', NULL, 'Q3', '2025-12-01 04:37:38'),
-('ND2', 'Gv', 'gv@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0987654321', NULL, 'Q2', '2025-12-01 04:37:38'),
-('ND3', 'Admin', 'admin@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0123000000', NULL, 'Q1', '2025-12-01 04:37:38'),
+('ND1', 'Hv', 'hv@gmail.com', '$2y$10$IKwGeijwumwxkIJRQdIvuOiEXqHAv4iYbNhy3XWjjyDtKErCpxYIy', '0123456789', '1764572609_DeGK_04.png', 'Q3', '2025-12-01 04:37:38'),
+('ND2', 'Gv', 'gv@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0987654321', '1764572609_DeGK_04.png', 'Q2', '2025-12-01 04:37:38'),
+('ND3', 'Admin', 'admin@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0123000000', '1764572609_DeGK_04.png', 'Q1', '2025-12-01 04:37:38'),
 ('ND6', 'Trúc Mai', 'trucmai124@gmail.com', '$2y$10$/eKlII/ePr30VH0Cnj/zxO07ejKnivbp33XNTLCz3uWBWk.cGJyIO', '35341962145', '1764572136_329153497_1527737297736766_819603327207651751_n.jpg', 'Q2', '2025-12-01 07:01:15');
 -- --------------------------------------------------------
 
