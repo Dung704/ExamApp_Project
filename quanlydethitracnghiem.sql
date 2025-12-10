@@ -203,6 +203,9 @@ CREATE TABLE `nguoi_dung` (
   `so_dien_thoai` varchar(20) DEFAULT NULL,
   `anh_dai_dien` varchar(255) DEFAULT NULL,
   `id_quyen` varchar(10) DEFAULT NULL,
+    `ngay_sinh` date DEFAULT NULL,
+  `gioi_tinh` tinyint(1) DEFAULT NULL,
+  `dia_chi` varchar(255) DEFAULT NULL,
   `ngay_tao` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -214,7 +217,6 @@ INSERT INTO `nguoi_dung` (`id`, `ho_ten`, `email`, `mat_khau`, `so_dien_thoai`, 
 ('ND1', 'Hv', 'hv@gmail.com', '$2y$10$IKwGeijwumwxkIJRQdIvuOiEXqHAv4iYbNhy3XWjjyDtKErCpxYIy', '0123456789', '1764572609_DeGK_04.png', 'Q3', '2025-12-01 04:37:38'),
 ('ND2', 'Gv', 'gv@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0987654321', '1764572609_DeGK_04.png', 'Q2', '2025-12-01 04:37:38'),
 ('ND3', 'Admin', 'admin@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0123000000', '1764572609_DeGK_04.png', 'Q1', '2025-12-01 04:37:38'),
-('ND6', 'Trúc Mai', 'trucmai124@gmail.com', '$2y$10$/eKlII/ePr30VH0Cnj/zxO07ejKnivbp33XNTLCz3uWBWk.cGJyIO', '35341962145', '1764572136_329153497_1527737297736766_819603327207651751_n.jpg', 'Q2', '2025-12-01 07:01:15');
 -- --------------------------------------------------------
 
 --
@@ -232,8 +234,7 @@ CREATE TABLE `phan_quyen` (
 
 INSERT INTO `phan_quyen` (`id`, `ten_quyen`) VALUES
 ('Q1', 'admin'),
-('Q2', 'giang_vien'),
-('Q3', 'hoc_vien');
+('Q2', 'hoc_vien');
 
 -- --------------------------------------------------------
 
@@ -255,6 +256,20 @@ CREATE TABLE `tap_tin_bai_hoc` (
 INSERT INTO `tap_tin_bai_hoc` (`id`, `id_bai_hoc`, `duong_dan`, `loai_tap_tin`) VALUES
 ('TT1', 'BH1', 'file1.pdf', 'pdf'),
 ('TT2', 'BH2', 'file2.pdf', 'pdf');
+
+CREATE TABLE ket_qua_chi_tiet (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_ket_qua VARCHAR(10) NOT NULL,
+    id_cau_hoi VARCHAR(10) NOT NULL,
+    id_lua_chon VARCHAR(10) NOT NULL,
+
+    UNIQUE(id_ket_qua, id_cau_hoi),   -- Mỗi câu hỏi chỉ lưu 1 lần
+
+    FOREIGN KEY (id_ket_qua) REFERENCES ket_qua_thi(id),
+    FOREIGN KEY (id_cau_hoi) REFERENCES cau_hoi(id),
+    FOREIGN KEY (id_lua_chon) REFERENCES lua_chon(id)
+);
+
 
 --
 -- Indexes for dumped tables

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --sidebar-width: 200px;
+        --primary-color: #4f46e5;
+        --sidebar-bg: #1e293b;
+        --sidebar-hover: #334155;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f1f5f9;
+      }
+
+      /* Sidebar */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: var(--sidebar-width);
+        background: var(--sidebar-bg);
+        transition: all 0.3s;
+        z-index: 1000;
+        overflow-y: auto;
+      }
+
+      .sidebar.collapsed {
+        margin-left: calc(-1 * var(--sidebar-width));
+      }
+
+      .sidebar-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .sidebar-logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        text-decoration: none;
+      }
+
+      .sidebar-menu {
+        padding: 1rem 0;
+      }
+
+      .menu-item {
+        padding: 0.75rem 1.5rem;
+        color: #cbd5e1;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s;
+      }
+
+      .menu-item:hover {
+        background: var(--sidebar-hover);
+        color: white;
+      }
+
+      .menu-item.active {
+        background: var(--primary-color);
+        color: white;
+      }
+
+      .menu-item i {
+        width: 20px;
+        margin-right: 10px;
+      }
+
+      /* Main Content */
+      .main-content {
+        margin-left: var(--sidebar-width);
+        transition: all 0.3s;
+        min-height: 100vh;
+      }
+
+      .main-content.expanded {
+        margin-left: 0;
+      }
+
+      /* Topbar */
+      .topbar {
+        background: white;
+        padding: 1rem 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .toggle-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #64748b;
+      }
+
+      .user-profile {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+      }
+
+      /* Dashboard Content */
+      .dashboard-content {
+        padding: 2rem 1.5rem;
+      }
+
+      .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .stat-title {
+        color: #64748b;
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+      }
+
+      .stat-value {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #1e293b;
+      }
+
+      .chart-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-top: 1.5rem;
+      }
+
+      .table-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-top: 1.5rem;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .sidebar {
+          margin-left: calc(-1 * var(--sidebar-width));
+        }
+
+        .sidebar.active {
+          margin-left: 0;
+        }
+
+        .main-content {
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="#" class="sidebar-logo">
+          <i class="fas fa-crown"></i> AdminPro
+        </a>
+      </div>
+      <nav class="sidebar-menu">
+        <a href="#" class="menu-item active" onclick="loadModule('dashboard')">
+          <i class="fas fa-home"></i> Dashboard
+        </a>
+        <a href="#" class="menu-item" onclick="loadModule('users')">
+          <i class="fas fa-users"></i> Người dùng
+        </a>
+        <a href="#" class="menu-item" onclick="loadModule('products')">
+          <i class="fas fa-box"></i> Sản phẩm
+        </a>
+        <a href="#" class="menu-item" onclick="loadModule('orders')">
+          <i class="fas fa-shopping-cart"></i> Đơn hàng
+        </a>
+        <a href="#" class="menu-item" onclick="loadModule('analytics')">
+          <i class="fas fa-chart-line"></i> Thống kê
+        </a>
+        <a href="#" class="menu-item" onclick="loadModule('settings')">
+          <i class="fas fa-cog"></i> Cài đặt
+        </a>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+      <!-- Topbar -->
+      <div class="topbar">
+        <button class="toggle-btn" onclick="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="user-profile">
+          <span>Admin User</span>
+          <div class="user-avatar">A</div>
+        </div>
+      </div>
+
+      <!-- Dashboard Content -->
+      <div class="dashboard-content" id="moduleContent">
+        <h2 class="mb-4">Dashboard</h2>
+
+        <!-- Stats Cards -->
+        <div class="row g-3 mb-4">
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="stat-card">
+              <div
+                class="stat-icon"
+                style="background: #dbeafe; color: #3b82f6"
+              >
+                <i class="fas fa-users"></i>
+              </div>
+              <div class="stat-title">Tổng người dùng</div>
+              <div class="stat-value">2,543</div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="stat-card">
+              <div
+                class="stat-icon"
+                style="background: #dcfce7; color: #22c55e"
+              >
+                <i class="fas fa-box"></i>
+              </div>
+              <div class="stat-title">Sản phẩm</div>
+              <div class="stat-value">1,234</div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="stat-card">
+              <div
+                class="stat-icon"
+                style="background: #fef3c7; color: #f59e0b"
+              >
+                <i class="fas fa-shopping-cart"></i>
+              </div>
+              <div class="stat-title">Đơn hàng</div>
+              <div class="stat-value">856</div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="stat-card">
+              <div
+                class="stat-icon"
+                style="background: #fce7f3; color: #ec4899"
+              >
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+              <div class="stat-title">Doanh thu</div>
+              <div class="stat-value">$45K</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart -->
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="chart-card">
+              <h5 class="mb-3">Thống kê doanh thu</h5>
+              <canvas id="revenueChart" height="80"></canvas>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="chart-card">
+              <h5 class="mb-3">Hoạt động gần đây</h5>
+              <div class="list-group list-group-flush">
+                <div class="list-group-item border-0 px-0">
+                  <small class="text-muted">2 phút trước</small>
+                  <p class="mb-0">Đơn hàng mới #1234</p>
+                </div>
+                <div class="list-group-item border-0 px-0">
+                  <small class="text-muted">15 phút trước</small>
+                  <p class="mb-0">Người dùng mới đăng ký</p>
+                </div>
+                <div class="list-group-item border-0 px-0">
+                  <small class="text-muted">1 giờ trước</small>
+                  <p class="mb-0">Sản phẩm được cập nhật</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-card">
+          <h5 class="mb-3">Đơn hàng gần đây</h5>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Khách hàng</th>
+                  <th>Sản phẩm</th>
+                  <th>Giá trị</th>
+                  <th>Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>#1001</td>
+                  <td>Nguyễn Văn A</td>
+                  <td>iPhone 15 Pro</td>
+                  <td>$999</td>
+                  <td><span class="badge bg-success">Hoàn thành</span></td>
+                </tr>
+                <tr>
+                  <td>#1002</td>
+                  <td>Trần Thị B</td>
+                  <td>MacBook Air</td>
+                  <td>$1,299</td>
+                  <td><span class="badge bg-warning">Đang xử lý</span></td>
+                </tr>
+                <tr>
+                  <td>#1003</td>
+                  <td>Lê Văn C</td>
+                  <td>iPad Pro</td>
+                  <td>$799</td>
+                  <td><span class="badge bg-info">Đang giao</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script>
+      // Toggle Sidebar
+      function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar");
+        const mainContent = document.getElementById("mainContent");
+
+        if (window.innerWidth <= 768) {
+          sidebar.classList.toggle("active");
+        } else {
+          sidebar.classList.toggle("collapsed");
+          mainContent.classList.toggle("expanded");
+        }
+      }
+
+      // Load Module
+      function loadModule(module) {
+        const menuItems = document.querySelectorAll(".menu-item");
+        menuItems.forEach((item) => item.classList.remove("active"));
+        event.target.closest(".menu-item").classList.add("active");
+
+        const content = document.getElementById("moduleContent");
+        content.innerHTML = `
+                <h2 class="mb-4">${
+                  module.charAt(0).toUpperCase() + module.slice(1)
+                }</h2>
+                <div class="alert alert-info">
+                    Nội dung module ${module} sẽ được hiển thị ở đây.
+                    Bạn có thể tùy chỉnh từng module một cách độc lập.
+                </div>
+            `;
+
+        if (window.innerWidth <= 768) {
+          document.getElementById("sidebar").classList.remove("active");
+        }
+      }
+
+      // Chart
+      const ctx = document.getElementById("revenueChart");
+      if (ctx) {
+        new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: ["T1", "T2", "T3", "T4", "T5", "T6", "T7"],
+            datasets: [
+              {
+                label: "Doanh thu",
+                data: [12, 19, 3, 5, 2, 3, 9],
+                borderColor: "#4f46e5",
+                backgroundColor: "rgba(79, 70, 229, 0.1)",
+                tension: 0.4,
+                fill: true,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+          },
+        });
+      }
+    </script>
+  </body>
+</html>

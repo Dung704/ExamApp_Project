@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Container</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f5f5;
+        padding: 2rem 0;
+      }
+
+      /* Container chính */
+      .main-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+      }
+
+      /* Card container */
+      .card-container {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+      }
+
+      /* Grid container */
+      .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .grid-item {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Flex container */
+      .flex-container {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+      }
+
+      .flex-item {
+        flex: 1;
+        min-width: 250px;
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Two column layout */
+      .two-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      /* Three column layout */
+      .three-column {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .column-item {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Section header */
+      .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: #333;
+      }
+
+      /* Demo content */
+      .demo-box {
+        background: #e9ecef;
+        padding: 1rem;
+        border-radius: 6px;
+        text-align: center;
+        color: #666;
+      }
+
+      /* Responsive breakpoints */
+      @media (max-width: 992px) {
+        .two-column {
+          grid-template-columns: 1fr;
+        }
+
+        .three-column {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .card-container {
+          padding: 1.5rem;
+        }
+
+        .three-column {
+          grid-template-columns: 1fr;
+        }
+
+        .flex-item {
+          min-width: 100%;
+        }
+      }
+
+      @media (max-width: 576px) {
+        body {
+          padding: 1rem 0;
+        }
+
+        .card-container {
+          padding: 1rem;
+        }
+
+        .grid-container {
+          gap: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main-container">
+      <!-- Single Card Container -->
+      <div class="card-container">
+        <h2 class="section-title">Card Container</h2>
+        <p>
+          Đây là một card container đơn giản. Phù hợp cho nội dung như form, bài
+          viết, hoặc thông tin chi tiết.
+        </p>
+        <div class="demo-box">Nội dung của bạn ở đây</div>
+      </div>
+
+      <!-- Grid Container -->
+      <div class="card-container">
+        <h2 class="section-title">Grid Container (Auto-fit)</h2>
+        <div class="grid-container">
+          <div class="grid-item">
+            <h5>Grid Item 1</h5>
+            <p>Tự động điều chỉnh số cột theo kích thước màn hình.</p>
+          </div>
+          <div class="grid-item">
+            <h5>Grid Item 2</h5>
+            <p>Min width: 250px, sẽ xuống dòng khi cần.</p>
+          </div>
+          <div class="grid-item">
+            <h5>Grid Item 3</h5>
+            <p>Hoàn hảo cho card grid hoặc product listing.</p>
+          </div>
+          <div class="grid-item">
+            <h5>Grid Item 4</h5>
+            <p>Responsive tự động không cần media query.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flex Container -->
+      <div class="card-container">
+        <h2 class="section-title">Flex Container</h2>
+        <div class="flex-container">
+          <div class="flex-item">
+            <h5>Flex Item 1</h5>
+            <p>Flexbox layout với wrap, items có thể co giãn.</p>
+          </div>
+          <div class="flex-item">
+            <h5>Flex Item 2</h5>
+            <p>Phù hợp cho layout linh hoạt.</p>
+          </div>
+          <div class="flex-item">
+            <h5>Flex Item 3</h5>
+            <p>Min width 250px để đảm bảo dễ đọc.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two Column Layout -->
+      <div class="card-container">
+        <h2 class="section-title">Two Column Layout</h2>
+        <div class="two-column">
+          <div class="column-item">
+            <h5>Column 1</h5>
+            <p>
+              Layout 2 cột, tự động chuyển thành 1 cột trên tablet và mobile.
+            </p>
+            <div class="demo-box">Content</div>
+          </div>
+          <div class="column-item">
+            <h5>Column 2</h5>
+            <p>Phù hợp cho so sánh, sidebar, hoặc split content.</p>
+            <div class="demo-box">Content</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Three Column Layout -->
+      <div class="card-container">
+        <h2 class="section-title">Three Column Layout</h2>
+        <div class="three-column">
+          <div class="column-item">
+            <h5>Column 1</h5>
+            <p>3 cột trên desktop.</p>
+            <div class="demo-box">Content</div>
+          </div>
+          <div class="column-item">
+            <h5>Column 2</h5>
+            <p>2 cột trên tablet.</p>
+            <div class="demo-box">Content</div>
+          </div>
+          <div class="column-item">
+            <h5>Column 3</h5>
+            <p>1 cột trên mobile.</p>
+            <div class="demo-box">Content</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bootstrap Grid Example -->
+      <div class="card-container">
+        <h2 class="section-title">Bootstrap Grid System</h2>
+        <div class="row g-3">
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="column-item">
+              <h5>Bootstrap Col</h5>
+              <p>Sử dụng Bootstrap grid classes.</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="column-item">
+              <h5>Bootstrap Col</h5>
+              <p>col-12 col-md-6 col-lg-4</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="column-item">
+              <h5>Bootstrap Col</h5>
+              <p>Responsive với breakpoints.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
