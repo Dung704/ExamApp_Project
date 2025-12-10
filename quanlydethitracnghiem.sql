@@ -222,6 +222,9 @@ CREATE TABLE `nguoi_dung` (
   `so_dien_thoai` varchar(20) DEFAULT NULL,
   `anh_dai_dien` varchar(255) DEFAULT NULL,
   `id_quyen` varchar(10) DEFAULT NULL,
+    `ngay_sinh` date DEFAULT NULL,
+  `gioi_tinh` tinyint(1) DEFAULT NULL,
+  `dia_chi` varchar(255) DEFAULT NULL,
   `ngay_tao` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -253,8 +256,7 @@ CREATE TABLE `phan_quyen` (
 
 INSERT INTO `phan_quyen` (`id`, `ten_quyen`) VALUES
 ('Q1', 'admin'),
-('Q2', 'giang_vien'),
-('Q3', 'hoc_vien');
+('Q2', 'hoc_vien');
 
 -- --------------------------------------------------------
 
@@ -276,6 +278,20 @@ CREATE TABLE `tap_tin_bai_hoc` (
 INSERT INTO `tap_tin_bai_hoc` (`id`, `id_bai_hoc`, `duong_dan`, `loai_tap_tin`) VALUES
 ('TT1', 'BH1', 'file1.pdf', 'pdf'),
 ('TT2', 'BH2', 'file2.pdf', 'pdf');
+
+CREATE TABLE ket_qua_chi_tiet (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_ket_qua VARCHAR(10) NOT NULL,
+    id_cau_hoi VARCHAR(10) NOT NULL,
+    id_lua_chon VARCHAR(10) NOT NULL,
+
+    UNIQUE(id_ket_qua, id_cau_hoi),   -- Mỗi câu hỏi chỉ lưu 1 lần
+
+    FOREIGN KEY (id_ket_qua) REFERENCES ket_qua_thi(id),
+    FOREIGN KEY (id_cau_hoi) REFERENCES cau_hoi(id),
+    FOREIGN KEY (id_lua_chon) REFERENCES lua_chon(id)
+);
+
 
 --
 -- Indexes for dumped tables
