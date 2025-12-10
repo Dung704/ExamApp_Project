@@ -57,17 +57,23 @@ include("../app/config/config.php");
                         Thi</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Bài học</a>
+                    <a class="nav-link <?= ($current_page == 'bai_hoc.php') ? 'active' : '' ?>" href="./bai_hoc.php">Bài
+                        Học</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Giới Thiệu</a>
+                    <a class="nav-link <?= ($current_page == 'gioi_thieu.php') ? 'active' : '' ?>"
+                        href="./gioi_thieu.php">Giới
+                        Thiệu</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Cộng đồng</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Nâng cấp</a>
+                    <a class="nav-link <?= ($current_page == 'lich_su_lam_bai.php') ? 'active' : '' ?>"
+                        href="./lich_su_lam_bai.php">Lịch Sử Làm Bài</a>
                 </li>
+
+
             </ul>
             <div class="d-flex align-items-center">
                 <?php if (isset($_SESSION['user_id'])): ?>
