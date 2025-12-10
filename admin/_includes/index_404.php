@@ -1,40 +1,94 @@
-<!-- 404 Error Text -->
+<!DOCTYPE html>
+<html lang="vi">
 
-<!-- FontAwesome -->
-<link href="../_assets/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Không tìm thấy trang</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-    rel="stylesheet" />
+        .container-404 {
+            text-align: center;
+            max-width: 600px;
+            padding: 2rem;
+        }
 
-<!-- SB Admin 2 CSS -->
-<link href="_assets/admin/css/sb-admin-2.min.css" rel="stylesheet" />
+        .error-code {
+            font-size: 10rem;
+            font-weight: bold;
+            color: #6c757d;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
 
-<!-- jQuery -->
-<script src="_assets/admin/vendor/jquery/jquery.min.js"></script>
+        .error-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 1rem;
+        }
 
-<!-- Bootstrap -->
-<script src="_assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        .error-description {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 2rem;
+        }
 
-<!-- jQuery Easing -->
-<script src="_assets/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+        .btn-home {
+            background: #007bff;
+            color: white;
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+        }
 
-<!-- Chart.js (nếu dùng) -->
-<script src="_assets/admin/vendor/chart.js/Chart.min.js"></script>
-<script src="_assets/admin/js/demo/chart-area-demo.js"></script>
-<script src="_assets/admin/js/demo/chart-pie-demo.js"></script>
+        .btn-home:hover {
+            background: #0056b3;
+            color: white;
+        }
 
-<!-- jQuery UI -->
-<link rel="stylesheet" href="_assets/admin/custom_js/jquery-ui.css">
-<script src="../_assets/admin/custom_js/jquery-ui.min.js"></script>
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 6rem;
+            }
 
-<div class="d-flex justify-content-center align-items-center vh-100 flex-column text-center">
-    <div class="error mx-auto" data-text="404">404</div>
-    <p class="lead text-gray-800 mb-5">Trang Không Tồn Tại</p>
-    <p class="text-gray-500 mb-0">Có vẻ như trang bạn đang tìm kiếm không tồn tại</p>
-    <a href="../user/index.php">&larr; Trở Về Trang Chủ</a>
-</div>
+            .error-title {
+                font-size: 1.5rem;
+            }
 
+            .error-description {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
 
-<!-- SB Admin JS -->
-<!-- <script src="../_assets/admin/js/sb-admin-2.min.js"></script> -->
+<body>
+    <div class="container-404">
+        <div class="error-code">404</div>
+
+        <h1 class="error-title">Không tìm thấy trang</h1>
+
+        <p class="error-description">
+            Trang bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.
+        </p>
+
+        <a href="/" class="btn-home">Về trang chủ</a>
+    </div>
+</body>
+
+</html>
