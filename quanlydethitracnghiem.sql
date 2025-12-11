@@ -6,6 +6,9 @@
 -- Generation Time: Dec 10, 2025 at 10:14 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
+DROP DATABASE IF EXISTS quanlydethitracnghiem;
+CREATE DATABASE quanlydethitracnghiem CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE quanlydethitracnghiem;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
