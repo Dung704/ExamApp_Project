@@ -71,5 +71,33 @@ if ($id_bai_hoc) {
             </div>
         </div>
     </div>
+    <!-- Các đề thi liên quan  -->
+    <?php
+$id_danh_muc = $bai_hoc['id_danh_muc'];
+$sql_lien_quan = "SELECT * FROM de_thi WHERE id_danh_muc = '$id_danh_muc' LIMIT 10";
+$result_lien_quan = mysqli_query($dbc, $sql_lien_quan);
+
+?>
+
+    <div class="container my-5">
+        <h4 class="mb-3">Các đề thi liên quan</h4>
+        <div class="d-flex flex-row overflow-auto gap-3">
+            <?php if(mysqli_num_rows($result_lien_quan) > 0): ?>
+            <?php while($dt = mysqli_fetch_assoc($result_lien_quan)): ?>
+            <div class="card shadow-sm" style="min-width: 250px;">
+                <div class="card-body">
+                    <h5 class="card-title"><?= $dt['ten_de_thi'] ?></h5>
+                    <p class="card-text"><?= substr($dt['mo_ta'], 0, 60) ?>...</p>
+                    <p>Thời gian: <?= $dt['thoi_gian'] ?> phút</p>
+                    <a href="chi_tiet_de_thi.php?id=<?= $dt['id'] ?>" class="btn btn-primary btn-sm">Bắt đầu</a>
+                </div>
+            </div>
+            <?php endwhile; ?>
+            <?php else: ?>
+            <div class="alert alert-info">Không có đề thi liên quan.</div>
+            <?php endif; ?>
+        </div>
+    </div>
+
 
     <?php include("./footer.php"); ?>

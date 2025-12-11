@@ -4,162 +4,267 @@ include_once('_includes/config.php');
 
 $page = isset($_GET['page']) ? $_GET['page'] : null;
 
-// Nếu chưa có page, redirect sang list_bill
 if (!$page) {
-  header('Location: index_admin.php?page=list_bill');
+  header('Location: index_admin.php?page=list_user');
   exit();
 }
 
 $pages = [
-  'list_product' => 'product_manager/list_product.php',
-  'add_product' => 'product_manager/add_product.php',
-  'edit_product' => 'product_manager/edit_product.php',
-  'list_product_category' => 'product_manager/list_product_category.php',
-  'add_product_category' => 'product_manager/add_product_category.php',
-  'edit_product_category' => 'product_manager/edit_product_category.php',
-  'list_product_brand' => 'product_manager/list_product_brand.php',
-  'add_product_brand' => 'product_manager/add_product_brand.php',
-  'edit_product_brand' => 'product_manager/edit_product_brand.php',
-  'list_user_customer' => 'user_manager/list_user_customer.php',
-  'add_user_customer' => 'user_manager/add_user_customer.php',
-  'edit_user_customer' => 'user_manager/edit_user_customer.php',
-  'list_user_employee' => 'user_manager/list_user_employee.php',
-  'add_user_employee' => 'user_manager/add_user_employee.php',
-  'edit_user_employee' => 'user_manager/edit_user_employee.php',
-  'list_bill' => 'revenue_manager/list_bill.php',
-  'list_bill_detail' => 'revenue_manager/list_bill_detail.php',
-  'add_bill' => 'revenue_manager/add_bill.php',
-  'list_authorization' => 'authorization_acount_manager/list_authorization.php',
-  'list_account' => 'authorization_acount_manager/list_account.php',
-  'edit_account' => 'authorization_acount_manager/edit_account.php',
-  'add_account_customer' => 'authorization_acount_manager/add_account_customer.php',
-  'add_account_employee' => 'authorization_acount_manager/add_account_employee.php',
+  'list_user' => 'user_manager/list_user.php',
+  'add_user' => 'user_manager/add_user.php',
+  'edit_user' => 'user_manager/edit_user.php',
   'dashboard' => 'dashboard_manager/dashboard.php'
 ];
 
-// Kiểm tra page hợp lệ
-$isValidPage = isset($pages[$page]) && file_exists($pages[$page]);
-$q2_allowed_pages = [
-  'list_bill',
-  'list_bill_detail',
-  'add_bill',
-  'list_account',
-  'add_account_customer'
-];
-
-// Kiểm tra đã đăng nhập chưa
+// Kiểm tra đăng nhập
 if (!isset($_SESSION['email'])) {
-  include('../user/login.php'); // chưa đăng nhập → bắt login
+  include('../user/login.php');
   exit();
 }
-
-// Kiểm tra quyền
-if (!isset($_SESSION['id_quyen'])) {
+$isValidPage = isset($pages[$page]) && file_exists($pages[$page]);
+// Chỉ cho phép quyền Q1
+if (!isset($_SESSION['id_quyen']) || $_SESSION['id_quyen'] !== 'Q1') {
   include('./_includes/index_404.php');
   exit();
 }
-
-if ($_SESSION['id_quyen'] == 'Q2') {
-  // Q2 chỉ được phép truy cập các page trong danh sách
-  if (!in_array($page, $q2_allowed_pages)) {
-    include('./_includes/index_404.php');
-    exit();
-  }
-} elseif ($_SESSION['id_quyen'] != 'Q1') {
-  // Những quyền khác ngoài Q1 và Q2 → 404
-  include('./_includes/index_404.php');
-  exit();
-}
-
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <meta name="description" content="" />
-  <meta name="author" content="" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
 
-  <title>Admin</title>
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    rel="stylesheet" />
 
-  <!-- Custom fonts for this template-->
-  <link href="_assets/admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css" />
   <link
     href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
     rel="stylesheet" />
-
-  <!-- Custom styles for this template-->
-  <link href="_assets/admin/css/sb-admin-2.min.css" rel="stylesheet" />
-
-  <!-- Bootstrap core JavaScript-->
-  <script src="_assets/admin/vendor/jquery/jquery.min.js"></script>
-  <script src="_assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Core plugin JavaScript-->
-  <script src="_assets/admin/vendor/jquery-easing/jquery.easing.min.js"></script>
-
+  <link rel="stylesheet" href="_assets/custom_css/bootstrap_538.css">
+  <script src="_assets/custom_js/bootstrap_bundle_min_538.js"></script>
   <!-- Nếu có dashboard dùng biểu đồ -->
-  <script src="_assets/admin/custom_js/chart.js"></script>
+  <script src="_assets/custom_js/chart.js"></script>
 
   <!-- jQuery UI cho autocomplete -->
-  <link rel="stylesheet" href="_assets/admin/custom_js/jquery-ui.css">
-  <script src="_assets/admin/custom_js/jquery-ui.min.js"></script>
-
+  <link rel="stylesheet" href="_assets/custom_css/jquery-ui.css">
+  <script src="_assets/custom_js/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="_assets/custom_css/dataTable_235.css">
+  <script src="_assets/custom_js/jquery_371.js"></script>
+  <script src="_assets/custom_js/dataTable_235.js"></script>
+  <link rel="stylesheet" href="_assets/custom_css/style.css">
 </head>
-
 <?php if ($isValidPage): ?>
 
-  <body id="page-top">
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-      <!-- Sidebar -->
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
       <?php include('_includes/sidebar.php') ?>
-      <!-- End of Sidebar -->
+    </div>
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+      <!-- Topbar -->
+      <div class="topbar">
+        <?php include('_includes/topbar.php') ?>
+      </div>
+      <?php include($pages[$page]); ?>
+      <?php if (false): ?>
+        <!-- Dashboard Content -->
+        <div class="dashboard-content" id="moduleContent">
+          <h2 class="mb-4">Dashboard</h2>
 
-      <!-- Content Wrapper -->
-      <div id="content-wrapper" class="d-flex flex-column">
-
-        <!-- Main Content -->
-        <div id="content">
-          <!-- Topbar -->
-          <?php include_once('_includes/topbar.php') ?>
-          <!-- End of Topbar -->
-
-          <!-- Begin Page Content -->
-          <div class="container-fluid">
-            <?php include($pages[$page]); ?>
+          <!-- Stats Cards -->
+          <div class="row g-3 mb-4">
+            <div class="col-12 col-sm-6 col-lg-3">
+              <div class="stat-card">
+                <div
+                  class="stat-icon"
+                  style="background: #dbeafe; color: #3b82f6">
+                  <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-title">Tổng người dùng</div>
+                <div class="stat-value">2,543</div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+              <div class="stat-card">
+                <div
+                  class="stat-icon"
+                  style="background: #dcfce7; color: #22c55e">
+                  <i class="fas fa-box"></i>
+                </div>
+                <div class="stat-title">Sản phẩm</div>
+                <div class="stat-value">1,234</div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+              <div class="stat-card">
+                <div
+                  class="stat-icon"
+                  style="background: #fef3c7; color: #f59e0b">
+                  <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="stat-title">Đơn hàng</div>
+                <div class="stat-value">856</div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+              <div class="stat-card">
+                <div
+                  class="stat-icon"
+                  style="background: #fce7f3; color: #ec4899">
+                  <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-title">Doanh thu</div>
+                <div class="stat-value">$45K</div>
+              </div>
+            </div>
           </div>
 
-          <!-- /.container-fluid -->
+          <!-- Chart -->
+          <div class="row">
+            <div class="col-lg-8">
+              <div class="chart-card">
+                <h5 class="mb-3">Thống kê doanh thu</h5>
+                <canvas id="revenueChart" height="80"></canvas>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="chart-card">
+                <h5 class="mb-3">Hoạt động gần đây</h5>
+                <div class="list-group list-group-flush">
+                  <div class="list-group-item border-0 px-0">
+                    <small class="text-muted">2 phút trước</small>
+                    <p class="mb-0">Đơn hàng mới #1234</p>
+                  </div>
+                  <div class="list-group-item border-0 px-0">
+                    <small class="text-muted">15 phút trước</small>
+                    <p class="mb-0">Người dùng mới đăng ký</p>
+                  </div>
+                  <div class="list-group-item border-0 px-0">
+                    <small class="text-muted">1 giờ trước</small>
+                    <p class="mb-0">Sản phẩm được cập nhật</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="table-card">
+            <h5 class="mb-3">Đơn hàng gần đây</h5>
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Khách hàng</th>
+                    <th>Sản phẩm</th>
+                    <th>Giá trị</th>
+                    <th>Trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>#1001</td>
+                    <td>Nguyễn Văn A</td>
+                    <td>iPhone 15 Pro</td>
+                    <td>$999</td>
+                    <td><span class="badge bg-success">Hoàn thành</span></td>
+                  </tr>
+                  <tr>
+                    <td>#1002</td>
+                    <td>Trần Thị B</td>
+                    <td>MacBook Air</td>
+                    <td>$1,299</td>
+                    <td><span class="badge bg-warning">Đang xử lý</span></td>
+                  </tr>
+                  <tr>
+                    <td>#1003</td>
+                    <td>Lê Văn C</td>
+                    <td>iPad Pro</td>
+                    <td>$799</td>
+                    <td><span class="badge bg-info">Đang giao</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-        <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <?php include('_includes/footer.php') ?>
-        <!-- End of Footer -->
-      </div>
-      <!-- End of Content Wrapper -->
-
+      <?php endif; ?>
     </div>
-    <!-- End of Page Wrapper -->
-
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-      <i class="fas fa-angle-up"></i>
-    </a>
-
-
   </body>
-
 <?php else: ?>
-
-  <?php include('./_includes/index_404.php'); ?>
-
+  <?php include('_includes/index_404.php') ?>
 <?php endif; ?>
 
 </html>
-<!-- Custom scripts for all pages-->
-<script src="_assets\admin\js\sb-admin-2.min.js"></script>
+
+
+<script>
+  $(document).ready(function() {
+    $('#userTable').DataTable({
+      "pageLength": 5, // số dòng mỗi trang
+      "ordering": true, // cho sắp xếp cột
+      "searching": true, // bật tìm kiếm
+      "lengthChange": true, // chọn số dòng/trang
+      "language": {
+        "lengthMenu": "Hiển thị _MENU_ dòng",
+        "zeroResults": "Không tìm thấy dữ liệu",
+        "info": "Trang _PAGE_ / _PAGES_",
+        "infoEmpty": "Không có dữ liệu",
+        "search": "Tìm:",
+        "paginate": {
+          "previous": "Trước",
+          "next": "Sau"
+        }
+      }
+    });
+  });
+</script>
+
+<script>
+  // Toggle Sidebar
+  function toggleSidebar() {
+    const sidebar = document.getElementById("sidebar");
+    const mainContent = document.getElementById("mainContent");
+
+    if (window.innerWidth <= 768) {
+      sidebar.classList.toggle("active");
+    } else {
+      sidebar.classList.toggle("collapsed");
+      mainContent.classList.toggle("expanded");
+    }
+  }
+
+
+  // Chart
+  const ctx = document.getElementById("revenueChart");
+  if (ctx) {
+    new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: ["T1", "T2", "T3", "T4", "T5", "T6", "T7"],
+        datasets: [{
+          label: "Doanh thu",
+          data: [12, 19, 3, 5, 2, 3, 9],
+          borderColor: "#4f46e5",
+          backgroundColor: "rgba(79, 70, 229, 0.1)",
+          tension: 0.4,
+          fill: true,
+        }, ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+      },
+    });
+  }
+</script>

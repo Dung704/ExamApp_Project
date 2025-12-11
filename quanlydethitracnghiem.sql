@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 01, 2025 at 10:06 AM
+-- Generation Time: Dec 10, 2025 at 10:14 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 DROP DATABASE IF EXISTS quanlydethitracnghiem;
@@ -45,7 +45,7 @@ CREATE TABLE `bai_hoc` (
 --
 
 INSERT INTO `bai_hoc` (`id`, `tieu_de`, `noi_dung`, `anh_bai_hoc`, `link_bai_hoc`, `ngay_tao`, `id_danh_muc`) VALUES
-('BH1', 'Bài học 1', 'Nội dung bài học 1', 'bai1.jpg', 'link1.html', '2025-12-01 04:37:38', 3),
+('BH1', 'Bài học 1', 'Nội dung bài học 1', 'bai1.jpg', 'https://www.youtube.com/watch?v=svZSkXxCnbs', '2025-12-01 04:37:38', 3),
 ('BH2', 'Bài học 2', 'Nội dung bài học 2', 'bai2.jpg', 'link2.html', '2025-12-01 04:37:38', 1);
 
 -- --------------------------------------------------------
@@ -67,9 +67,9 @@ CREATE TABLE `cau_hoi` (
 --
 
 INSERT INTO `cau_hoi` (`id`, `id_de_thi`, `noi_dung`, `hinh_anh`, `muc_do`) VALUES
-('CH1', 'DT1', 'Câu hỏi 1 của đề 1', NULL, 'dễ'),
-('CH2', 'DT1', 'Câu hỏi 2 của đề 1', NULL, 'trung bình'),
-('CH3', 'DT2', 'Câu hỏi 1 của đề 2', NULL, 'khó');
+('CH1', 'DT1', 'Chữ trong hình sau có nghĩa là gì ?', 'images.jpg', 'dễ'),
+('CH2', 'DT1', '照片里有多少人？', 'hinh-anh-gia-dinh-hanh-phuc-cute-1.jpg', 'trung bình'),
+('CH3', 'DT2', '1+1 = ?', NULL, 'khó');
 
 -- --------------------------------------------------------
 
@@ -90,7 +90,8 @@ CREATE TABLE `danh_muc_de_thi` (
 INSERT INTO `danh_muc_de_thi` (`id`, `ten_danh_muc`, `mo_ta`) VALUES
 (1, 'HSK', 'Đề thi tiếng Trung HSK'),
 (2, 'TOPIK', 'Đề thi tiếng Hàn TOPIK'),
-(3, 'TOEIC', 'Đề thi tiếng Anh TOEIC');
+(3, 'TOEIC', 'Đề thi tiếng Anh TOEIC'),
+(4, 'JPN', 'Chứng chỉ tiếng Nhật');
 
 -- --------------------------------------------------------
 
@@ -114,8 +115,36 @@ CREATE TABLE `de_thi` (
 --
 
 INSERT INTO `de_thi` (`id`, `id_danh_muc`, `ten_de_thi`, `mo_ta`, `thoi_gian`, `id_bai_hoc`, `thang_diem`, `ngay_tao`) VALUES
-('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 30, 'BH1', 10, '2025-12-01 04:37:38'),
+('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 1, 'BH1', 10, '2025-12-01 04:37:38'),
 ('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 'BH2', 10, '2025-12-01 04:37:38');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ket_qua_chi_tiet`
+--
+
+CREATE TABLE `ket_qua_chi_tiet` (
+  `id` int(11) NOT NULL,
+  `id_ket_qua` varchar(10) NOT NULL,
+  `id_cau_hoi` varchar(10) NOT NULL,
+  `id_lua_chon` varchar(10) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ket_qua_chi_tiet`
+--
+
+INSERT INTO `ket_qua_chi_tiet` (`id`, `id_ket_qua`, `id_cau_hoi`, `id_lua_chon`) VALUES
+(30, 'KQ1', 'CH1', 'LC2'),
+(31, 'KQ1', 'CH2', 'LC4'),
+(36, 'KQ2', 'CH3', 'LC5'),
+(37, 'KQ3', 'CH1', 'LC2'),
+(38, 'KQ3', 'CH2', 'LC3'),
+(39, 'KQ4', 'CH1', 'LC1'),
+(40, 'KQ4', 'CH2', 'LC3'),
+(41, 'KQ5', 'CH1', 'LC2'),
+(42, 'KQ5', 'CH2', 'LC3');
 
 -- --------------------------------------------------------
 
@@ -128,17 +157,20 @@ CREATE TABLE `ket_qua_thi` (
   `id_nguoi_dung` varchar(10) NOT NULL,
   `id_de_thi` varchar(10) NOT NULL,
   `diem_so` float DEFAULT NULL,
-  `thoi_gian_nop` datetime DEFAULT current_timestamp()
+  `thoi_gian_nop` datetime DEFAULT current_timestamp(),
+  `thoi_gian_bat_dau` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `ket_qua_thi`
 --
 
-INSERT INTO `ket_qua_thi` (`id`, `id_nguoi_dung`, `id_de_thi`, `diem_so`, `thoi_gian_nop`) VALUES
-('KQ1', 'ND1', 'DT1', 8, '2025-12-01 04:37:38'),
-('KQ2', 'ND2', 'DT1', 7, '2025-12-01 04:37:38'),
-('KQ3', 'ND1', 'DT2', 9, '2025-12-01 04:37:38');
+INSERT INTO `ket_qua_thi` (`id`, `id_nguoi_dung`, `id_de_thi`, `diem_so`, `thoi_gian_nop`, `thoi_gian_bat_dau`) VALUES
+('KQ1', 'ND6', 'DT1', 5, '2025-12-10 15:19:09', '2025-12-10 15:19:02'),
+('KQ2', 'ND6', 'DT2', 10, '2025-12-10 15:19:42', '2025-12-10 15:19:36'),
+('KQ3', 'ND7', 'DT1', 10, '2025-12-10 15:52:45', '2025-12-10 15:52:36'),
+('KQ4', 'ND7', 'DT1', 5, '2025-12-10 16:01:38', '2025-12-10 16:01:21'),
+('KQ5', 'ND7', 'DT1', 10, '2025-12-10 16:13:03', '2025-12-10 16:12:07');
 
 -- --------------------------------------------------------
 
@@ -153,16 +185,6 @@ CREATE TABLE `lich_su_lam_bai` (
   `id_lua_chon` varchar(10) NOT NULL,
   `dung_sai` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `lich_su_lam_bai`
---
-
-INSERT INTO `lich_su_lam_bai` (`id`, `id_ket_qua`, `id_cau_hoi`, `id_lua_chon`, `dung_sai`) VALUES
-('LS1', 'KQ1', 'CH1', 'LC1', 1),
-('LS2', 'KQ1', 'CH2', 'LC3', 0),
-('LS3', 'KQ2', 'CH1', 'LC2', 0),
-('LS4', 'KQ3', 'CH3', 'LC6', 1);
 
 -- --------------------------------------------------------
 
@@ -182,12 +204,12 @@ CREATE TABLE `lua_chon` (
 --
 
 INSERT INTO `lua_chon` (`id`, `id_cau_hoi`, `noi_dung`, `dung_sai`) VALUES
-('LC1', 'CH1', 'Đáp án A', 0),
-('LC2', 'CH1', 'Đáp án B', 1),
-('LC3', 'CH2', 'Đáp án C', 1),
-('LC4', 'CH2', 'Đáp án D', 0),
-('LC5', 'CH3', 'Đáp án E', 1),
-('LC6', 'CH3', 'Đáp án F', 0);
+('LC1', 'CH1', 'Bạn bè', 0),
+('LC2', 'CH1', 'Chúng ta', 1),
+('LC3', 'CH2', '六个人', 1),
+('LC4', 'CH2', '四个人', 0),
+('LC5', 'CH3', '2', 1),
+('LC6', 'CH3', '3', 0);
 
 -- --------------------------------------------------------
 
@@ -203,6 +225,9 @@ CREATE TABLE `nguoi_dung` (
   `so_dien_thoai` varchar(20) DEFAULT NULL,
   `anh_dai_dien` varchar(255) DEFAULT NULL,
   `id_quyen` varchar(10) DEFAULT NULL,
+    `ngay_sinh` date DEFAULT NULL,
+  `gioi_tinh` tinyint(1) DEFAULT NULL,
+  `dia_chi` varchar(255) DEFAULT NULL,
   `ngay_tao` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -211,10 +236,12 @@ CREATE TABLE `nguoi_dung` (
 --
 
 INSERT INTO `nguoi_dung` (`id`, `ho_ten`, `email`, `mat_khau`, `so_dien_thoai`, `anh_dai_dien`, `id_quyen`, `ngay_tao`) VALUES
-('ND1', 'Hv', 'hv@gmail.com', '$2y$10$IKwGeijwumwxkIJRQdIvuOiEXqHAv4iYbNhy3XWjjyDtKErCpxYIy', '0123456789', '1764572609_DeGK_04.png', 'Q3', '2025-12-01 04:37:38'),
-('ND2', 'Gv', 'gv@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0987654321', '1764572609_DeGK_04.png', 'Q2', '2025-12-01 04:37:38'),
-('ND3', 'Admin', 'admin@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0123000000', '1764572609_DeGK_04.png', 'Q1', '2025-12-01 04:37:38'),
-('ND6', 'Trúc Mai', 'trucmai124@gmail.com', '$2y$10$/eKlII/ePr30VH0Cnj/zxO07ejKnivbp33XNTLCz3uWBWk.cGJyIO', '35341962145', '1764572136_329153497_1527737297736766_819603327207651751_n.jpg', 'Q2', '2025-12-01 07:01:15');
+('ND1', 'Hv', 'hv@gmail.com', '$2y$10$IKwGeijwumwxkIJRQdIvuOiEXqHAv4iYbNhy3XWjjyDtKErCpxYIy', '0123456789', NULL, 'Q3', '2025-12-01 04:37:38'),
+('ND2', 'Gv', 'gv@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0987654321', NULL, 'Q2', '2025-12-01 04:37:38'),
+('ND3', 'Admin', 'admin@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0123000000', NULL, 'Q1', '2025-12-01 04:37:38'),
+('ND6', 'Nguyễn Hoàng Huy Phong', 'trucmai124@gmail.com', '$2y$10$/eKlII/ePr30VH0Cnj/zxO07ejKnivbp33XNTLCz3uWBWk.cGJyIO', '35341962145', '1765355921_42d5806e0d8bb423c977cd87b44e3202.jpg', 'Q2', '2025-12-01 07:01:15'),
+('ND7', 'Nguyễn Vũ Huy Hoàng', 'hoang.nvh.66cnnt@ntu.edu.vn', '$2y$10$.XHNfTlebGyy5Wc9oWrUzu..gu1tuvqudvqAB4IuhsR.M8EI5fY22', '187641784', '1765356153_images.jpg', 'Q2', '2025-12-10 09:42:33');
+
 -- --------------------------------------------------------
 
 --
@@ -232,8 +259,7 @@ CREATE TABLE `phan_quyen` (
 
 INSERT INTO `phan_quyen` (`id`, `ten_quyen`) VALUES
 ('Q1', 'admin'),
-('Q2', 'giang_vien'),
-('Q3', 'hoc_vien');
+('Q2', 'hoc_vien');
 
 -- --------------------------------------------------------
 
@@ -255,6 +281,20 @@ CREATE TABLE `tap_tin_bai_hoc` (
 INSERT INTO `tap_tin_bai_hoc` (`id`, `id_bai_hoc`, `duong_dan`, `loai_tap_tin`) VALUES
 ('TT1', 'BH1', 'file1.pdf', 'pdf'),
 ('TT2', 'BH2', 'file2.pdf', 'pdf');
+
+CREATE TABLE ket_qua_chi_tiet (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_ket_qua VARCHAR(10) NOT NULL,
+    id_cau_hoi VARCHAR(10) NOT NULL,
+    id_lua_chon VARCHAR(10) NOT NULL,
+
+    UNIQUE(id_ket_qua, id_cau_hoi),   -- Mỗi câu hỏi chỉ lưu 1 lần
+
+    FOREIGN KEY (id_ket_qua) REFERENCES ket_qua_thi(id),
+    FOREIGN KEY (id_cau_hoi) REFERENCES cau_hoi(id),
+    FOREIGN KEY (id_lua_chon) REFERENCES lua_chon(id)
+);
+
 
 --
 -- Indexes for dumped tables
@@ -288,6 +328,15 @@ ALTER TABLE `de_thi`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_dethi_baihoc` (`id_bai_hoc`),
   ADD KEY `fk_de_thi_danh_muc` (`id_danh_muc`);
+
+--
+-- Indexes for table `ket_qua_chi_tiet`
+--
+ALTER TABLE `ket_qua_chi_tiet`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id_ket_qua` (`id_ket_qua`,`id_cau_hoi`),
+  ADD KEY `id_cau_hoi` (`id_cau_hoi`),
+  ADD KEY `id_lua_chon` (`id_lua_chon`);
 
 --
 -- Indexes for table `ket_qua_thi`
@@ -342,7 +391,13 @@ ALTER TABLE `tap_tin_bai_hoc`
 -- AUTO_INCREMENT for table `danh_muc_de_thi`
 --
 ALTER TABLE `danh_muc_de_thi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `ket_qua_chi_tiet`
+--
+ALTER TABLE `ket_qua_chi_tiet`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- Constraints for dumped tables
@@ -366,6 +421,14 @@ ALTER TABLE `cau_hoi`
 ALTER TABLE `de_thi`
   ADD CONSTRAINT `fk_de_thi_danh_muc` FOREIGN KEY (`id_danh_muc`) REFERENCES `danh_muc_de_thi` (`id`),
   ADD CONSTRAINT `fk_dethi_baihoc` FOREIGN KEY (`id_bai_hoc`) REFERENCES `bai_hoc` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `ket_qua_chi_tiet`
+--
+ALTER TABLE `ket_qua_chi_tiet`
+  ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_1` FOREIGN KEY (`id_ket_qua`) REFERENCES `ket_qua_thi` (`id`),
+  ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_2` FOREIGN KEY (`id_cau_hoi`) REFERENCES `cau_hoi` (`id`),
+  ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_3` FOREIGN KEY (`id_lua_chon`) REFERENCES `lua_chon` (`id`);
 
 --
 -- Constraints for table `ket_qua_thi`
