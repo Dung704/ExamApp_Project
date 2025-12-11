@@ -25,7 +25,6 @@ SET time_zone = "+00:00";
 --
 
 -- --------------------------------------------------------
-
 --
 -- Table structure for table `bai_hoc`
 --
@@ -236,8 +235,7 @@ CREATE TABLE `nguoi_dung` (
 --
 
 INSERT INTO `nguoi_dung` (`id`, `ho_ten`, `email`, `mat_khau`, `so_dien_thoai`, `anh_dai_dien`, `id_quyen`, `ngay_tao`) VALUES
-('ND1', 'Hv', 'hv@gmail.com', '$2y$10$IKwGeijwumwxkIJRQdIvuOiEXqHAv4iYbNhy3XWjjyDtKErCpxYIy', '0123456789', NULL, 'Q3', '2025-12-01 04:37:38'),
-('ND2', 'Gv', 'gv@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0987654321', NULL, 'Q2', '2025-12-01 04:37:38'),
+('ND1', 'Hv', 'hv@gmail.com', '$2y$10$IKwGeijwumwxkIJRQdIvuOiEXqHAv4iYbNhy3XWjjyDtKErCpxYIy', '0123456789', NULL, 'Q2', '2025-12-01 04:37:38'),
 ('ND3', 'Admin', 'admin@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0123000000', NULL, 'Q1', '2025-12-01 04:37:38'),
 ('ND6', 'Nguyễn Hoàng Huy Phong', 'trucmai124@gmail.com', '$2y$10$/eKlII/ePr30VH0Cnj/zxO07ejKnivbp33XNTLCz3uWBWk.cGJyIO', '35341962145', '1765355921_42d5806e0d8bb423c977cd87b44e3202.jpg', 'Q2', '2025-12-01 07:01:15'),
 ('ND7', 'Nguyễn Vũ Huy Hoàng', 'hoang.nvh.66cnnt@ntu.edu.vn', '$2y$10$.XHNfTlebGyy5Wc9oWrUzu..gu1tuvqudvqAB4IuhsR.M8EI5fY22', '187641784', '1765356153_images.jpg', 'Q2', '2025-12-10 09:42:33');
@@ -281,21 +279,6 @@ CREATE TABLE `tap_tin_bai_hoc` (
 INSERT INTO `tap_tin_bai_hoc` (`id`, `id_bai_hoc`, `duong_dan`, `loai_tap_tin`) VALUES
 ('TT1', 'BH1', 'file1.pdf', 'pdf'),
 ('TT2', 'BH2', 'file2.pdf', 'pdf');
-
-CREATE TABLE ket_qua_chi_tiet (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_ket_qua VARCHAR(10) NOT NULL,
-    id_cau_hoi VARCHAR(10) NOT NULL,
-    id_lua_chon VARCHAR(10) NOT NULL,
-
-    UNIQUE(id_ket_qua, id_cau_hoi),   -- Mỗi câu hỏi chỉ lưu 1 lần
-
-    FOREIGN KEY (id_ket_qua) REFERENCES ket_qua_thi(id),
-    FOREIGN KEY (id_cau_hoi) REFERENCES cau_hoi(id),
-    FOREIGN KEY (id_lua_chon) REFERENCES lua_chon(id)
-);
-
-
 --
 -- Indexes for dumped tables
 --
@@ -426,9 +409,9 @@ ALTER TABLE `de_thi`
 -- Constraints for table `ket_qua_chi_tiet`
 --
 ALTER TABLE `ket_qua_chi_tiet`
-  ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_1` FOREIGN KEY (`id_ket_qua`) REFERENCES `ket_qua_thi` (`id`),
-  ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_2` FOREIGN KEY (`id_cau_hoi`) REFERENCES `cau_hoi` (`id`),
-  ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_3` FOREIGN KEY (`id_lua_chon`) REFERENCES `lua_chon` (`id`);
+  ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_1` FOREIGN KEY (`id_ket_qua`) REFERENCES `ket_qua_thi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_2` FOREIGN KEY (`id_cau_hoi`) REFERENCES `cau_hoi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_3` FOREIGN KEY (`id_lua_chon`) REFERENCES `lua_chon` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `ket_qua_thi`
@@ -467,3 +450,5 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
