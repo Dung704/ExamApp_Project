@@ -9,7 +9,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mat_khau = isset($_POST['mat_khau']) ? trim($_POST['mat_khau']) : '';
     $re_mat_khau = isset($_POST['re_mat_khau']) ? trim($_POST['re_mat_khau']) : '';
     $so_dien_thoai = isset($_POST['so_dien_thoai']) ? trim($_POST['so_dien_thoai']) : '';
-    $id_quyen = "Q2"; 
+    $ngay_sinh = isset($_POST['ngay_sinh']) ? $_POST['ngay_sinh'] : NULL;
+    $gioi_tinh = isset($_POST['gioi_tinh']) ? trim($_POST['gioi_tinh']) : '';
+    $dia_chi = isset($_POST['dia_chi']) ? trim($_POST['dia_chi']) : '';
+
+    $id_quyen = "Q2";
     $ngay_tao = date("Y-m-d H:i:s");
 
     if ($mat_khau !== $re_mat_khau) {
@@ -26,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $res = mysqli_query($dbc, "SELECT id FROM nguoi_dung ORDER BY id DESC LIMIT 1");
             if (mysqli_num_rows($res) > 0) {
                 $row = mysqli_fetch_assoc($res);
-                $last_id = $row['id']; 
+                $last_id = $row['id'];
                 $num = intval(substr($last_id, 2)) + 1;
                 $new_id = "ND" . $num;
             } else {
@@ -45,18 +49,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $mat_khau_hash = password_hash($mat_khau, PASSWORD_DEFAULT);
 
-            $insert = "INSERT INTO nguoi_dung 
-                (id, ho_ten, email, mat_khau, so_dien_thoai, anh_dai_dien, id_quyen, ngay_tao)
-                VALUES (
-                    '$new_id',
-                    '$ho_ten',
-                    '$email',
-                    '$mat_khau_hash',
-                    '$so_dien_thoai',
-                    $anh_dai_dien_sql,
-                    '$id_quyen',
-                    '$ngay_tao'
-                )";
+           $insert = "INSERT INTO nguoi_dung 
+            (id, ho_ten, email, mat_khau, so_dien_thoai, anh_dai_dien, id_quyen, ngay_sinh, gioi_tinh, dia_chi, ngay_tao)
+            VALUES (
+                '$new_id',
+                '$ho_ten',
+                '$email',
+                '$mat_khau_hash',
+                '$so_dien_thoai',
+                $anh_dai_dien_sql,
+                '$id_quyen',
+                " . ($ngay_sinh ? "'$ngay_sinh'" : "NULL") . ",
+                '$gioi_tinh',
+                '$dia_chi',
+                '$ngay_tao'
+            )";
+
+
 
             if (mysqli_query($dbc, $insert)) {
                 echo "<div class='alert alert-success'>Đăng ký thành công! <a href='./login.php'>Đăng nhập ngay</a></div>";
@@ -75,6 +84,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="hoTen" class="form-label">Họ tên</label>
         <input type="text" class="form-control" id="hoTen" name="ho_ten" required>
     </div>
+    <div class="mb-3">
+        <label for="ngaySinh" class="form-label">Ngày sinh</label>
+        <input type="date" class="form-control" id="ngaySinh" name="ngay_sinh">
+    </div>
+
+    <div class="mb-3">
+        <label for="gioiTinh" class="form-label">Giới tính</label>
+        <select class="form-select" id="gioiTinh" name="gioi_tinh">
+            <option value="">Chọn giới tính</option>
+            <option value="Nam">Nam</option>
+            <option value="Nữ">Nữ</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="diaChi" class="form-label">Địa chỉ</label>
+        <textarea class="form-control" id="diaChi" name="dia_chi" rows="2"></textarea>
+    </div>
+
 
     <div class="mb-3">
         <label for="email" class="form-label">Email đăng nhập</label>

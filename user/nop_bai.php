@@ -94,7 +94,7 @@ mysqli_query($dbc, "DELETE FROM ket_qua_chi_tiet WHERE id_ket_qua = '$id_kq'");
 foreach ($ket_qua_chi_tiet as $item) {
     $id_cau = $item['id_cau_hoi'];
     $id_lc = $item['id_lua_chon'] ?? "NULL";
-
+//  KQCT = code tạo mã KQCT + uniqid 
     if ($id_lc === "NULL") {
         $query_ct = "
             INSERT INTO ket_qua_chi_tiet(id_ket_qua, id_cau_hoi, id_lua_chon)

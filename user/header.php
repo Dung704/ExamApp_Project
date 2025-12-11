@@ -66,14 +66,19 @@ include("../app/config/config.php");
                         Thiệu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Cộng đồng</a>
+                    <a class="nav-link <?= ($current_page == 'cong_dong.php') ? 'active' : '' ?>"
+                        href="./cong_dong.php">Cộng
+                        đồng</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?= ($current_page == 'lich_su_lam_bai.php') ? 'active' : '' ?>"
                         href="./lich_su_lam_bai.php">Lịch Sử Làm Bài</a>
                 </li>
-
-
+                <?php if (isset($_SESSION['id_quyen']) && $_SESSION['id_quyen'] == 'Q1'): ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="../admin/index_admin.php">Trang quản lý</a>
+                </li>
+                <?php endif; ?>
             </ul>
             <div class="d-flex align-items-center">
                 <?php if (isset($_SESSION['user_id'])): ?>

@@ -10,16 +10,18 @@ $sql_bai_hoc = "SELECT * FROM bai_hoc ORDER BY ngay_tao DESC";
 $result_bai_hoc = mysqli_query($dbc, $sql_bai_hoc);
 ?>
 
-<!-- Ô tìm kiếm -->
-<div class="d-flex justify-content-center my-5">
-    <div class="input-group" style="max-width: 600px;">
-        <input type="text" class="form-control" placeholder="Nhập nội dung" aria-label="Search">
-        <span class="input-group-text bg-white border-start-0">
-            <i class="bi bi-search me-2"></i>|
-            <i class="bi bi-mic-fill ms-2"></i>
-        </span>
+<!-- FORM TÌM KIẾM -->
+<form action="tim_kiem.php" method="GET">
+    <div class="d-flex justify-content-center my-5">
+        <div class="input-group" style="max-width: 600px;">
+            <input type="text" name="q" class="form-control" placeholder="Nhập nội dung..." required>
+            <button class="input-group-text bg-white border-start-0" type="submit">
+                <i class="bi bi-search me-2"></i>
+            </button>
+        </div>
     </div>
-</div>
+</form>
+
 
 <!-- Nội dung chính -->
 <div class="container my-5">
@@ -95,17 +97,35 @@ $result_bai_hoc = mysqli_query($dbc, $sql_bai_hoc);
 
 
         <!--  Cột phải: Đề thi nổi bật -->
+
+        <?php
+            $sql_top = "
+                SELECT d.ten_de_thi, k.id_de_thi, COUNT(*) AS so_lan_lam
+                FROM ket_qua_thi k
+                JOIN de_thi d ON k.id_de_thi = d.id
+                GROUP BY k.id_de_thi, d.ten_de_thi
+                ORDER BY so_lan_lam DESC
+                LIMIT 5
+            ";
+            $rs_top = mysqli_query($dbc, $sql_top);
+        ?>
+
         <div class="col-md-3 mb-4">
             <div class="card">
                 <div class="card-header bg-warning text-dark">Đề Thi Nổi Bật</div>
                 <div class="card-body">
-                    <span class="badge bg-secondary me-1 mb-1">HSK5</span>
-                    <span class="badge bg-secondary me-1 mb-1">Nghe hiểu</span>
-                    <span class="badge bg-secondary me-1 mb-1">Giao tiếp</span>
-                    <span class="badge bg-secondary me-1 mb-1">Từ vựng nâng cao</span>
+                    <?php while($row = mysqli_fetch_assoc($rs_top)): ?>
+                    <a href="chi_tiet_de_thi.php?id=<?= $row['id_de_thi'] ?>" class="text-decoration-none">
+                        <span class="badge bg-secondary me-1 mb-1">
+                            <?= htmlspecialchars($row['ten_de_thi']) ?> (<?= $row['so_lan_lam'] ?> lần)
+                        </span>
+                    </a>
+                    <?php endwhile; ?>
                 </div>
             </div>
         </div>
+
+
 
     </div>
 </div>

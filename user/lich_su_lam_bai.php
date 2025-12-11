@@ -3,8 +3,10 @@ include("./header.php");
 
 // Kiểm tra login
 if (!isset($_SESSION['user_id'])) {
-    die("Bạn chưa đăng nhập.");
+    header("Location: login.php?tmp=yeu_cau_dang_nhap");
+    exit();
 }
+
 
 $id_user = $_SESSION['user_id'];
 

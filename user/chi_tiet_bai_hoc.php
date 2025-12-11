@@ -1,6 +1,9 @@
 <?php
 include("./header.php");
-
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php?tmp=yeu_cau_dang_nhap");
+    exit();
+}
 // Lấy id bài học từ GET
 $id_bai_hoc = $_GET['id_bh'] ?? '';
 

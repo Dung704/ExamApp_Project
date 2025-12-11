@@ -1,5 +1,9 @@
 <?php
 include("./header.php");
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php?tmp=yeu_cau_dang_nhap");
+    exit();
+}
 $id = $_GET['id'];
 
 $sql = "SELECT * FROM de_thi WHERE id = '$id'";
