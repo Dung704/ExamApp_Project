@@ -279,25 +279,6 @@ CREATE TABLE `tap_tin_bai_hoc` (
 INSERT INTO `tap_tin_bai_hoc` (`id`, `id_bai_hoc`, `duong_dan`, `loai_tap_tin`) VALUES
 ('TT1', 'BH1', 'file1.pdf', 'pdf'),
 ('TT2', 'BH2', 'file2.pdf', 'pdf');
-
-<<<<<<< HEAD
-
-=======
-CREATE TABLE ket_qua_chi_tiet (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_ket_qua VARCHAR(10) NOT NULL,
-    id_cau_hoi VARCHAR(10) NOT NULL,
-    id_lua_chon VARCHAR(10) NOT NULL,
-
-    UNIQUE(id_ket_qua, id_cau_hoi),   -- Mỗi câu hỏi chỉ lưu 1 lần
-
-    FOREIGN KEY (id_ket_qua) REFERENCES ket_qua_thi(id),
-    FOREIGN KEY (id_cau_hoi) REFERENCES cau_hoi(id),
-    FOREIGN KEY (id_lua_chon) REFERENCES lua_chon(id)
-);
->>>>>>> 2842af5c64d5dbdd59d80d44480bdfc392d44bb6
-
-
 --
 -- Indexes for dumped tables
 --
