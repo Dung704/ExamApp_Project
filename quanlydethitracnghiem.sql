@@ -371,16 +371,16 @@ ALTER TABLE `tap_tin_bai_hoc`
 --
 
 --
--- AUTO_INCREMENT for table `danh_muc_de_thi`
+-- No AUTO_INCREMENT for table `danh_muc_de_thi`
 --
 ALTER TABLE `danh_muc_de_thi`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL;
 
 --
--- AUTO_INCREMENT for table `ket_qua_chi_tiet`
+-- No AUTO_INCREMENT for table `ket_qua_chi_tiet`
 --
 ALTER TABLE `ket_qua_chi_tiet`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL;
 
 --
 -- Constraints for dumped tables
@@ -450,3 +450,4 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
