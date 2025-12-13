@@ -13,6 +13,12 @@ $pages = [
   'list_user' => 'user_manager/list_user.php',
   'add_user' => 'user_manager/add_user.php',
   'edit_user' => 'user_manager/edit_user.php',
+  'list_exam_category' => 'exam_manager/list_exam_category.php',
+  'add_exam_category' => 'exam_manager/add_exam_category.php',
+  'edit_exam_category' => 'exam_manager/edit_exam_category.php',
+  'list_lesson' => 'exam_manager/list_lesson.php',
+  'add_lesson' => 'exam_manager/add_lesson.php',
+  'edit_lesson' => 'exam_manager/edit_lesson.php',
   'dashboard' => 'dashboard_manager/dashboard.php'
 ];
 
@@ -40,9 +46,7 @@ if (!isset($_SESSION['id_quyen']) || $_SESSION['id_quyen'] !== 'Q1') {
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     rel="stylesheet" />
 
-  <link
-    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-    rel="stylesheet" />
+
   <link rel="stylesheet" href="_assets/custom_css/bootstrap_538.css">
   <script src="_assets/custom_js/bootstrap_bundle_min_538.js"></script>
   <!-- Nếu có dashboard dùng biểu đồ -->
@@ -69,7 +73,9 @@ if (!isset($_SESSION['id_quyen']) || $_SESSION['id_quyen'] !== 'Q1') {
       <div class="topbar">
         <?php include('_includes/topbar.php') ?>
       </div>
-      <?php include($pages[$page]); ?>
+      <div class="table-card">
+        <?php include($pages[$page]); ?>
+      </div>
       <?php if (false): ?>
         <!-- Dashboard Content -->
         <div class="dashboard-content" id="moduleContent">
@@ -206,7 +212,7 @@ if (!isset($_SESSION['id_quyen']) || $_SESSION['id_quyen'] !== 'Q1') {
 <script>
   $(document).ready(function() {
     $('#userTable').DataTable({
-      "pageLength": 5, // số dòng mỗi trang
+      "pageLength": 10, // số dòng mỗi trang
       "ordering": true, // cho sắp xếp cột
       "searching": true, // bật tìm kiếm
       "lengthChange": true, // chọn số dòng/trang
@@ -267,4 +273,26 @@ if (!isset($_SESSION['id_quyen']) || $_SESSION['id_quyen'] !== 'Q1') {
       },
     });
   }
+
+  // // Load Module
+  // function loadModule(module) {
+  //   const menuItems = document.querySelectorAll(".menu-item");
+  //   menuItems.forEach((item) => item.classList.remove("active"));
+  //   event.target.closest(".menu-item").classList.add("active");
+
+  //   const content = document.getElementById("moduleContent");
+  //   content.innerHTML = `
+  //               <h2 class="mb-4">${
+  //                 module.charAt(0).toUpperCase() + module.slice(1)
+  //               }</h2>
+  //               <div class="alert alert-info">
+  //                   Nội dung module ${module} sẽ được hiển thị ở đây.
+  //                   Bạn có thể tùy chỉnh từng module một cách độc lập.
+  //               </div>
+  //           `;
+
+  //   if (window.innerWidth <= 768) {
+  //     document.getElementById("sidebar").classList.remove("active");
+  //   }
+  // }
 </script>

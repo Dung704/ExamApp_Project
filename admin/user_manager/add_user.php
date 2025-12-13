@@ -57,7 +57,7 @@ if (isset($_POST['submit'])) {
 
             <div class="col-md-6">
                 <label>Mã người dùng:</label>
-                <input type="text" class="form-control" value="<?php echo $new_id; ?>" readonly>
+                <input type="text" class="form-control" value="<?php echo $new_id; ?>" disabled>
             </div>
 
             <div class="col-md-6">
