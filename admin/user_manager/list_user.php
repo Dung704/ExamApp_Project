@@ -3,6 +3,16 @@
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $delete_user = "DELETE FROM nguoi_dung WHERE id='$id'";
+
+    $query_image = "SELECT anh_dai_dien FROM nguoi_dung WHERE id = '$id'";
+    $result_query_image = mysqli_query($conn, $query_image);
+    if ($row_image = mysqli_fetch_assoc($result_query_image)) {
+        $file_name = $row_image['anh_dai_dien'];
+        $path = "../user/image_user/" . $file_name;
+        if (!empty($file_name) && file_exists($path)) {
+            unlink($path);
+        }
+    }
     if (mysqli_query($conn, $delete_user)) {
         echo '<div id="alert-box" class="alert alert-success"
             style="position:fixed; top:20px; right:20px; z-index:9999;">Đã xoá!</div>
@@ -74,7 +84,7 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                         <td>
                             <?php if ($row['anh_dai_dien'] != null): ?>
                                 <img src="../user/image_user/<?php echo $row['anh_dai_dien']; ?>"
-                                    style="width:50px; height:50px; object-fit:cover;">
+                                    style="width:100px; height:100px; object-fit:cover;">
                             <?php else: ?>
                                 Không có
                             <?php endif; ?>
@@ -89,9 +99,11 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                                 class="btn btn-sm btn-warning">Sửa</a>
                             <a href="index_admin.php?page=list_user&id=<?= $row['id'] ?>"
                                 class="btn btn-sm btn-danger"
-                                onclick="return confirm('Bạn có chắc muốn xoá người dùng này?')">
+                                title="Bạn có chắc muốn xoá người dùng này? vì dữ liệu này liên quan tới..."
+                                onclick="return confirm('Bạn có chắc muốn xoá người dùng này? vì dữ liệu này liên quan tới những dữ liệu kết quả khác và nó sẽ bị xoá cùng nhau ')">
                                 Xoá
                             </a>
+
                         </td>
                     </tr>
                 <?php $i++;
@@ -99,5 +111,4 @@ $result_to_show = mysqli_query($conn, $query_to_show);
             </tbody>
         </table>
     </div>
-</div>
 </div>

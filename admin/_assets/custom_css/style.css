@@ -1,5 +1,5 @@
 :root {
-  --sidebar-width: 200px;
+  --sidebar-width: 300px;
   --primary-color: #4f46e5;
   --sidebar-bg: #1e293b;
   --sidebar-hover: #334155;
@@ -185,4 +185,102 @@ body {
   .main-content {
     margin-left: 0;
   }
+}
+
+/* Menu item cơ bản */
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: #ecf0f1;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+}
+
+.menu-item:hover {
+  background: #34495e;
+  border-left-color: #3498db;
+}
+
+.menu-item.active {
+  background: #34495e;
+  border-left-color: #3498db;
+  color: #3498db;
+}
+
+.menu-item i {
+  width: 20px;
+  margin-right: 10px;
+}
+
+/* Menu có submenu */
+.menu-item.has-submenu {
+  justify-content: space-between;
+  position: relative;
+}
+
+.menu-item.has-submenu .arrow {
+  transition: transform 0.3s ease;
+  font-size: 12px;
+  width: auto;
+  margin-right: 0;
+}
+
+.menu-item.has-submenu.open .arrow {
+  transform: rotate(180deg);
+}
+
+/* Submenu */
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  background: #1a252f;
+  transition: max-height 0.3s ease;
+}
+
+.submenu.open {
+  max-height: 500px;
+}
+
+.submenu-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px 10px 50px;
+  color: #bdc3c7;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.submenu-item:hover {
+  background: #263a4a;
+  color: #ecf0f1;
+  border-left-color: #3498db;
+}
+
+.submenu-item.active {
+  background: #263a4a;
+  color: #3498db;
+  border-left-color: #3498db;
+}
+
+.submenu-item i {
+  width: 16px;
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+/* Menu group */
+.menu-group {
+  margin-bottom: 5px;
+}
+
+th {
+  text-align: center !important;
+}
+
+td {
+  text-align: center !important;
 }
