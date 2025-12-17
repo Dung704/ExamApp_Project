@@ -134,11 +134,11 @@ include("./header.php");
                             <tr class="<?php echo $mau_xep_hang?>">
                                 <th><?= $stt ?></th>
 
-                                <td>
-                                    <img src="<?= $avatar ?>" class="rounded-circle me-2"
-                                        style="width: 35px; height: 35px; object-fit: cover;">
-                                    <?= $row['ho_ten'] ?>
-                                </td>
+                                <td> <a href="trang_ca_nhan_nguoi_dung.php?id=<?= $row['id'] ?>"
+                                        class="text-decoration-none text-dark">
+                                        <img src="<?= $avatar ?>" class="rounded-circle me-2"
+                                            style="width: 35px; height: 35px; object-fit: cover;"> <?= $row['ho_ten'] ?>
+                                    </a> </td>
 
                                 <td><?= $row['so_de_da_lam'] ?></td>
                                 <td><?= $row['tong_diem'] ?> </td>

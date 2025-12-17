@@ -44,15 +44,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['noi_dung'])) {
 
 <div class="container mt-4">
     <!-- Ô tìm kiếm -->
-    <div class="d-flex justify-content-center my-5">
-        <div class="input-group" style="max-width: 600px;">
-            <input type="text" class="form-control" placeholder="Nhập nội dung" aria-label="Search">
-            <span class="input-group-text bg-white border-start-0">
-                <i class="bi bi-search me-2"></i>|
-                <i class="bi bi-mic-fill ms-2"></i>
-            </span>
+    <form method="GET">
+        <div class="d-flex justify-content-center my-5">
+            <div class="input-group" style="max-width: 600px;">
+                <input type="text" name="keyword" class="form-control" placeholder="Nhập nội dung">
+                <span class="input-group-text bg-white border-start-0">
+                    <i class="bi bi-search me-2"></i>|
+                    <i class="bi bi-mic-fill ms-2"></i>
+                </span>
+            </div>
         </div>
-    </div>
+    </form>
+
 
     <div class="row">
 
@@ -87,15 +90,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['noi_dung'])) {
             </div>
 
             <?php
-                $sql_q = "
-                    SELECT ch.id, ch.noi_dung, ch.thoi_gian_tao, ch.anh_dinh_kem,
-                        nd.ho_ten, nd.anh_dai_dien
-                    FROM cau_hoi_nguoi_dung AS ch
-                    JOIN nguoi_dung AS nd ON ch.id_nguoi_hoi = nd.id
-                    ORDER BY ch.thoi_gian_tao DESC
-                    LIMIT 20
-                ";
-            $rs_q = mysqli_query($dbc, $sql_q);
+                $keyword = $_GET['keyword'] ?? '';
+
+                if ($keyword != '') {
+                    // Tìm kiếm theo từ khóa
+                    $sql_q = "
+                        SELECT ch.id, ch.noi_dung, ch.thoi_gian_tao, ch.anh_dinh_kem,
+                            nd.ho_ten, nd.anh_dai_dien
+                        FROM cau_hoi_nguoi_dung AS ch
+                        JOIN nguoi_dung AS nd ON ch.id_nguoi_hoi = nd.id
+                        WHERE ch.noi_dung LIKE '%$keyword%'
+                        ORDER BY ch.thoi_gian_tao DESC
+                    ";
+                } else {
+                    // Hiển thị mặc định
+                    $sql_q = "
+                        SELECT ch.id, ch.noi_dung, ch.thoi_gian_tao, ch.anh_dinh_kem,
+                            nd.ho_ten, nd.anh_dai_dien
+                        FROM cau_hoi_nguoi_dung AS ch
+                        JOIN nguoi_dung AS nd ON ch.id_nguoi_hoi = nd.id
+                        ORDER BY ch.thoi_gian_tao DESC
+                        LIMIT 20
+                    ";
+                }
+
+                $rs_q = mysqli_query($dbc, $sql_q);
+
 
             ?>
 
@@ -224,13 +244,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['noi_dung'])) {
 
                             <tr class="<?= $mau ?>">
                                 <td class="fw-bold"><?= $stt ?></td>
-                                <td>
-                                    <img src="<?= $avatar ?>" class="rounded-circle me-2"
-                                        style="width: 35px; height: 35px; object-fit: cover;">
-                                    <?= $row['ho_ten'] ?>
-                                </td>
+                                <td> <a href="trang_ca_nhan_nguoi_dung.php?id=<?= $row['id'] ?>"
+                                        class="text-decoration-none text-dark">
+                                        <img src="<?= $avatar ?>" class="rounded-circle me-2"
+                                            style="width: 35px; height: 35px; object-fit: cover;"> <?= $row['ho_ten'] ?>
+                                    </a> </td>
                                 <td><?= $row['so_de_da_lam'] ?></td>
-                                <td><?= $row['tong_diem'] ?></td>
+                                <td><?= $row['tong_diem'] ?> </td>
+
                             </tr>
 
                             <?php 
