@@ -54,7 +54,7 @@ if (!isset($_SESSION['id_quyen']) || $_SESSION['id_quyen'] !== 'Q1') {
 
   <!-- jQuery UI cho autocomplete -->
   <link rel="stylesheet" href="_assets/custom_css/jquery-ui.css">
-  <script src="_assets/custom_js/jquery-ui.min.js"></script>
+
   <link rel="stylesheet" href="_assets/custom_css/dataTable_235.css">
   <script src="_assets/custom_js/jquery_371.js"></script>
   <script src="_assets/custom_js/dataTable_235.js"></script>

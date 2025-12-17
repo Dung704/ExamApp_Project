@@ -28,7 +28,10 @@ body {
 }
 
 .sidebar-header {
-  padding: 1.5rem;
+  display: flex;
+  align-items: center; /* trục Y */
+  justify-content: center; /* trục X */
+  padding: 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
