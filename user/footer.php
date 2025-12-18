@@ -1,4 +1,4 @@
-<footer class="bg-dark text-light pt-5 pb-3 " style="margin-top: 400px;">
+<footer class="bg-dark text-light pt-5 pb-3 " style="margin-top: 100px;">
     <div class="container">
         <div class="row">
 

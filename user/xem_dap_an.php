@@ -138,5 +138,11 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     </div>
     <?php endforeach; ?>
+    <!-- Nút bắt đầu -->
+    <div class="text-center mt-4">
+        <a href="thi.php?id=<?= $info["id_de_thi"] ?>" class="btn btn-primary btn-lg px-5 py-3 fw-bold">
+            <i class="bi bi-arrow-counterclockwise"></i> Làm lại bài thi này
+        </a>
+    </div>
 </div>
 <?php include("./footer.php"); ?>

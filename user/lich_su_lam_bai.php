@@ -109,14 +109,12 @@ $total_pages = ceil($total / $limit);
                     <td><strong><?= $row['ten_de_thi'] ?></strong></td>
 
                     <td>
-                        <span
-                            class="badge-score 
-                            <?= $row['diem_so'] >= 8 ? 'bg-success-subtle' : ($row['diem_so'] >= 5 ? 'bg-warning-subtle' : 'bg-danger-subtle') ?>">
-                            <?= $row['diem_so'] ?>
-                        </span>
+                        <?= $row['diem_so'] ?>
                     </td>
 
-                    <td><?= $row['thoi_gian_nop'] ?></td>
+                    <td>
+                        <p class="fw-semibold mb-0"> <?= date("d/m/Y H:i", strtotime($row["thoi_gian_nop"])) ?> </p>
+                    </td>
 
                     <td>
                         <a href="xem_dap_an.php?id_kq=<?= $row['id'] ?>" class="btn btn-info btn-sm">
@@ -137,7 +135,8 @@ $total_pages = ceil($total / $limit);
         <ul class="pagination justify-content-center">
 
             <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
-                <a class="page-link" href="?page=<?= $page - 1 ?>&search=<?= $search ?>">Trước</a>
+                <a class="page-link" href="?page=<?= $page - 1 ?>&search=<?= $search ?>"><i
+                        class="bi bi-chevron-left"></i></a>
             </li>
 
             <?php for ($i = 1; $i <= $total_pages; $i++): ?>
@@ -147,7 +146,8 @@ $total_pages = ceil($total / $limit);
             <?php endfor; ?>
 
             <li class="page-item <?= ($page >= $total_pages) ? 'disabled' : '' ?>">
-                <a class="page-link" href="?page=<?= $page + 1 ?>&search=<?= $search ?>">Sau</a>
+                <a class="page-link" href="?page=<?= $page + 1 ?>&search=<?= $search ?>"><i
+                        class="bi bi-chevron-right"></i></a>
             </li>
 
         </ul>

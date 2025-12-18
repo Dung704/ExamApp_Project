@@ -185,7 +185,8 @@ $rs_q = mysqli_query($dbc, $sql_q);
                     <ul class="pagination justify-content-center">
 
                         <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
-                            <a class="page-link" href="?page=<?= $page - 1 ?>&keyword=<?= $keyword ?>">Trước</a>
+                            <a class="page-link" href="?page=<?= $page - 1 ?>&keyword=<?= $keyword ?>"><i
+                                    class="bi bi-chevron-left"></i></a>
                         </li>
 
                         <?php for ($i = 1; $i <= $total_pages; $i++): ?>
@@ -197,7 +198,8 @@ $rs_q = mysqli_query($dbc, $sql_q);
                         <?php endfor; ?>
 
                         <li class="page-item <?= ($page >= $total_pages) ? 'disabled' : '' ?>">
-                            <a class="page-link" href="?page=<?= $page + 1 ?>&keyword=<?= $keyword ?>">Sau</a>
+                            <a class="page-link" href="?page=<?= $page + 1 ?>&keyword=<?= $keyword ?>"><i
+                                    class="bi bi-chevron-right"></i></a>
                         </li>
 
                     </ul>
