@@ -14,26 +14,8 @@ include("../app/config/config.php");
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-    .nav-link {
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
+    <link rel="stylesheet" href="./CSS/style_user.css">
 
-    .nav-link:hover {
-        background-color: #E3ECF6;
-        color: black !important;
-        border-radius: 5px;
-        padding: 6px 12px;
-    }
-
-    .nav-link.active {
-        background-color: #E3ECF6;
-        color: black !important;
-        border-radius: 5px;
-        padding: 6px 12px;
-
-    }
-    </style>
 </head>
 
 <body>
