@@ -238,6 +238,10 @@
                 class="submenu-item <?php echo ($_GET['page'] ?? '') == 'add_lesson' ? 'active' : ''; ?>">
                 <i class="fas fa-plus"></i> Thêm bài học
             </a>
+            <a href="index_admin.php?page=list_file_lesson"
+                class="submenu-item <?php echo ($_GET['page'] ?? '') == 'list_file_lesson' ? 'active' : ''; ?>">
+                <i class="fas fa-list"></i> Danh sách tập tin bài học
+            </a>
         </div>
 
     </div>

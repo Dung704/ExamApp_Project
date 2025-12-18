@@ -17,6 +17,7 @@ $pages = [
   'add_exam_category' => 'exam_manager/add_exam_category.php',
   'edit_exam_category' => 'exam_manager/edit_exam_category.php',
   'list_lesson' => 'exam_manager/list_lesson.php',
+  'list_file_lesson' => 'exam_manager/list_file_lesson.php',
   'add_lesson' => 'exam_manager/add_lesson.php',
   'edit_lesson' => 'exam_manager/edit_lesson.php',
   'dashboard' => 'dashboard_manager/dashboard.php'

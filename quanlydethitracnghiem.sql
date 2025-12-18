@@ -89,7 +89,29 @@ INSERT INTO `danh_muc_de_thi` (`id`, `ten_danh_muc`, `mo_ta`) VALUES
 -- --------------------------------------------------------
 --
 -- Table structure for table `cau_hoi`
+
 --
+-- Table structure for table `de_thi`
+--
+
+CREATE TABLE `de_thi` (--CRUD3
+  `id` varchar(10) NOT NULL,
+  `id_danh_muc` int(11) DEFAULT NULL,
+  `ten_de_thi` varchar(255) NOT NULL,
+  `mo_ta` text DEFAULT NULL,
+  `thoi_gian` int(11) DEFAULT NULL,
+  `id_bai_hoc` varchar(10) DEFAULT NULL,
+  `thang_diem` int(11) DEFAULT 10,
+  `ngay_tao` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `de_thi`
+--
+
+INSERT INTO `de_thi` (`id`, `id_danh_muc`, `ten_de_thi`, `mo_ta`, `thoi_gian`, `id_bai_hoc`, `thang_diem`, `ngay_tao`) VALUES
+('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 1, 'BH1', 10, '2025-12-01 04:37:38'),
+('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 'BH2', 10, '2025-12-01 04:37:38');--
 
 CREATE TABLE `cau_hoi` ( --CRUD2
   `id` varchar(10) NOT NULL,
@@ -162,28 +184,7 @@ INSERT INTO `cau_tra_loi_nguoi_dung` (`id`, `id_cau_hoi`, `id_nguoi_tra_loi`, `n
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `de_thi`
---
 
-CREATE TABLE `de_thi` (--CRUD3
-  `id` varchar(10) NOT NULL,
-  `id_danh_muc` int(11) DEFAULT NULL,
-  `ten_de_thi` varchar(255) NOT NULL,
-  `mo_ta` text DEFAULT NULL,
-  `thoi_gian` int(11) DEFAULT NULL,
-  `id_bai_hoc` varchar(10) DEFAULT NULL,
-  `thang_diem` int(11) DEFAULT 10,
-  `ngay_tao` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `de_thi`
---
-
-INSERT INTO `de_thi` (`id`, `id_danh_muc`, `ten_de_thi`, `mo_ta`, `thoi_gian`, `id_bai_hoc`, `thang_diem`, `ngay_tao`) VALUES
-('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 1, 'BH1', 10, '2025-12-01 04:37:38'),
-('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 'BH2', 10, '2025-12-01 04:37:38');
 
 -- --------------------------------------------------------
 
