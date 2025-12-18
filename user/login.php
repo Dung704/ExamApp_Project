@@ -1,6 +1,11 @@
 <?php
 include("./header.php");
 
+if (isset($_GET['tmp']) && $_GET['tmp'] == 'yeu_cau_dang_nhap') {
+    echo "<div class='alert alert-warning text-center mt-3'>Vui lòng đăng nhập để tiếp tục sử dụng tính năng này !</div>";
+}
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
     $mat_khau = isset($_POST['mat_khau']) ? trim($_POST['mat_khau']) : '';
@@ -21,8 +26,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['anh_dai_dien'] = $row['anh_dai_dien'];
                 $_SESSION['ngay_tao'] = $row['ngay_tao'];
                 $_SESSION['email'] = $row['email'];
+                $_SESSION['gioi_tinh'] = $row['gioi_tinh'];
+                $_SESSION['dia_chi'] = $row['dia_chi'];
+                $_SESSION['ngay_sinh'] = $row['ngay_sinh'];
+                $_SESSION['id_quyen'] = $row['id_quyen'];
                 $_SESSION['so_dien_thoai'] = $row['so_dien_thoai'];
-                header("Location: index.php");
+                if ($row['id_quyen'] === 'Q1') {
+                    header("Location: ../admin/index_admin.php");
+                } else {
+                    header("Location: index.php"); 
+                }
+                        
                 exit();
             } else {
                 echo "<div class='alert alert-danger text-center mt-3'>Mật khẩu không đúng!</div>";
