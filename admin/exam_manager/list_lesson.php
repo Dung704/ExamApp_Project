@@ -107,13 +107,18 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                         <td><?= $row['noi_dung'] ?></td>
                         <td>
                             <?php if ($row['anh_bai_hoc'] != null): ?>
-                                <img src="_assets/_images/<?= $row['anh_bai_hoc'] ?>"
+                                <img src="../user/image_baihoc/<?= $row['anh_bai_hoc'] ?>"
                                     style="width:100px; height:100px; object-fit:cover;">
                             <?php else: ?>
                                 Không có
                             <?php endif; ?>
                         </td>
-                        <td><?= $row['link_bai_hoc'] ?></td>
+
+                        <td>
+                            <a href="<?= $row['link_bai_hoc'] ?>" target="_blank">
+                                <?= $row['link_bai_hoc'] ?>
+                            </a>
+                        </td>
                         <td><?= $row['ten_danh_muc'] ?></td>
                         <?php if (false): ?>
                             <td>
@@ -124,7 +129,7 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                                 $result_files = mysqli_query($conn, $query_files);
                                 if (mysqli_num_rows($result_files) > 0) {
                                     while ($file = mysqli_fetch_assoc($result_files)) {
-                                        echo '<a href="_assets/_files/' . $file['duong_dan'] . '" target="_blank">' . $file['duong_dan'] . '</a><br>';
+                                        echo '<a href="../user/file_pdf' . $file['duong_dan'] . '" target="_blank">' . $file['duong_dan'] . '</a><br>';
                                     }
                                 } else {
                                     echo "Không có";

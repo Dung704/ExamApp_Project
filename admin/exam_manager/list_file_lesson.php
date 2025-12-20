@@ -34,7 +34,7 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                         <td><?= $row['id'] ?></td>
                         <td><?= $row['id_bai_hoc'] . ' (' . $row['tieu_de'] . ')' ?></td>
                         <td>
-                            <a href="_assets/_files/<?= $row['duong_dan'] ?>" target="_blank">
+                            <a href="../user/file_pdf/<?= $row['duong_dan'] ?>" target="_blank">
                                 <?= $row['duong_dan'] ?>
                             </a>
                         </td>

@@ -16,7 +16,7 @@ if (isset($_POST['submit'])) {
     $anh_bai_hoc = '';
     if (isset($_FILES['anh_bai_hoc']) && $_FILES['anh_bai_hoc']['error'] == 0) {
         $anh_bai_hoc = time() . '_' . $_FILES['anh_bai_hoc']['name'];
-        move_uploaded_file($_FILES['anh_bai_hoc']['tmp_name'], '_assets/_images/' . $anh_bai_hoc);
+        move_uploaded_file($_FILES['anh_bai_hoc']['tmp_name'], '../user/image_baihoc/' . $anh_bai_hoc);
     }
 
     // Kiểm tra tiêu đề trùng
@@ -53,26 +53,62 @@ if (isset($_POST['submit'])) {
                 $files = $_FILES['files'];
                 $allowed = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
 
+                // Lấy danh sách file đã có trong database (tất cả bài học)
+                $query_existing_files = "SELECT duong_dan FROM tap_tin_bai_hoc";
+                $result_existing = mysqli_query($conn, $query_existing_files);
+                $existing_files = [];
+                while ($row = mysqli_fetch_assoc($result_existing)) {
+                    $existing_files[] = $row['duong_dan'];
+                }
+
+                // Lấy max ID hiện tại của tap_tin_bai_hoc
+                $query_max_file = "SELECT MAX(CAST(SUBSTRING(id, 3) AS UNSIGNED)) AS max_id FROM tap_tin_bai_hoc";
+                $result_max_file = mysqli_query($conn, $query_max_file);
+                $row_max_file = mysqli_fetch_assoc($result_max_file);
+                $file_counter = ($row_max_file['max_id'] ?? 0) + 1;
+
+                $duplicate_files = [];
+                $uploaded_count = 0;
+
                 for ($i = 0; $i < count($files['name']); $i++) {
                     if ($files['error'][$i] == 0) {
-                        $file_name = time() . '_' . $files['name'][$i];
+                        $file_name = $files['name'][$i];  // ← Không có timestamp
                         $tmp_name  = $files['tmp_name'][$i];
                         $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
-                        if (!in_array($ext, $allowed)) continue; // bỏ qua file không hợp lệ
+                        if (!in_array($ext, $allowed)) continue;
 
-                        move_uploaded_file($tmp_name, '_assets/_files/' . $file_name);
+                        // ✅ Kiểm tra file trùng trong toàn bộ database
+                        if (in_array($file_name, $existing_files)) {
+                            $duplicate_files[] = $file_name;
+                            continue;
+                        }
 
-                        // --- Tạo ID cho file
-                        $new_file_id = 'TT' . $file_counter;
-                        $file_counter++;
+                        if (move_uploaded_file($tmp_name, '_assets/_files/' . $file_name)) {
+                            // Tạo ID cho file
+                            $new_file_id = 'TT' . $file_counter;
+                            $file_counter++;
 
-                        // --- Insert vào tap_tin_bai_hoc
-                        $insert_file = "INSERT INTO tap_tin_bai_hoc 
+                            // Insert vào tap_tin_bai_hoc
+                            $insert_file = "INSERT INTO tap_tin_bai_hoc 
                     (id, id_bai_hoc, duong_dan, loai_tap_tin) 
                     VALUES ('$new_file_id', '$new_id', '$file_name', '$ext')";
-                        mysqli_query($conn, $insert_file);
+                            mysqli_query($conn, $insert_file);
+                            $uploaded_count++;
+                        }
                     }
+                }
+
+                // Thông báo kết quả
+                if (!empty($duplicate_files)) {
+                    echo '<div class="alert alert-warning">
+            <strong>File trùng (đã bỏ qua):</strong><br>' .
+                        implode('<br>', array_map('htmlspecialchars', $duplicate_files)) .
+                        '</div>';
+                }
+
+                if ($uploaded_count > 0) {
+                    echo '<div class="alert alert-success">Đã tải lên ' . $uploaded_count . ' file mới.</div>';
                 }
             }
 

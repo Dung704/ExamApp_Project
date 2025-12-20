@@ -53,6 +53,7 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                     <th>Thời gian (phút)</th>
                     <th>Thang điểm</th>
                     <th>Ngày tạo</th>
+                    <th>Trạng thái</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
@@ -70,7 +71,12 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                         <td><?= $row['thang_diem'] ?></td>
                         <td><?= $row['ngay_tao'] ?></td>
                         <td>
-                            <div class="d-flex align-items-center gap-2">
+                            <span style="color: <?= $row['trang_thai'] == 0 ? 'red' : 'green' ?>">
+                                <?= $row['trang_thai'] == 0 ? 'Đang ẩn' : 'Đang hiển thị' ?>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="align-items-center ">
                                 <a href="index_admin.php?page=edit_exam&id=<?= $row['id'] ?>"
                                     class="btn btn-sm btn-warning">
                                     Sửa

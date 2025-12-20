@@ -26,6 +26,9 @@ $pages = [
   'list_exam_question' => 'exam_manager/list_exam_question.php',
   'add_exam_question' => 'exam_manager/add_exam_question.php',
   'edit_exam_question' => 'exam_manager/edit_exam_question.php',
+  'list_select_question' => 'exam_manager/list_select_question.php',
+  'add_select_question' => 'exam_manager/add_select_question.php',
+  'edit_select_question' => 'exam_manager/edit_select_question.php',
   'dashboard' => 'dashboard_manager/dashboard.php'
 ];
 

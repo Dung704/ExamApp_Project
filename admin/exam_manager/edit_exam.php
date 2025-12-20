@@ -21,7 +21,7 @@ if (isset($_POST['submit'])) {
     $mo_ta        = trim($_POST['mo_ta']);
     $thoi_gian    = (int)$_POST['thoi_gian'];
     $thang_diem   = (int)$_POST['thang_diem'];
-
+    $trang_thai = $_POST['trang_thai'];
     // Check trùng tên + danh mục (loại trừ chính nó)
     $query_duplicate = "
         SELECT 1 
@@ -46,7 +46,8 @@ if (isset($_POST['submit'])) {
                 id_danh_muc = $id_danh_muc,
                 mo_ta = '$mo_ta',
                 thoi_gian = $thoi_gian,
-                thang_diem = $thang_diem
+                thang_diem = $thang_diem,
+                trang_thai = $trang_thai
             WHERE id = '$id_detail'
         ";
 
@@ -83,7 +84,7 @@ if (isset($_POST['submit'])) {
         </div>
 
         <div class="row mb-3">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <label>Danh mục:</label>
                 <select name="id_danh_muc" class="form-control" required>
                     <?php while ($dm = mysqli_fetch_assoc($result_dm)) { ?>
@@ -106,6 +107,15 @@ if (isset($_POST['submit'])) {
                 <input type="number" min="0" name="thang_diem" class="form-control"
                     value="<?= $dt['thang_diem'] ?>">
             </div>
+            <div class="col-md-3">
+                <label>Trạng thái</label>
+                <select name="trang_thai" class="form-control">
+                    <option value="0" <?= $dt['trang_thai'] == 0 ? 'selected' : '' ?>>Ẩn</option>
+                    <option value="1" <?= $dt['trang_thai'] == 1 ? 'selected' : '' ?>>Hiện</option>
+                </select>
+            </div>
+
+
         </div>
 
         <div class="row mb-3">

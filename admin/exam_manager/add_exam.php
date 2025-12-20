@@ -16,7 +16,7 @@ if (isset($_POST['submit'])) {
     $id_danh_muc = $_POST['id_danh_muc'];
     //Kiểm tra trùng
     $query_duplicate = "
-    SELECT 1
+    SELECT id
     FROM de_thi
     WHERE ten_de_thi = '$ten_dt'
       AND id_danh_muc = $id_danh_muc
@@ -26,7 +26,7 @@ if (isset($_POST['submit'])) {
     $duplicate_result = mysqli_fetch_assoc($query_duplicate_result);
 
     if (mysqli_num_rows($query_duplicate_result) > 0) {
-        echo '<div class="alert alert-danger">Tên đề thi đã tồn tại! Mã dt: ' . $duplicate_result['id'] . '</div>';
+        echo '<div class="alert alert-danger">Tên đề thi đã tồn tại! Mã đề thi: ' . $duplicate_result['id'] . '</div>';
     } else {
         $insert = "INSERT INTO de_thi (id, ten_de_thi, mo_ta, thoi_gian, thang_diem, id_danh_muc)
                VALUES ('$new_dt', '$ten_dt', '$mo_ta','$thoi_gian', '$thang_diem', '$id_danh_muc')";
