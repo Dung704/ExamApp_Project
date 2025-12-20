@@ -242,6 +242,10 @@
                 class="submenu-item <?php echo ($_GET['page'] ?? '') == 'list_file_lesson' ? 'active' : ''; ?>">
                 <i class="fas fa-list"></i> Danh sách tập tin bài học
             </a>
+            <a href="index_admin.php?page=list_exam"
+                class="submenu-item <?php echo ($_GET['page'] ?? '') == 'list_exam' ? 'active' : ''; ?>">
+                <i class="fas fa-list"></i> Danh sách đề thi
+            </a>
         </div>
 
     </div>

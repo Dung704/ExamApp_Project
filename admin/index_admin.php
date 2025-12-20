@@ -20,6 +20,12 @@ $pages = [
   'list_file_lesson' => 'exam_manager/list_file_lesson.php',
   'add_lesson' => 'exam_manager/add_lesson.php',
   'edit_lesson' => 'exam_manager/edit_lesson.php',
+  'list_exam' => 'exam_manager/list_exam.php',
+  'add_exam' => 'exam_manager/add_exam.php',
+  'edit_exam' => 'exam_manager/edit_exam.php',
+  'list_exam_question' => 'exam_manager/list_exam_question.php',
+  'add_exam_question' => 'exam_manager/add_exam_question.php',
+  'edit_exam_question' => 'exam_manager/edit_exam_question.php',
   'dashboard' => 'dashboard_manager/dashboard.php'
 ];
 

@@ -137,6 +137,7 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                         <td>
                             <a href="index_admin.php?page=edit_lesson&id=<?= $row['id'] ?>"
                                 class="btn btn-sm btn-warning">Sửa</a>
+
                             <a href="index_admin.php?page=list_lesson&id=<?= $row['id'] ?>"
                                 class="btn btn-sm btn-danger"
                                 onclick="return confirm('Bạn có chắc muốn xoá bài học này?')">

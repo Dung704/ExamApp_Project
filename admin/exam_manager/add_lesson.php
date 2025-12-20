@@ -20,7 +20,15 @@ if (isset($_POST['submit'])) {
     }
 
     // Kiểm tra tiêu đề trùng
-    $query_duplicate = "SELECT id FROM bai_hoc WHERE tieu_de = '$tieu_de'";
+    $query_duplicate = "
+    SELECT bh.id 
+    FROM bai_hoc AS bh
+    INNER JOIN danh_muc_de_thi AS dmdt
+        ON bh.id_danh_muc = dmdt.id
+    WHERE bh.tieu_de = '$tieu_de' 
+      AND dmdt.id = $id_danh_muc
+    LIMIT 1
+";
     $result_duplicate = mysqli_query($conn, $query_duplicate);
     if (mysqli_num_rows($result_duplicate) > 0) {
         echo '<div class="alert alert-danger">Tiêu đề đã tồn tại!</div>';

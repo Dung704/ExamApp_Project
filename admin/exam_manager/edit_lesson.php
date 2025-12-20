@@ -122,7 +122,7 @@ if (isset($_POST['submit'])) {
                 <script>
                     setTimeout(function() {
                         window.location.href = 'index_admin.php?page=edit_lesson&id=$id_detail';
-                    }, 1500);
+                    });
                 </script>
             ";
         } else {
