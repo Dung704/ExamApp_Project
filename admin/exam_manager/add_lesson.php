@@ -84,7 +84,7 @@ if (isset($_POST['submit'])) {
                             continue;
                         }
 
-                        if (move_uploaded_file($tmp_name, '_assets/_files/' . $file_name)) {
+                        if (move_uploaded_file($tmp_name, '../user/file_pdf/' . $file_name)) {
                             // Tạo ID cho file
                             $new_file_id = 'TT' . $file_counter;
                             $file_counter++;
@@ -209,35 +209,46 @@ if (isset($_POST['submit'])) {
     filesInput.addEventListener('change', function(e) {
         const files = Array.from(e.target.files);
 
-        // Chỉ thêm file nếu chưa có trong selectedFiles
+        // Thêm file mới vào selectedFiles (tránh trùng)
         files.forEach(file => {
-            if (!selectedFiles.some(f => f.name === file.name)) {
+            if (!selectedFiles.some(f => f.name === file.name && f.size === f.size)) {
                 selectedFiles.push(file);
             }
         });
 
+        // ✅ Cập nhật lại input.files bằng DataTransfer
+        updateInputFiles();
+
         // Hiển thị preview
+        renderPreview();
+    });
+
+    function updateInputFiles() {
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(file => {
+            dataTransfer.items.add(file);
+        });
+        filesInput.files = dataTransfer.files;
+    }
+
+    function renderPreview() {
         previewContainer.innerHTML = '';
         selectedFiles.forEach((file, index) => {
             const div = document.createElement('div');
-            div.textContent = file.name + " ";
+            div.style.cssText = 'display:flex; align-items:center; gap:10px; padding:5px; border:1px solid #ddd; border-radius:4px;';
 
-            // Thêm nút xóa từng file
-            const removeBtn = document.createElement('button');
-            removeBtn.textContent = "Xóa";
-            removeBtn.type = "button";
-            removeBtn.onclick = () => {
-                selectedFiles.splice(index, 1);
-                div.remove();
+            div.innerHTML = `
+            <span style="flex:1;">${file.name}</span>
+            <button type="button" class="btn btn-sm btn-danger" onclick="removeFile(${index})">Xóa</button>
+        `;
 
-                // Nếu xóa hết file, reset input
-                if (selectedFiles.length === 0) {
-                    filesInput.value = '';
-                }
-            };
-
-            div.appendChild(removeBtn);
             previewContainer.appendChild(div);
         });
-    });
+    }
+
+    function removeFile(index) {
+        selectedFiles.splice(index, 1);
+        updateInputFiles();
+        renderPreview();
+    }
 </script>
