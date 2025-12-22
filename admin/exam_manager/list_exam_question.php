@@ -37,10 +37,7 @@ LEFT JOIN lua_chon AS lc
 WHERE ch.id_de_thi = '$id_dThi'
 GROUP BY ch.id
 ORDER BY CAST(SUBSTRING(ch.id, 3) AS UNSIGNED) ASC
-
 ";
-
-
 $result_to_show = mysqli_query($conn, $query_to_show);
 ?>
 <div class="table-card">

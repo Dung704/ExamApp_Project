@@ -35,9 +35,23 @@ if (isset($_POST['submit'])) {
         echo '<div class="alert alert-danger">Lỗi: ' . mysqli_error($conn) . '</div>';
     }
 }
+$query_to_show = "
+   SELECT 
+    ch.*,
+    dt.ten_de_thi,
+    COUNT(lc.id) AS tong_lua_chon
+FROM cau_hoi AS ch
+LEFT JOIN de_thi AS dt
+    ON ch.id_de_thi = dt.id
+LEFT JOIN lua_chon AS lc
+    ON lc.id_cau_hoi = ch.id
+WHERE ch.id_de_thi = '$id_dThi'
+GROUP BY ch.id
+ORDER BY CAST(SUBSTRING(ch.id, 3) AS UNSIGNED) ASC
+";
+$result_to_show = mysqli_query($conn, $query_to_show);
 ?>
 <div class="table-card">
-
     <h3>Thêm câu hỏi số <?php echo $row['tong'] + 1 ?> cho <?php echo $nameDeThi['ten_de_thi'] ?></h3>
     <form action="" method="post" enctype="multipart/form-data" class="mt-3">
         <div class="row mb-3">
@@ -48,9 +62,9 @@ if (isset($_POST['submit'])) {
             <div class="col-md-2">
                 <label>Mức độ:</label>
                 <select name="muc_do" class="form-control">
-                    <option value="easy">Dễ</option>
-                    <option value="medium">Trung bình</option>
-                    <option value="hard">Khó</option>
+                    <option value="dễ">Dễ</option>
+                    <option value="trung bình">Trung bình</option>
+                    <option value="khó">Khó</option>
                 </select>
             </div>
             <div class="col-md-8">
@@ -71,6 +85,63 @@ if (isset($_POST['submit'])) {
         <button type="submit" name="submit" class="btn btn-primary">Thêm câu hỏi</button>
         <a href="index_admin.php?page=list_exam_question&id=<?= $id_dThi ?>" class="btn btn-secondary">Về trang câu hỏi</a>
     </form>
+
+
+
+    <div class="table-responsive">
+        <table class="table table-hover" id="examTable">
+            <thead>
+                <tr>
+                    <th>Câu</th>
+                    <!-- <th>ID câu hỏi</th> -->
+                    <!-- <th>Đề thi</th> -->
+                    <th>Nội dung</th>
+                    <th>Hình ảnh</th>
+                    <th>Mức độ</th>
+                    <th>Tổng số lựa chọn</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $i = 1;
+                while ($row = mysqli_fetch_assoc($result_to_show)) { ?>
+                    <tr>
+                        <td><?= $i ?></td>
+
+                        <!-- <td><?= $row['id'] ?></td> -->
+
+                        <!-- <td>
+                            <?= $row['id_de_thi'] ?>
+                            <?= $row['ten_de_thi'] ? ' (' . $row['ten_de_thi'] . ')' : '' ?>
+                        </td> -->
+
+                        <td>
+                            <?= mb_strimwidth($row['noi_dung'], 0, 100, '...') ?>
+                        </td>
+
+                        <td>
+                            <?php if (!empty($row['hinh_anh'])): ?>
+                                <img src="../user/image_user/<?= $row['hinh_anh'] ?>"
+                                    style="width:200px;object-fit:cover;border-radius:6px;">
+                            <?php else: ?>
+                                <span class="text-muted">Không có</span>
+                            <?php endif; ?>
+                        </td>
+
+                        <td><?= $row['muc_do'] ?? 'Chưa xác định' ?></td>
+                        <td>
+                            <span class="badge <?= $row['tong_lua_chon'] == 0 ? 'bg-danger' : 'bg-success' ?>">
+                                <?= $row['tong_lua_chon'] ?>
+                            </span>
+                        </td>
+                    </tr>
+                <?php
+                    $i++;
+                } ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>

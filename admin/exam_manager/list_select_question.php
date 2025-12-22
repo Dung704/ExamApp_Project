@@ -86,7 +86,7 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                         </td>
 
                         <td>
-                            <a href="index_admin.php?page=edit_select_question&id=<?= $row['id'] ?>"
+                            <a href="index_admin.php?page=edit_select_question&idLC=<?= $row['id'] ?>&lc=<?= chr(64 + $i) ?>&TT=<?= $tt ?>&idCH=<?= $id_cau_hoi ?>"
                                 class="btn btn-sm btn-warning">
                                 Sửa
                             </a>
