@@ -69,6 +69,7 @@ if (!isset($_SESSION['id_quyen']) || $_SESSION['id_quyen'] !== 'Q1') {
   <script src="_assets/custom_js/jquery_371.js"></script>
   <script src="_assets/custom_js/dataTable_235.js"></script>
   <link rel="stylesheet" href="_assets/custom_css/style.css">
+  <script src="https://cdn.ckeditor.com/ckeditor5/latest/super-build/ckeditor.js"></script>
 </head>
 <?php if ($isValidPage): ?>
 
@@ -305,4 +306,19 @@ if (!isset($_SESSION['id_quyen']) || $_SESSION['id_quyen'] !== 'Q1') {
   //     document.getElementById("sidebar").classList.remove("active");
   //   }
   // }
+</script>
+
+
+
+
+<script>
+  ClassicEditor.create(document.querySelector('#noi_dung'), {
+    toolbar: [
+      'bold', 'italic', 'underline',
+      'bulletedList', 'numberedList',
+      'link', 'blockQuote',
+      'insertTable',
+      'undo', 'redo'
+    ]
+  });
 </script>

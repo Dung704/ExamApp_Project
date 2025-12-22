@@ -1,4 +1,21 @@
 <?php
+// --- Hàm chuyển đổi kích thước 
+function return_bytes($val)
+{
+    $val = trim($val);
+    $last = strtolower($val[strlen($val) - 1]);
+    $val = (int)$val;
+    switch ($last) {
+        case 'g':
+            $val *= 1024;
+        case 'm':
+            $val *= 1024;
+        case 'k':
+            $val *= 1024;
+    }
+    return $val;
+}
+
 // --- Tạo ID tự động BH1, BH2... cho bài học
 $query_max = "SELECT MAX(CAST(SUBSTRING(id, 3) AS UNSIGNED)) AS max_id FROM bai_hoc";
 $result_max = mysqli_query($conn, $query_max);
@@ -7,117 +24,125 @@ $new_id = 'BH' . (($row_max['max_id'] ?? 0) + 1);
 
 // --- Submit form
 if (isset($_POST['submit'])) {
-    $tieu_de      = trim($_POST['tieu_de']);
-    $noi_dung     = trim($_POST['noi_dung']);
-    $link_bai_hoc = trim($_POST['link_bai_hoc']);
-    $id_danh_muc  = $_POST['id_danh_muc'];
+    // Kiểm tra kích thước POST trước
+    $max_post_size = ini_get('post_max_size');
+    $max_post_bytes = return_bytes($max_post_size);
 
-    // --- Upload ảnh bài học
-    $anh_bai_hoc = '';
-    if (isset($_FILES['anh_bai_hoc']) && $_FILES['anh_bai_hoc']['error'] == 0) {
-        $anh_bai_hoc = time() . '_' . $_FILES['anh_bai_hoc']['name'];
-        move_uploaded_file($_FILES['anh_bai_hoc']['tmp_name'], '../user/image_baihoc/' . $anh_bai_hoc);
-    }
-
-    // Kiểm tra tiêu đề trùng
-    $query_duplicate = "
-    SELECT bh.id 
-    FROM bai_hoc AS bh
-    INNER JOIN danh_muc_de_thi AS dmdt
-        ON bh.id_danh_muc = dmdt.id
-    WHERE bh.tieu_de = '$tieu_de' 
-      AND dmdt.id = $id_danh_muc
-    LIMIT 1
-";
-    $result_duplicate = mysqli_query($conn, $query_duplicate);
-    if (mysqli_num_rows($result_duplicate) > 0) {
-        echo '<div class="alert alert-danger">Tiêu đề đã tồn tại!</div>';
+    if ($_SERVER['CONTENT_LENGTH'] > $max_post_bytes) {
+        echo '<div class="alert alert-danger">
+            <strong>Lỗi!</strong> Tổng dung lượng file quá lớn. 
+            Giới hạn: ' . $max_post_size . '. 
+            Vui lòng chọn ít file hơn hoặc file nhỏ hơn.
+        </div>';
     } else {
-        // --- Insert bài học vào bảng bai_hoc
-        $insert = "
-    INSERT INTO bai_hoc 
-    (id, tieu_de, noi_dung, anh_bai_hoc, link_bai_hoc, id_danh_muc)
-    VALUES 
-    ('$new_id', '$tieu_de', '$noi_dung', '$anh_bai_hoc', '$link_bai_hoc', '$id_danh_muc')
-";
-        if (mysqli_query($conn, $insert)) {
+        $tieu_de      = trim($_POST['tieu_de']);
+        $noi_dung     = trim($_POST['noi_dung']);
+        $link_bai_hoc = trim($_POST['link_bai_hoc']);
+        $id_danh_muc  = $_POST['id_danh_muc'];
 
-            // --- Lấy max ID hiện tại của tap_tin_bai_hoc
-            $query_max_file = "SELECT MAX(CAST(SUBSTRING(id, 3) AS UNSIGNED)) AS max_id FROM tap_tin_bai_hoc";
-            $result_max_file = mysqli_query($conn, $query_max_file);
-            $row_max_file = mysqli_fetch_assoc($result_max_file);
-            $file_counter = ($row_max_file['max_id'] ?? 0) + 1;
+        // Kiểm tra tiêu đề trùng
+        $query_duplicate = "
+        SELECT bh.id 
+        FROM bai_hoc AS bh
+        INNER JOIN danh_muc_de_thi AS dmdt
+            ON bh.id_danh_muc = dmdt.id
+        WHERE bh.tieu_de = '$tieu_de' 
+          AND dmdt.id = $id_danh_muc
+        LIMIT 1
+    ";
+        $result_duplicate = mysqli_query($conn, $query_duplicate);
+        if (mysqli_num_rows($result_duplicate) > 0) {
+            echo '<div class="alert alert-danger">Tiêu đề đã tồn tại!</div>';
+        } else {
+            // --- Upload ảnh bài học
+            $anh_bai_hoc = '';
+            if (isset($_FILES['anh_bai_hoc']) && $_FILES['anh_bai_hoc']['error'] == 0) {
+                $anh_bai_hoc = time() . '_' . $_FILES['anh_bai_hoc']['name'];
+                move_uploaded_file($_FILES['anh_bai_hoc']['tmp_name'], '../user/image_baihoc/' . $anh_bai_hoc);
+            }
+            // --- Insert bài học vào bảng bai_hoc
+            $insert = "
+        INSERT INTO bai_hoc 
+        (id, tieu_de, noi_dung, anh_bai_hoc, link_bai_hoc, id_danh_muc)
+        VALUES 
+        ('$new_id', '$tieu_de', '$noi_dung', '$anh_bai_hoc', '$link_bai_hoc', '$id_danh_muc')
+    ";
+            if (mysqli_query($conn, $insert)) {
 
-            // --- Upload nhiều tập tin bài học
-            if (isset($_FILES['files'])) {
-                $files = $_FILES['files'];
-                $allowed = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
-
-                // Lấy danh sách file đã có trong database (tất cả bài học)
-                $query_existing_files = "SELECT duong_dan FROM tap_tin_bai_hoc";
-                $result_existing = mysqli_query($conn, $query_existing_files);
-                $existing_files = [];
-                while ($row = mysqli_fetch_assoc($result_existing)) {
-                    $existing_files[] = $row['duong_dan'];
-                }
-
-                // Lấy max ID hiện tại của tap_tin_bai_hoc
+                // --- Lấy max ID hiện tại của tap_tin_bai_hoc
                 $query_max_file = "SELECT MAX(CAST(SUBSTRING(id, 3) AS UNSIGNED)) AS max_id FROM tap_tin_bai_hoc";
                 $result_max_file = mysqli_query($conn, $query_max_file);
                 $row_max_file = mysqli_fetch_assoc($result_max_file);
                 $file_counter = ($row_max_file['max_id'] ?? 0) + 1;
 
-                $duplicate_files = [];
-                $uploaded_count = 0;
+                // --- Upload nhiều tập tin bài học
+                if (isset($_FILES['files'])) {
+                    $files = $_FILES['files'];
+                    $allowed = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
 
-                for ($i = 0; $i < count($files['name']); $i++) {
-                    if ($files['error'][$i] == 0) {
-                        $file_name = $files['name'][$i];
-                        $tmp_name  = $files['tmp_name'][$i];
-                        $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+                    // Lấy danh sách file đã có trong database (tất cả bài học)
+                    $query_existing_files = "SELECT duong_dan FROM tap_tin_bai_hoc";
+                    $result_existing = mysqli_query($conn, $query_existing_files);
+                    $existing_files = [];
+                    while ($row = mysqli_fetch_assoc($result_existing)) {
+                        $existing_files[] = $row['duong_dan'];
+                    }
 
-                        if (!in_array($ext, $allowed)) continue;
+                    $duplicate_files = [];
+                    $uploaded_count = 0;
 
-                        // ✅ Kiểm tra file trùng trong toàn bộ database
-                        if (in_array($file_name, $existing_files)) {
-                            $duplicate_files[] = $file_name;
-                            continue;
+                    for ($i = 0; $i < count($files['name']); $i++) {
+                        if ($files['error'][$i] == 0) {
+                            $file_name = $files['name'][$i];
+                            $tmp_name  = $files['tmp_name'][$i];
+                            $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+                            if (!in_array($ext, $allowed)) continue;
+
+                            // Kiểm tra file trùng trong toàn bộ database
+                            if (in_array($file_name, $existing_files)) {
+                                $duplicate_files[] = $file_name;
+                                continue;
+                            }
+
+                            if (move_uploaded_file($tmp_name, '../user/file_pdf/' . $file_name)) {
+                                // Tạo ID cho file
+                                $new_file_id = 'TT' . $file_counter;
+                                $file_counter++;
+
+                                // Insert vào tap_tin_bai_hoc
+                                $insert_file = "INSERT INTO tap_tin_bai_hoc 
+                        (id, id_bai_hoc, duong_dan, loai_tap_tin) 
+                        VALUES ('$new_file_id', '$new_id', '$file_name', '$ext')";
+                                mysqli_query($conn, $insert_file);
+                                $uploaded_count++;
+                            }
                         }
+                    }
 
-                        if (move_uploaded_file($tmp_name, '../user/file_pdf/' . $file_name)) {
-                            // Tạo ID cho file
-                            $new_file_id = 'TT' . $file_counter;
-                            $file_counter++;
+                    // Thông báo kết quả
+                    if (!empty($duplicate_files)) {
+                        echo '<div class="alert alert-warning">
+                <strong>File trùng (đã bỏ qua):</strong><br>' .
+                            implode('<br>', array_map('htmlspecialchars', $duplicate_files)) .
+                            '</div>';
+                    }
 
-                            // Insert vào tap_tin_bai_hoc
-                            $insert_file = "INSERT INTO tap_tin_bai_hoc 
-                    (id, id_bai_hoc, duong_dan, loai_tap_tin) 
-                    VALUES ('$new_file_id', '$new_id', '$file_name', '$ext')";
-                            mysqli_query($conn, $insert_file);
-                            $uploaded_count++;
-                        }
+                    if ($uploaded_count > 0) {
+                        echo '<div class="alert alert-success">Đã tải lên ' . $uploaded_count . ' file mới.</div>';
                     }
                 }
 
-                // Thông báo kết quả
-                if (!empty($duplicate_files)) {
-                    echo '<div class="alert alert-warning">
-            <strong>File trùng (đã bỏ qua):</strong><br>' .
-                        implode('<br>', array_map('htmlspecialchars', $duplicate_files)) .
-                        '</div>';
-                }
-
-                if ($uploaded_count > 0) {
-                    echo '<div class="alert alert-success">Đã tải lên ' . $uploaded_count . ' file mới.</div>';
-                }
+                echo '<div class="alert alert-success">Thêm bài học thành công! Mã: ' . $new_id . '</div>';
+            } else {
+                echo '<div class="alert alert-danger">Lỗi: ' . mysqli_error($conn) . '</div>';
             }
-
-            echo '<div class="alert alert-success">Thêm bài học thành công! Mã: ' . $new_id . '</div>';
-        } else {
-            echo '<div class="alert alert-danger">Lỗi: ' . mysqli_error($conn) . '</div>';
         }
     }
 }
+
+// Lấy giới hạn upload từ PHP
+$max_post_size = ini_get('post_max_size');
 ?>
 
 
@@ -166,7 +191,7 @@ if (isset($_POST['submit'])) {
             <div class="col-md-4">
                 <label>Ảnh bài học:</label>
                 <input type="file" name="anh_bai_hoc" id="anh_bai_hoc" class="form-control" accept="image/*">
-                <img id="preview_img" src="#" style="display:none; width:200px; height:200px; object-fit:cover; margin-top:10px;">
+                <img id="preview_img" src="#" style="display:none; width:600px;  object-fit:cover; margin-top:10px;">
             </div>
 
             <div class="col-md-8">
@@ -174,14 +199,22 @@ if (isset($_POST['submit'])) {
                 <input type="file" name="files[]" id="files" class="form-control" multiple
                     accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
                 <small class="text-muted">Chọn nhiều file PDF, Word, Excel, PowerPoint...</small>
+
+                <!-- Hiển thị giới hạn dung lượng -->
+                <div id="size_info" style="margin-top:8px; font-size:13px;">
+                    <strong>Giới hạn tổng dung lượng:</strong>
+                    <span style="color: #28a745; font-weight:bold;"><?= $max_post_size ?></span>
+                    <br>
+                    <span id="current_size" style="color: #007bff;">Chưa chọn file nào</span>
+                </div>
+
                 <div id="preview_files" style="margin-top:10px; display:flex; flex-direction:column; gap:5px;"></div>
             </div>
 
-
-
         </div>
 
-        <button type="submit" name="submit" class="btn btn-primary">Thêm bài học</button>
+        <button type="submit" name="submit" id="submit_btn" class="btn btn-primary">Thêm bài học</button>
+        <a href="index_admin.php?page=list_lesson" class="btn btn-secondary">Về trang bài học</a>
     </form>
 </div>
 
@@ -203,21 +236,51 @@ if (isset($_POST['submit'])) {
 <script>
     let selectedFiles = [];
 
+    // Lấy giới hạn từ PHP (chuyển sang bytes)
+    const maxPostSize = "<?= $max_post_size ?>";
+    const maxBytes = parseSize(maxPostSize);
+
     const filesInput = document.getElementById('files');
     const previewContainer = document.getElementById('preview_files');
+    const submitBtn = document.getElementById('submit_btn');
+    const currentSizeSpan = document.getElementById('current_size');
+
+    //  Hàm chuyển đổi kích thước 
+    function parseSize(size) {
+        const units = {
+            K: 1024,
+            M: 1024 * 1024,
+            G: 1024 * 1024 * 1024
+        };
+        const match = size.match(/^(\d+)([KMG])?$/i);
+        if (!match) return 0;
+        return parseInt(match[1]) * (units[match[2]?.toUpperCase()] || 1);
+    }
+
+    // Hàm format bytes → KB/MB/GB
+    function formatBytes(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return (bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i];
+    }
 
     filesInput.addEventListener('change', function(e) {
         const files = Array.from(e.target.files);
 
         // Thêm file mới vào selectedFiles (tránh trùng)
         files.forEach(file => {
-            if (!selectedFiles.some(f => f.name === file.name && f.size === f.size)) {
+            if (!selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
                 selectedFiles.push(file);
             }
         });
 
-        // ✅ Cập nhật lại input.files bằng DataTransfer
+        //  Cập nhật lại input.files bằng DataTransfer
         updateInputFiles();
+
+        //  Kiểm tra dung lượng
+        checkTotalSize();
 
         // Hiển thị preview
         renderPreview();
@@ -231,6 +294,29 @@ if (isset($_POST['submit'])) {
         filesInput.files = dataTransfer.files;
     }
 
+    // Hàm kiểm tra tổng dung lượng
+    function checkTotalSize() {
+        const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+
+        currentSizeSpan.textContent = `Đã chọn: ${formatBytes(totalSize)} / ${maxPostSize}`;
+
+        if (totalSize > maxBytes) {
+            currentSizeSpan.style.color = '#dc3545'; // Đỏ
+            currentSizeSpan.style.fontWeight = 'bold';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('btn-secondary');
+            submitBtn.classList.remove('btn-primary');
+            submitBtn.textContent = '⚠️ Vượt quá dung lượng cho phép';
+        } else {
+            currentSizeSpan.style.color = '#007bff'; // Xanh
+            currentSizeSpan.style.fontWeight = 'normal';
+            submitBtn.disabled = false;
+            submitBtn.classList.add('btn-primary');
+            submitBtn.classList.remove('btn-secondary');
+            submitBtn.textContent = 'Thêm bài học';
+        }
+    }
+
     function renderPreview() {
         previewContainer.innerHTML = '';
         selectedFiles.forEach((file, index) => {
@@ -238,7 +324,7 @@ if (isset($_POST['submit'])) {
             div.style.cssText = 'display:flex; align-items:center; gap:10px; padding:5px; border:1px solid #ddd; border-radius:4px;';
 
             div.innerHTML = `
-            <span style="flex:1;">${file.name}</span>
+            <span style="flex:1;">${file.name} <small>(${formatBytes(file.size)})</small></span>
             <button type="button" class="btn btn-sm btn-danger" onclick="removeFile(${index})">Xóa</button>
         `;
 
@@ -249,6 +335,10 @@ if (isset($_POST['submit'])) {
     function removeFile(index) {
         selectedFiles.splice(index, 1);
         updateInputFiles();
+        checkTotalSize(); // Cập nhật lại kiểm tra dung lượng
         renderPreview();
     }
+
+    //  Kiểm tra ban đầu khi trang load
+    checkTotalSize();
 </script>

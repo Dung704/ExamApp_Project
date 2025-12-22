@@ -3,6 +3,16 @@
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $delete_exam_category = "DELETE FROM de_thi WHERE id='$id'";
+
+    $query_image = "SELECT hinh_anh FROM cau_hoi WHERE id = '$id'";
+    $result_query_image = mysqli_query($conn, $query_image);
+    if ($row_image = mysqli_fetch_assoc($result_query_image)) {
+        $file_name = $row_image['hinh_anh'];
+        $path = "_assets/_images/" . $file_name;
+        if (!empty($file_name) && file_exists($path)) {
+            unlink($path);
+        }
+    }
     if (mysqli_query($conn, $delete_exam_category)) {
         echo '<div id="alert-box" class="alert alert-success"
             style="position:fixed; top:20px; right:20px; z-index:9999;">Đã xoá!</div>
@@ -17,16 +27,22 @@ if (isset($_GET['id'])) {
     }
 }
 
+
 // --- Lấy dữ liệu đề thi ---
 $query_to_show = "
     SELECT 
-        dt.*, 
-        dmdt.ten_danh_muc
+        dt.*,
+        dmdt.ten_danh_muc,
+        COUNT(ch.id) AS tong_cau_hoi
     FROM de_thi AS dt
     LEFT JOIN danh_muc_de_thi AS dmdt
         ON dt.id_danh_muc = dmdt.id
+    LEFT JOIN cau_hoi AS ch
+        ON ch.id_de_thi = dt.id
+    GROUP BY dt.id
     ORDER BY dt.ngay_tao DESC
 ";
+
 $result_to_show = mysqli_query($conn, $query_to_show);
 ?>
 
@@ -53,6 +69,7 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                     <th>Thời gian (phút)</th>
                     <th>Thang điểm</th>
                     <th>Ngày tạo</th>
+                    <th>Tổng câu hỏi</th>
                     <th>Trạng thái</th>
                     <th>Hành động</th>
                 </tr>
@@ -71,10 +88,26 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                         <td><?= $row['thang_diem'] ?></td>
                         <td><?= $row['ngay_tao'] ?></td>
                         <td>
-                            <span style="color: <?= $row['trang_thai'] == 0 ? 'red' : 'green' ?>">
+                            <?php
+                            $count = $row['tong_cau_hoi'];
+
+                            if ($count == 0) {
+                                $class = 'bg-danger';
+                            } elseif ($count < 10) {
+                                $class = 'bg-warning text-dark';
+                            } else {
+                                $class = 'bg-success';
+                            }
+                            ?>
+                            <span class="badge <?= $class ?>"><?= $count ?></span>
+                        </td>
+
+                        <td>
+                            <span class="badge <?= $row['trang_thai'] == 0 ? 'bg-danger' : 'bg-success' ?>">
                                 <?= $row['trang_thai'] == 0 ? 'Đang ẩn' : 'Đang hiển thị' ?>
                             </span>
                         </td>
+
                         <td>
                             <div class="align-items-center ">
                                 <a href="index_admin.php?page=edit_exam&id=<?= $row['id'] ?>"

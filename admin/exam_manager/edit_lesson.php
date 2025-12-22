@@ -1,7 +1,4 @@
 <?php
-// Tắt hiển thị lỗi PHP (tùy chọn)
-error_reporting(E_ALL & ~E_WARNING);
-ini_set('display_errors', 0);
 
 $id_detail = $_GET['id'];
 
@@ -118,7 +115,7 @@ if (isset($_POST['submit'])) {
                     $files = $_FILES['files'];
                     $allowed = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
 
-                    // ✅ Lấy danh sách file hiện có của bài học này
+                    // Lấy danh sách file hiện có của bài học này
                     $query_existing_files = "SELECT duong_dan FROM tap_tin_bai_hoc WHERE id_bai_hoc = '$id_detail'";
                     $result_existing = mysqli_query($conn, $query_existing_files);
                     $existing_files = [];
@@ -143,7 +140,7 @@ if (isset($_POST['submit'])) {
 
                             if (!in_array($ext, $allowed)) continue;
 
-                            // ✅ Kiểm tra file trùng
+                            // Kiểm tra file trùng
                             if (in_array($file_name, $existing_files)) {
                                 $duplicate_files[] = $file_name;
                                 continue;
@@ -249,19 +246,36 @@ $query_files_result = mysqli_query($conn, $query_files);
                     <div class="row">
                         <div class="col">
                             <input type="file" name="anh_bai_hoc" id="anh_bai_hoc" class="form-control" accept="image/*">
+                            <input type="hidden" name="anh_bai_hoc_cu" value="<?= htmlspecialchars($u['anh_bai_hoc']) ?>">
                         </div>
-                        <div class="col">
+                    </div>
+
+                    <!-- Hiển thị ảnh cũ và ảnh mới preview -->
+                    <div class="row mt-3">
+                        <!-- Ảnh hiện tại -->
+                        <div class="col-md-6">
+                            <label class="text-muted">Ảnh hiện tại:</label>
                             <?php
                             $avatarPath = "../user/image_baihoc/" . $u['anh_bai_hoc'];
                             if (!empty($u['anh_bai_hoc'])) {
-                                echo '<img id="preview_image" src="' . htmlspecialchars($avatarPath) . '" 
-                                    style="width:300px;height:300px;object-fit:cover;border-radius:8px;">';
+                                echo '<img id="current_image" src="' . htmlspecialchars($avatarPath) . '" 
+                    style="width:100%;max-width:600px;object-fit:cover;border-radius:8px;border:2px solid #ddd;">';
                             } else {
-                                echo '<img id="preview_image" src="" alt="Chưa có ảnh" 
-                                    style="width:300px;height:300px;object-fit:cover;border-radius:8px;display:none;border:2px dashed #ccc;">';
-                                echo '<span id="no_image_text" style="color:gray;">Không có ảnh</span>';
+                                echo '<div id="current_image" style="width:100%;max-width:300px;height:300px;display:flex;align-items:center;justify-content:center;border:2px dashed #ccc;border-radius:8px;color:#999;">
+                    Chưa có ảnh
+                </div>';
                             }
                             ?>
+                        </div>
+
+                        <!-- Preview ảnh mới -->
+                        <div class="col-md-6">
+                            <label class="text-success">Preview ảnh mới:</label>
+                            <img id="preview_image" src="" alt=""
+                                style="width:100%;max-width:600px;object-fit:cover;border-radius:8px;border:2px solid #28a745;display:none;">
+                            <div id="no_preview_text" style="width:100%;max-width:300px;height:300px;display:flex;align-items:center;justify-content:center;border:2px dashed #ccc;border-radius:8px;color:#999;">
+                                Chọn ảnh để xem preview
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -337,7 +351,7 @@ $query_files_result = mysqli_query($conn, $query_files);
     // Preview ảnh bài học
     const anhBaiHocInput = document.getElementById('anh_bai_hoc');
     const previewImage = document.getElementById('preview_image');
-    const noImageText = document.getElementById('no_image_text');
+    const noPreviewText = document.getElementById('no_preview_text');
 
     if (anhBaiHocInput) {
         anhBaiHocInput.addEventListener('change', function(e) {
@@ -349,10 +363,14 @@ $query_files_result = mysqli_query($conn, $query_files);
                 reader.onload = function(event) {
                     previewImage.src = event.target.result;
                     previewImage.style.display = 'block';
-                    if (noImageText) noImageText.style.display = 'none';
+                    if (noPreviewText) noPreviewText.style.display = 'none';
                 };
 
                 reader.readAsDataURL(file);
+            } else {
+                // Nếu không chọn file hoặc file không hợp lệ
+                previewImage.style.display = 'none';
+                if (noPreviewText) noPreviewText.style.display = 'flex';
             }
         });
     }

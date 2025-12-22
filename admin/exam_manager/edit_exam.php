@@ -64,73 +64,75 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
-<form method="post">
-    <h3 class="text-center">Cập nhật đề thi</h3>
+<div class="table-card">
+    <form method="post">
+        <h3 class="text-center">Cập nhật đề thi</h3>
 
-    <?php $dt = mysqli_fetch_assoc($query_detail_result); ?>
-    <div class="row mb-3">
-        <h3>Thông tin đề thi</h3>
+        <?php $dt = mysqli_fetch_assoc($query_detail_result); ?>
         <div class="row mb-3">
-            <div class="col-md-6">
-                <label>Mã đề thi:</label>
-                <input type="text" class="form-control" value="<?= $dt['id'] ?>" disabled>
+            <h3>Thông tin đề thi</h3>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label>Mã đề thi:</label>
+                    <input type="text" class="form-control" value="<?= $dt['id'] ?>" disabled>
+                </div>
+
+                <div class="col-md-6">
+                    <label>Tên đề thi:</label>
+                    <input type="text" name="ten_de_thi" class="form-control" required
+                        value="<?= $dt['ten_de_thi'] ?>">
+                </div>
             </div>
 
-            <div class="col-md-6">
-                <label>Tên đề thi:</label>
-                <input type="text" name="ten_de_thi" class="form-control" required
-                    value="<?= $dt['ten_de_thi'] ?>">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label>Danh mục:</label>
+                    <select name="id_danh_muc" class="form-select" required>
+                        <?php while ($dm = mysqli_fetch_assoc($result_dm)) { ?>
+                            <option value="<?= $dm['id'] ?>"
+                                <?= $dm['id'] == $dt['id_danh_muc'] ? 'selected' : '' ?>>
+                                <?= $dm['ten_danh_muc'] ?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label>Thời gian (phút):</label>
+                    <input type="number" min="0" name="thoi_gian" class="form-control"
+                        value="<?= $dt['thoi_gian'] ?>">
+                </div>
+
+                <div class="col-md-3">
+                    <label>Thang điểm:</label>
+                    <input type="number" min="0" name="thang_diem" class="form-control"
+                        value="<?= $dt['thang_diem'] ?>">
+                </div>
+                <div class="col-md-3">
+                    <label>Trạng thái</label>
+                    <select name="trang_thai" class="form-select">
+                        <option value="0" <?= $dt['trang_thai'] == 0 ? 'selected' : '' ?>>Ẩn</option>
+                        <option value="1" <?= $dt['trang_thai'] == 1 ? 'selected' : '' ?>>Hiện</option>
+                    </select>
+                </div>
+
+
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label>Mô tả:</label>
+                    <textarea id="noi_dung" name="mo_ta" class="form-control" rows="5"><?= $dt['mo_ta'] ?></textarea>
+                </div>
             </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col-md-3">
-                <label>Danh mục:</label>
-                <select name="id_danh_muc" class="form-control" required>
-                    <?php while ($dm = mysqli_fetch_assoc($result_dm)) { ?>
-                        <option value="<?= $dm['id'] ?>"
-                            <?= $dm['id'] == $dt['id_danh_muc'] ? 'selected' : '' ?>>
-                            <?= $dm['ten_danh_muc'] ?>
-                        </option>
-                    <?php } ?>
-                </select>
-            </div>
 
-            <div class="col-md-3">
-                <label>Thời gian (phút):</label>
-                <input type="number" min="0" name="thoi_gian" class="form-control"
-                    value="<?= $dt['thoi_gian'] ?>">
-            </div>
+        <button type="submit" name="submit" class="btn btn-primary"
+            onclick="return confirm('Bạn có chắc muốn cập nhật đề thi này?')">
+            Cập nhật đề thi
+        </button>
 
-            <div class="col-md-3">
-                <label>Thang điểm:</label>
-                <input type="number" min="0" name="thang_diem" class="form-control"
-                    value="<?= $dt['thang_diem'] ?>">
-            </div>
-            <div class="col-md-3">
-                <label>Trạng thái</label>
-                <select name="trang_thai" class="form-control">
-                    <option value="0" <?= $dt['trang_thai'] == 0 ? 'selected' : '' ?>>Ẩn</option>
-                    <option value="1" <?= $dt['trang_thai'] == 1 ? 'selected' : '' ?>>Hiện</option>
-                </select>
-            </div>
-
-
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <label>Mô tả:</label>
-                <textarea name="mo_ta" class="form-control" rows="5"><?= $dt['mo_ta'] ?></textarea>
-            </div>
-        </div>
-    </div>
-
-
-    <button type="submit" name="submit" class="btn btn-primary"
-        onclick="return confirm('Bạn có chắc muốn cập nhật đề thi này?')">
-        Cập nhật đề thi
-    </button>
-
-    <a href="index_admin.php?page=list_exam" class="btn btn-secondary">Quay lại</a>
-</form>
+        <a href="index_admin.php?page=list_exam" class="btn btn-secondary">Quay lại</a>
+    </form>
+</div>
