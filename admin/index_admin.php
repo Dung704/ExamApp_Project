@@ -239,6 +239,26 @@ if (!isset($_SESSION['id_quyen']) || $_SESSION['id_quyen'] !== 'Q1') {
         }
       }
     });
+    $('#examTable').DataTable({
+      "pageLength": 10, // số dòng mỗi trang
+      "ordering": true, // cho sắp xếp cột
+      "searching": true, // bật tìm kiếm
+      "lengthChange": true, // chọn số dòng/trang
+      order: [
+        [0, 'desc']
+      ],
+      "language": {
+        "lengthMenu": "Hiển thị _MENU_ dòng",
+        "zeroResults": "Không tìm thấy dữ liệu",
+        "info": "Trang _PAGE_ / _PAGES_",
+        "infoEmpty": "Không có dữ liệu",
+        "search": "Tìm:",
+        "paginate": {
+          "previous": "Trước",
+          "next": "Sau"
+        }
+      }
+    });
   });
 </script>
 

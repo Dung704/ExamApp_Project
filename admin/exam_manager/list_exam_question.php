@@ -119,7 +119,7 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                                 </a>
 
 
-                                <a href="index_admin.php?page=list_select_question&id=<?= $row['id'] ?>"
+                                <a href="index_admin.php?page=list_select_question&id=<?= $row['id'] ?>&TT=<?= $i ?>"
                                     class="btn btn-sm btn-info text-white text-nowrap">
                                     Xem lựa chọn
                                 </a>

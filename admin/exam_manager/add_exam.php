@@ -2,10 +2,7 @@
 $query_max = "SELECT MAX(CAST(SUBSTRING(id, 3) AS UNSIGNED)) AS max_id FROM de_thi";
 $result_max = mysqli_query($conn, $query_max);
 $row_max = mysqli_fetch_assoc($result_max);
-
 $new_dt = 'DT' . ($row_max['max_id'] + 1);
-
-
 
 // Xử lý submit form
 if (isset($_POST['submit'])) {
@@ -67,7 +64,7 @@ if (isset($_POST['submit'])) {
             </div>
             <div class="col-md-4">
                 <label>Danh mục:</label>
-                <select name="id_danh_muc" class="form-control" required>
+                <select name="id_danh_muc" class="form-select" required>
                     <?php
                     $rs = mysqli_query($conn, "SELECT id, ten_danh_muc FROM danh_muc_de_thi");
                     while ($r = mysqli_fetch_assoc($rs)) {

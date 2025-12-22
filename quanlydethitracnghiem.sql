@@ -165,6 +165,30 @@ INSERT INTO `de_thi` (`id`, `id_danh_muc`, `ten_de_thi`, `mo_ta`, `thoi_gian`, `
 ('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 1, 'BH1', 10, '2025-12-01 04:37:38', 0),
 ('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 'BH2', 10, '2025-12-01 04:37:38', 0);
 
+
+--
+-- Table structure for table `lua_chon`
+--
+
+CREATE TABLE `lua_chon` (
+  `id` varchar(10) NOT NULL,
+  `id_cau_hoi` varchar(10) NOT NULL,
+  `noi_dung` text NOT NULL,
+  `dung_sai` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `lua_chon`
+--
+
+INSERT INTO `lua_chon` (`id`, `id_cau_hoi`, `noi_dung`, `dung_sai`) VALUES
+('LC1', 'CH1', 'Bạn bè', 0),
+('LC2', 'CH1', 'Chúng ta', 1),
+('LC3', 'CH2', '六个人', 1),
+('LC4', 'CH2', '四个人', 0),
+('LC5', 'CH3', '2', 1),
+('LC6', 'CH3', '3', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -236,28 +260,7 @@ CREATE TABLE `lich_su_lam_bai` (
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `lua_chon`
---
 
-CREATE TABLE `lua_chon` (
-  `id` varchar(10) NOT NULL,
-  `id_cau_hoi` varchar(10) NOT NULL,
-  `noi_dung` text NOT NULL,
-  `dung_sai` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `lua_chon`
---
-
-INSERT INTO `lua_chon` (`id`, `id_cau_hoi`, `noi_dung`, `dung_sai`) VALUES
-('LC1', 'CH1', 'Bạn bè', 0),
-('LC2', 'CH1', 'Chúng ta', 1),
-('LC3', 'CH2', '六个人', 1),
-('LC4', 'CH2', '四个人', 0),
-('LC5', 'CH3', '2', 1),
-('LC6', 'CH3', '3', 0);
 
 -- --------------------------------------------------------
 
