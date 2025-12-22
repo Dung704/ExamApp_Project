@@ -99,7 +99,6 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                     <th>Hình ảnh</th>
                     <th>Mức độ</th>
                     <th>Tổng số lựa chọn</th>
-
                 </tr>
             </thead>
             <tbody>

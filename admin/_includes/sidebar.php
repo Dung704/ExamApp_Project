@@ -74,104 +74,14 @@
         <i class="fas fa-chart-line"></i> Báo cáo
     </a>
 
-    <!-- Cài đặt -->
-    <a href="index_admin.php?page=settings"
-        class="menu-item <?php echo ($_GET['page'] ?? '') == 'settings' ? 'active' : ''; ?>">
-        <i class="fas fa-cog"></i> Cài đặt
+    <a
+        href="../user/logout.php"
+        class="menu-item"
+        onclick="return confirm('Bạn có chắc chắn muốn đăng xuất không?')">
+        <i class="fas fa-sign-out"></i> Đăng xuất
     </a>
+
 </nav>
-
-<!-- <style>
-    /* Menu item cơ bản */
-    .menu-item {
-        display: flex;
-        align-items: center;
-        padding: 12px 20px;
-        color: #ecf0f1;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        cursor: pointer;
-        border-left: 3px solid transparent;
-    }
-
-    .menu-item:hover {
-        background: #34495e;
-        border-left-color: #3498db;
-    }
-
-    .menu-item.active {
-        background: #34495e;
-        border-left-color: #3498db;
-        color: #3498db;
-    }
-
-    .menu-item i {
-        width: 20px;
-        margin-right: 10px;
-    }
-
-    /* Menu có submenu */
-    .menu-item.has-submenu {
-        justify-content: space-between;
-        position: relative;
-    }
-
-    .menu-item.has-submenu .arrow {
-        transition: transform 0.3s ease;
-        font-size: 12px;
-        width: auto;
-        margin-right: 0;
-    }
-
-    .menu-item.has-submenu.open .arrow {
-        transform: rotate(180deg);
-    }
-
-    /* Submenu */
-    .submenu {
-        max-height: 0;
-        overflow: hidden;
-        background: #1a252f;
-        transition: max-height 0.3s ease;
-    }
-
-    .submenu.open {
-        max-height: 500px;
-    }
-
-    .submenu-item {
-        display: flex;
-        align-items: center;
-        padding: 10px 20px 10px 50px;
-        color: #bdc3c7;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        border-left: 3px solid transparent;
-    }
-
-    .submenu-item:hover {
-        background: #263a4a;
-        color: #ecf0f1;
-        border-left-color: #3498db;
-    }
-
-    .submenu-item.active {
-        background: #263a4a;
-        color: #3498db;
-        border-left-color: #3498db;
-    }
-
-    .submenu-item i {
-        width: 16px;
-        margin-right: 10px;
-        font-size: 14px;
-    }
-
-    /* Menu group */
-    .menu-group {
-        margin-bottom: 5px;
-    }
-</style> -->
 
 <script>
     $(document).ready(function() {
@@ -205,46 +115,3 @@
         });
     });
 </script>
-
-<?php
-/* 
-HƯỚNG DẪN SỬ DỤNG:
-
-1. Để thêm menu mới KHÔNG CÓ submenu:
-   <a href="index_admin.php?page=YOUR_PAGE" 
-      class="menu-item <?php echo ($_GET['page'] ?? '') == 'YOUR_PAGE' ? 'active' : ''; ?>">
-       <i class="fas fa-YOUR-ICON"></i> Tên Menu
-   </a>
-
-2. Để thêm menu CÓ submenu:
-   <div class="menu-group">
-       <div class="menu-item has-submenu <?php echo in_array($_GET['page'] ?? '', ['page1', 'page2']) ? 'active' : ''; ?>"
-            data-submenu="unique-menu-id">
-           <i class="fas fa-YOUR-ICON"></i> 
-           <span>Tên Menu</span>
-           <i class="fas fa-chevron-down arrow"></i>
-       </div>
-       <div class="submenu" id="unique-menu-id">
-           <a href="index_admin.php?page=page1" 
-              class="submenu-item <?php echo ($_GET['page'] ?? '') == 'page1' ? 'active' : ''; ?>">
-               <i class="fas fa-icon1"></i> Submenu 1
-           </a>
-           <a href="index_admin.php?page=page2" 
-              class="submenu-item <?php echo ($_GET['page'] ?? '') == 'page2' ? 'active' : ''; ?>">
-               <i class="fas fa-icon2"></i> Submenu 2
-           </a>
-       </div>
-   </div>
-
-3. Lưu ý:
-   - data-submenu và id của submenu phải giống nhau
-   - Thêm tất cả các page của submenu vào mảng in_array() ở menu cha
-   - Mỗi submenu cần có id duy nhất
-
-4. Nếu muốn cho phép mở nhiều submenu cùng lúc:
-   - Xóa hoặc comment phần code đóng tất cả submenu khác trong JavaScript
-
-5. Nếu muốn lưu trạng thái đóng/mở menu khi reload trang:
-   - Uncomment phần code localStorage trong JavaScript
-*/
-?>
