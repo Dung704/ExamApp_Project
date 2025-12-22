@@ -2,14 +2,29 @@
 <nav class="sidebar-menu">
     <div class="sidebar-header">
         <a href="#" class="sidebar-logo">
-            <i class="fas fa-crown"></i> AdminPro
+            <i class="fas fa-crown"></i> DDT
         </a>
     </div>
-    <!-- Dashboard -->
-    <a href="index_admin.php?page=dashboard"
-        class="menu-item <?php echo ($_GET['page'] ?? '') == 'dashboard' ? 'active' : ''; ?>">
-        <i class="fas fa-home"></i> Dashboard
-    </a>
+
+
+
+    <div class="menu-group">
+        <div class="menu-item has-submenu <?php echo in_array($_GET['page'] ?? '', ['dashboard']) ? 'active' : ''; ?>"
+            data-submenu="settings-menu">
+            <i class="fas fa-gear"></i>
+            <span>Quản lý website</span>
+            <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="submenu" id="settings-menu">
+            <!-- Dashboard -->
+            <a href="index_admin.php?page=dashboard"
+                class="submenu-item <?php echo ($_GET['page'] ?? '') == 'dashboard' ? 'active' : ''; ?>">
+                <i class="fas fa-home"></i> Dashboard
+            </a>
+
+
+        </div>
+    </div>
 
     <!-- Quản lý người dùng (có submenu) -->
     <div class="menu-group">
@@ -67,19 +82,6 @@
         </div>
 
     </div>
-
-    <!-- Báo cáo (không có submenu) -->
-    <a href="index_admin.php?page=reports"
-        class="menu-item <?php echo ($_GET['page'] ?? '') == 'reports' ? 'active' : ''; ?>">
-        <i class="fas fa-chart-line"></i> Báo cáo
-    </a>
-
-    <a
-        href="../user/logout.php"
-        class="menu-item"
-        onclick="return confirm('Bạn có chắc chắn muốn đăng xuất không?')">
-        <i class="fas fa-sign-out"></i> Đăng xuất
-    </a>
 
 </nav>
 
