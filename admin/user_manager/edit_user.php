@@ -30,7 +30,7 @@ if (isset($_POST['submit'])) {
 
         if ($row_image = mysqli_fetch_assoc($result_query_image)) {
             $file_name = $row_image['anh_dai_dien'];
-            $path = __DIR__ . "/../user/image_user/" . $file_name;
+            $path = "../user/image_user/" . $file_name;
             if (file_exists($path)) unlink($path);
         }
 
