@@ -34,7 +34,7 @@ $query_to_show = "SELECT
 FROM nguoi_dung AS nd
 LEFT JOIN phan_quyen AS pq
     ON nd.id_quyen = pq.id
-ORDER BY nd.id ASC;
+ORDER BY nd.ngay_tao ASC;
 ";
 $result_to_show = mysqli_query($conn, $query_to_show);
 ?>
@@ -84,7 +84,7 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                         <td>
                             <?php if ($row['anh_dai_dien'] != null): ?>
                                 <img src="../user/image_user/<?php echo $row['anh_dai_dien']; ?>"
-                                    style="width:100px; height:100px; object-fit:cover;">
+                                    style="width:300px; object-fit:cover;">
                             <?php else: ?>
                                 Không có
                             <?php endif; ?>

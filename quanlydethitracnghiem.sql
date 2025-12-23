@@ -136,6 +136,53 @@ INSERT INTO `cau_tra_loi_nguoi_dung` (`id`, `id_cau_hoi`, `id_nguoi_tra_loi`, `n
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cau_hoi_nguoi_dung`
+--
+
+CREATE TABLE `cau_hoi_nguoi_dung` (
+  `id` varchar(50) NOT NULL,
+  `noi_dung` text NOT NULL,
+  `anh_dinh_kem` varchar(255) DEFAULT NULL,
+  `id_nguoi_hoi` varchar(10) NOT NULL,
+  `thoi_gian_tao` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cau_hoi_nguoi_dung`
+--
+
+INSERT INTO `cau_hoi_nguoi_dung` (`id`, `noi_dung`, `anh_dinh_kem`, `id_nguoi_hoi`, `thoi_gian_tao`) VALUES
+('CHND_20251211_23a9652133', 'Có ai có tài liệu học HSK không ạ, \r\ngửi cho em qua mail này với ạ, admin không cho upload file lên đây ạ.', NULL, 'ND8', '2025-12-11 11:57:03'),
+('CHND_20251211_3e3007cd52', 'Nên học trong bao lâu thì đi thi lấy chứng chỉ HSK được ạ', NULL, 'ND8', '2025-12-11 11:55:29'),
+('CHND_20251211_7a206e4836', 'Mọi người ơi , có ai học tốt tiếng Nhật không ạ , em săp đi nhật rồi ạ.', NULL, 'ND6', '2025-12-11 12:01:28'),
+('CHND_20251211_81c1a011ca', 'Chữ trong ảnh này đọc thế nào ạ', 'CHND_20251211_81c1a011ca.jpg', 'ND6', '2025-12-11 14:06:05'),
+('CHND_20251211_e3201d6b8f', 'Làm sao để nhớ được từ vựng nhanh vậy mọi người \nMong được giải đáp ạ.', NULL, 'ND8', '2025-12-11 11:54:33');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cau_tra_loi_nguoi_dung`
+--
+
+CREATE TABLE `cau_tra_loi_nguoi_dung` (
+  `id` varchar(50) NOT NULL,
+  `id_cau_hoi` varchar(50) NOT NULL,
+  `id_nguoi_tra_loi` varchar(10) NOT NULL,
+  `noi_dung` text NOT NULL,
+  `anh_dinh_kem` varchar(255) DEFAULT NULL,
+  `thoi_gian_tao` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cau_tra_loi_nguoi_dung`
+--
+
+INSERT INTO `cau_tra_loi_nguoi_dung` (`id`, `id_cau_hoi`, `id_nguoi_tra_loi`, `noi_dung`, `anh_dinh_kem`, `thoi_gian_tao`) VALUES
+('05a350d28267658c8427', 'CHND_20251211_23a9652133', 'ND6', 'Có nha bạn', '1765439929_736462.png', '2025-12-11 14:58:49');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `danh_muc_de_thi`
 --
 
@@ -382,20 +429,6 @@ CREATE TABLE `lich_su_lam_bai` (
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `lua_chon`
---
-
-CREATE TABLE `lua_chon` (
-  `id` varchar(10) NOT NULL,
-  `id_cau_hoi` varchar(10) NOT NULL,
-  `noi_dung` text NOT NULL,
-  `dung_sai` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `lua_chon`
---
 
 INSERT INTO `lua_chon` (`id`, `id_cau_hoi`, `noi_dung`, `dung_sai`) VALUES
 ('LC1', 'CH1', 'Bạn bè', 0),
