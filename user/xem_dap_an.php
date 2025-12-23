@@ -1,34 +1,41 @@
 <?php
 include("./header.php");
 
-// Kiểm tra ID kết quả
+/* =========================
+   1. KIỂM TRA ID KẾT QUẢ
+========================= */
 if (!isset($_GET['id_kq'])) {
     die("Lỗi: Không có mã kết quả.");
 }
 
 $id_kq = $_GET['id_kq'];
 
-// Lấy thông tin đề thi từ kết quả
-$sql = "
+/* =========================
+   2. LẤY THÔNG TIN ĐỀ THI
+========================= */
+$sql_info = "
     SELECT kq.id_de_thi, dt.ten_de_thi
     FROM ket_qua_thi kq
     JOIN de_thi dt ON kq.id_de_thi = dt.id
     WHERE kq.id = '$id_kq'
 ";
-$info = mysqli_fetch_assoc(mysqli_query($dbc, $sql));
+$rs_info = mysqli_query($dbc, $sql_info);
+$info = mysqli_fetch_assoc($rs_info);
 
 if (!$info) {
     die("Không tìm thấy kết quả thi.");
 }
 
-// Lấy toàn bộ câu hỏi + người dùng đã chọn
+/* =========================
+   3. LẤY CHI TIẾT CÂU HỎI + ĐÁP ÁN
+========================= */
 $sql_ct = "
-    SELECT 
+SELECT 
     ch.id AS id_cau_hoi,
     ch.noi_dung AS cau_hoi,
     ch.hinh_anh,
-    kqct.id_lua_chon AS lua_chon_user,
 
+    kqct.id_lua_chon AS lua_chon_user,
     lc_user.noi_dung AS nd_user,
     lc_user.dung_sai AS user_dung_sai,
 
@@ -37,54 +44,99 @@ $sql_ct = "
 FROM ket_qua_chi_tiet kqct
 JOIN cau_hoi ch ON kqct.id_cau_hoi = ch.id
 LEFT JOIN lua_chon lc_user ON kqct.id_lua_chon = lc_user.id
-JOIN lua_chon lc_dung ON lc_dung.id_cau_hoi = ch.id AND lc_dung.dung_sai = 1
+JOIN lua_chon lc_dung 
+    ON lc_dung.id_cau_hoi = ch.id 
+    AND lc_dung.dung_sai = 1
 WHERE kqct.id_ket_qua = '$id_kq'
 ORDER BY ch.id
-
 ";
 
 $result = mysqli_query($dbc, $sql_ct);
+
+/* =========================
+   4. GOM DỮ LIỆU THEO CÂU HỎI
+   (QUAN TRỌNG: xử lý câu nhiều đáp án)
+========================= */
+$questions = [];
+
+while ($row = mysqli_fetch_assoc($result)) {
+    $id = $row['id_cau_hoi'];
+
+    if (!isset($questions[$id])) {
+        $questions[$id] = [
+            'cau_hoi' => $row['cau_hoi'],
+            'hinh_anh' => $row['hinh_anh'],
+            'user_answers' => [],
+            'correct_answers' => []
+        ];
+    }
+
+    // Đáp án người dùng chọn
+    if ($row['lua_chon_user'] !== null) {
+        if (!in_array(
+            $row['nd_user'],
+            array_column($questions[$id]['user_answers'], 'noi_dung')
+        )) {
+            $questions[$id]['user_answers'][] = [
+                'noi_dung' => $row['nd_user'],
+                'dung_sai' => $row['user_dung_sai']
+            ];
+        }
+
+    }
+
+    // Đáp án đúng (tránh trùng)
+    if (!in_array(
+        $row['nd_dung'],
+        array_column($questions[$id]['correct_answers'], 'noi_dung')
+    )) {
+        $questions[$id]['correct_answers'][] = [
+            'noi_dung' => $row['nd_dung']
+        ];
+    }
+}
 ?>
 
+<!-- =========================
+     5. HIỂN THỊ GIAO DIỆN
+========================= -->
 <div class="container my-4">
     <h3>Đáp án chi tiết: <?= $info['ten_de_thi'] ?></h3>
 
-    <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+    <?php foreach ($questions as $q): ?>
     <div class="card p-3 my-3">
 
-        <h5><strong>Câu hỏi:</strong> <?= $row['cau_hoi'] ?></h5>
+        <h5><strong>Câu hỏi:</strong> <?= $q['cau_hoi'] ?></h5>
 
-        <?php if (!empty($row['hinh_anh'])) { ?>
-        <img src="./image_user/<?= $row['hinh_anh'] ?>" alt="Hình câu hỏi" style="max-width:300px;" class=" my-2">
+        <?php if (!empty($q['hinh_anh'])): ?>
+        <img src="./image_cauhoi/<?= $q['hinh_anh'] ?>" alt="Hình câu hỏi" style="max-width:300px" class="my-2">
+        <?php endif; ?>
 
-        <?php } ?>
+        <hr>
 
-        <p>
-            <strong>Đáp án bạn chọn:</strong><br>
-            <?php if ($row['lua_chon_user'] === null) { ?>
-            <span style="color: orange; font-weight:bold;">
-                Chưa chọn đáp án
-            </span>
-            <?php } else if ($row['user_dung_sai'] == 1) { ?>
-            <span style="color: green; font-weight:bold;">
-                <?= $row['nd_user'] ?> (Đúng)
-            </span>
-            <?php } else { ?>
-            <span style="color: red; font-weight:bold;">
-                <?= $row['nd_user'] ?> (Sai)
-            </span>
-            <?php } ?>
-        </p>
+        <p><strong>Đáp án bạn chọn:</strong></p>
 
+        <?php if (empty($q['user_answers'])): ?>
+        <span class="text-warning fw-bold">Chưa chọn đáp án</span>
+        <?php else: ?>
+        <ul>
+            <?php foreach ($q['user_answers'] as $ua): ?>
+            <li style="color: <?= $ua['dung_sai'] ? 'green' : 'red' ?>; font-weight:bold">
+                <?= $ua['noi_dung'] ?>
+                (<?= $ua['dung_sai'] ? 'Đúng' : 'Sai' ?>)
+            </li>
+            <?php endforeach; ?>
+        </ul>
+        <?php endif; ?>
 
-        <p>
-            <strong>Đáp án đúng:</strong><br>
-            <span style="color: green; font-weight:bold;">
-                <?= $row['nd_dung'] ?>
-            </span>
-        </p>
+        <p class="mt-2"><strong>Đáp án đúng:</strong></p>
+        <ul>
+            <?php foreach ($q['correct_answers'] as $ca): ?>
+            <li class="text-success fw-bold"><?= $ca['noi_dung'] ?></li>
+            <?php endforeach; ?>
+        </ul>
 
     </div>
-    <?php } ?>
-
+    <?php endforeach; ?>
 </div>
+<?php include("./footer.php"); ?>
