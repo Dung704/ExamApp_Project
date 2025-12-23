@@ -7,6 +7,10 @@
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
+DROP DATABASE IF EXISTS quanlydethitracnghiem;
+CREATE DATABASE quanlydethitracnghiem CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE quanlydethitracnghiem;
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -164,17 +168,18 @@ CREATE TABLE `de_thi` (
   `mo_ta` text DEFAULT NULL,
   `thoi_gian` int(11) DEFAULT NULL,
   `thang_diem` int(11) DEFAULT 10,
-  `ngay_tao` datetime DEFAULT current_timestamp()
+  `ngay_tao` datetime DEFAULT current_timestamp(),
+  `trang_thai` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `de_thi`
 --
 
-INSERT INTO `de_thi` (`id`, `id_danh_muc`, `ten_de_thi`, `mo_ta`, `thoi_gian`, `thang_diem`, `ngay_tao`) VALUES
-('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 1, 10, '2025-12-01 04:37:38'),
-('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 10, '2025-12-01 04:37:38'),
-('DT_HSK1_01', 1, 'HSK1 - Luyện tập tổng hợp', 'Luyện tập HSK1', 3, 100, '2025-12-17 16:23:59');
+INSERT INTO `de_thi` (`id`, `id_danh_muc`, `ten_de_thi`, `mo_ta`, `thoi_gian`, `thang_diem`, `ngay_tao`, `trang_thai`) VALUES
+('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 1, 10, '2025-12-01 04:37:38', 0),
+('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 10, '2025-12-01 04:37:38', 0),
+('DT_HSK1_01', 1, 'HSK1 - Luyện tập tổng hợp', 'Luyện tập HSK1', 3, 100, '2025-12-17 16:23:59', 0);
 
 -- --------------------------------------------------------
 
@@ -661,9 +666,9 @@ ALTER TABLE `de_thi`
 -- Constraints for table `ket_qua_chi_tiet`
 --
 ALTER TABLE `ket_qua_chi_tiet`
-  ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_1` FOREIGN KEY (`id_ket_qua`) REFERENCES `ket_qua_thi` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_2` FOREIGN KEY (`id_cau_hoi`) REFERENCES `cau_hoi` (`id`),
-  ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_3` FOREIGN KEY (`id_lua_chon`) REFERENCES `lua_chon` (`id`);
+  ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_1` FOREIGN KEY (`id_ket_qua`) REFERENCES `ket_qua_thi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_2` FOREIGN KEY (`id_cau_hoi`) REFERENCES `cau_hoi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_3` FOREIGN KEY (`id_lua_chon`) REFERENCES `lua_chon` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `ket_qua_thi`
