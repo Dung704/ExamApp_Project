@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 18, 2025 at 03:21 AM
+-- Generation Time: Dec 18, 2025 at 05:24 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -176,9 +176,10 @@ CREATE TABLE `de_thi` (
 -- Dumping data for table `de_thi`
 --
 
-INSERT INTO `de_thi` (`id`, `id_danh_muc`, `ten_de_thi`, `mo_ta`, `thoi_gian`, `id_bai_hoc`, `thang_diem`, `ngay_tao`, `trang_thai`) VALUES
-('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 1, 'BH1', 10, '2025-12-01 04:37:38', 0),
-('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 'BH2', 10, '2025-12-01 04:37:38', 0);
+INSERT INTO `de_thi` (`id`, `id_danh_muc`, `ten_de_thi`, `mo_ta`, `thoi_gian`, `thang_diem`, `ngay_tao`, `trang_thai`) VALUES
+('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 1, 10, '2025-12-01 04:37:38', 0),
+('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 10, '2025-12-01 04:37:38', 0),
+('DT_HSK1_01', 1, 'HSK1 - Luyện tập tổng hợp', 'Luyện tập HSK1', 3, 100, '2025-12-17 16:23:59', 0);
 
 -- --------------------------------------------------------
 
@@ -299,7 +300,17 @@ INSERT INTO `ket_qua_chi_tiet` (`id`, `id_ket_qua`, `id_cau_hoi`, `id_lua_chon`)
 (160, 'KQ32', 'CH_HSK1_07', 'LC107A'),
 (161, 'KQ32', 'CH_HSK1_08', 'LC108A'),
 (162, 'KQ32', 'CH_HSK1_09', 'LC109A'),
-(163, 'KQ32', 'CH_HSK1_10', 'LC110A');
+(163, 'KQ32', 'CH_HSK1_10', 'LC110A'),
+(164, 'KQ33', 'CH_HSK1_01', NULL),
+(165, 'KQ33', 'CH_HSK1_02', NULL),
+(166, 'KQ33', 'CH_HSK1_03', NULL),
+(167, 'KQ33', 'CH_HSK1_04', NULL),
+(168, 'KQ33', 'CH_HSK1_05', NULL),
+(169, 'KQ33', 'CH_HSK1_06', NULL),
+(170, 'KQ33', 'CH_HSK1_07', NULL),
+(171, 'KQ33', 'CH_HSK1_08', NULL),
+(172, 'KQ33', 'CH_HSK1_09', NULL),
+(173, 'KQ33', 'CH_HSK1_10', NULL);
 
 -- --------------------------------------------------------
 
@@ -347,6 +358,7 @@ INSERT INTO `ket_qua_thi` (`id`, `id_nguoi_dung`, `id_de_thi`, `diem_so`, `thoi_
 ('KQ30', 'ND6', 'DT1', NULL, '2025-12-17 14:47:48', '2025-12-17 14:47:48'),
 ('KQ31', 'ND6', 'DT_HSK1_01', 0, '2025-12-17 16:33:53', '2025-12-17 16:28:36'),
 ('KQ32', 'ND6', 'DT_HSK1_01', 60, '2025-12-17 16:36:35', '2025-12-17 16:35:19'),
+('KQ33', 'ND6', 'DT_HSK1_01', 0, '2025-12-18 11:07:02', '2025-12-18 11:06:59'),
 ('KQ4', 'ND7', 'DT1', 5, '2025-12-10 16:01:38', '2025-12-10 16:01:21'),
 ('KQ5', 'ND7', 'DT1', 10, '2025-12-10 16:13:03', '2025-12-10 16:12:07'),
 ('KQ6', 'ND8', 'DT1', 10, '2025-12-11 10:38:27', '2025-12-11 10:38:19'),
@@ -613,7 +625,7 @@ ALTER TABLE `danh_muc_de_thi`
 -- AUTO_INCREMENT for table `ket_qua_chi_tiet`
 --
 ALTER TABLE `ket_qua_chi_tiet`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=164;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=174;
 
 --
 -- Constraints for dumped tables

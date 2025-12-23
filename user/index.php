@@ -13,14 +13,15 @@ $result_bai_hoc = mysqli_query($dbc, $sql_bai_hoc);
 <!-- FORM TÌM KIẾM -->
 <form action="tim_kiem.php" method="GET">
     <div class="d-flex justify-content-center my-5">
-        <div class="input-group" style="max-width: 600px;">
+        <div class="input-group search-box" style="max-width: 600px;">
             <input type="text" name="q" class="form-control" placeholder="Nhập nội dung..." required>
-            <button class="input-group-text bg-white border-start-0" type="submit">
+            <button class="input-group-text bg-black text-white border-start-0" type="submit">
                 <i class="bi bi-search me-2"></i>
             </button>
         </div>
     </div>
 </form>
+
 
 
 <!-- Nội dung chính -->
@@ -29,7 +30,7 @@ $result_bai_hoc = mysqli_query($dbc, $sql_bai_hoc);
 
         <!--  Cột trái: Danh mục đề thi -->
         <div class="col-md-3 mb-4">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">Danh mục bài thi</div>
                 <ul class="list-group list-group-flush">
                     <?php if(mysqli_num_rows($result) > 0): ?>
@@ -49,40 +50,42 @@ $result_bai_hoc = mysqli_query($dbc, $sql_bai_hoc);
 
         <!-- Cột giữa: Bài học mới nhất -->
         <div class="col-md-6 mb-4">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-header bg-success text-white">Bài học Mới Nhất</div>
                 <div class="card-body">
                     <?php if(mysqli_num_rows($result_bai_hoc) > 0): ?>
                     <?php while($row = mysqli_fetch_assoc($result_bai_hoc)): ?>
                     <a href="./chi_tiet_bai_hoc.php?id_bh=<?= $row['id'] ?>" class="text-decoration-none text-dark">
-                        <div class="card mb-3 shadow-sm">
+                        <div class="card mb-3 shadow-sm lesson-card">
                             <div class="card-body">
                                 <div class="row align-items-center">
-                                    <!-- Nội dung bên trái -->
+
                                     <div class="col-8">
-                                        <h5 class="card-title"><?= $row['tieu_de'] ?></h5>
-                                        <p class="card-text mb-1">Ngày tạo: <?= $row['ngay_tao'] ?></p>
-                                        <p class="card-text mb-2 text-truncate d-block"
-                                            style="max-height: 4.5em; overflow: hidden;">
+                                        <h5 class="card-title fw-bold"><?= $row['tieu_de'] ?></h5>
+                                        <p class="text-muted mb-1">Ngày tạo: <?= $row['ngay_tao'] ?></p>
+
+                                        <p class="card-text text-truncate" style="max-height: 4.5em;">
                                             <?= $row['noi_dung'] ?>
                                         </p>
+
                                         <?php if(!empty($row['link_bai_hoc'])): ?>
-                                        <p class="card-text mb-2">
-                                            Link tham khảo:
-                                            <a href="<?= $row['link_bai_hoc'] ?>" target="_blank">
+                                        <p class="mt-2">
+                                            <small>Link tham khảo:</small><br>
+                                            <a href="<?= $row['link_bai_hoc'] ?>" target="_blank" class="text-primary">
                                                 <?= $row['link_bai_hoc'] ?>
                                             </a>
                                         </p>
                                         <?php endif; ?>
                                     </div>
-                                    <!-- Ảnh bên phải -->
+
                                     <div class="col-4 text-end">
                                         <?php if(!empty($row['anh_bai_hoc'])): ?>
                                         <img src="./image_baihoc/<?= $row['anh_bai_hoc'] ?>"
                                             alt="<?= $row['tieu_de'] ?>" class="img-fluid rounded"
-                                            style="max-height: 100px;">
+                                            style="max-height: 110px; object-fit: cover;">
                                         <?php endif; ?>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -94,6 +97,7 @@ $result_bai_hoc = mysqli_query($dbc, $sql_bai_hoc);
                 </div>
             </div>
         </div>
+
 
 
         <!--  Cột phải: Đề thi nổi bật -->
@@ -111,12 +115,12 @@ $result_bai_hoc = mysqli_query($dbc, $sql_bai_hoc);
         ?>
 
         <div class="col-md-3 mb-4">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-header bg-warning text-dark">Đề Thi Nổi Bật</div>
                 <div class="card-body">
                     <?php while($row = mysqli_fetch_assoc($rs_top)): ?>
                     <a href="chi_tiet_de_thi.php?id=<?= $row['id_de_thi'] ?>" class="text-decoration-none">
-                        <span class="badge bg-secondary me-1 mb-1">
+                        <span class="badge bg-secondary mb-2 d-inline-block">
                             <?= htmlspecialchars($row['ten_de_thi']) ?> (<?= $row['so_lan_lam'] ?> lần)
                         </span>
                     </a>
@@ -124,6 +128,7 @@ $result_bai_hoc = mysqli_query($dbc, $sql_bai_hoc);
                 </div>
             </div>
         </div>
+
 
 
 

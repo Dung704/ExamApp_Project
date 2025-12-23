@@ -1,26 +1,62 @@
 <?php
 include_once("./header.php");
-?>
 
-<?php
 $keyword = $_GET['q'] ?? '';
 $keyword = mysqli_real_escape_string($dbc, $keyword);
+
+/* ====== PHÂN TRANG ====== */
+$limit = 10;
+
+/* --- PHÂN TRANG ĐỀ THI --- */
+$page_de = isset($_GET['page_de']) ? (int)$_GET['page_de'] : 1;
+if ($page_de < 1) $page_de = 1;
+$start_de = ($page_de - 1) * $limit;
+
+/* --- PHÂN TRANG BÀI HỌC --- */
+$page_bh = isset($_GET['page_bh']) ? (int)$_GET['page_bh'] : 1;
+if ($page_bh < 1) $page_bh = 1;
+$start_bh = ($page_bh - 1) * $limit;
+
+/* ====== ĐẾM TỔNG SỐ ĐỀ THI ====== */
+$total_de_thi = mysqli_fetch_assoc(mysqli_query($dbc,
+    "SELECT COUNT(*) AS total FROM de_thi 
+     WHERE ten_de_thi LIKE '%$keyword%' 
+        OR mo_ta LIKE '%$keyword%'"
+))['total'];
+
+$total_pages_de = ceil($total_de_thi / $limit);
+
+/* ====== LẤY ĐỀ THI CÓ PHÂN TRANG ====== */
 $sql_de_thi = "
     SELECT * FROM de_thi 
     WHERE ten_de_thi LIKE '%$keyword%' 
         OR mo_ta LIKE '%$keyword%'
+    LIMIT $start_de, $limit
 ";
 $result_de_thi = mysqli_query($dbc, $sql_de_thi);
+
+/* ====== ĐẾM TỔNG SỐ BÀI HỌC ====== */
+$total_bai_hoc = mysqli_fetch_assoc(mysqli_query($dbc,
+    "SELECT COUNT(*) AS total FROM bai_hoc
+     WHERE tieu_de LIKE '%$keyword%' 
+        OR noi_dung LIKE '%$keyword%'"
+))['total'];
+
+$total_pages_bh = ceil($total_bai_hoc / $limit);
+
+/* ====== LẤY BÀI HỌC CÓ PHÂN TRANG ====== */
 $sql_bai_hoc = "
     SELECT * FROM bai_hoc
     WHERE tieu_de LIKE '%$keyword%' 
         OR noi_dung LIKE '%$keyword%'
+    LIMIT $start_bh, $limit
 ";
 $result_bai_hoc = mysqli_query($dbc, $sql_bai_hoc);
 
-$khong_co_bai_hoc = mysqli_num_rows($result_bai_hoc)== 0;
-$khong_co_de_thi = mysqli_num_rows($result_de_thi)== 0;
+$khong_co_bai_hoc = ($total_bai_hoc == 0);
+$khong_co_de_thi = ($total_de_thi == 0);
 ?>
+
 
 <div class="container my-4">
 
@@ -35,17 +71,18 @@ $khong_co_de_thi = mysqli_num_rows($result_de_thi)== 0;
         </div>
     </form>
 
-
     <h3>Đang hiển thị kết quả cho : "<?= htmlspecialchars($keyword) ?>"</h3>
-    <?php if ($khong_co_bai_hoc && $khong_co_de_thi ):?>
+
+    <?php if ($khong_co_bai_hoc && $khong_co_de_thi): ?>
     <p class="text-center text-muted mt-4">
         Không tìm thấy kết quả với từ khóa <?= htmlspecialchars($keyword) ?>
     </p>
+    <?php endif; ?>
 
 
-    <?php endif;?>
-
+    <!-- ====================== ĐỀ THI ====================== -->
     <?php if (mysqli_num_rows($result_de_thi) > 0): ?>
+    <h4 class="mt-4">Đề thi</h4>
     <ul>
         <?php while ($row = mysqli_fetch_assoc($result_de_thi)): ?>
         <li>
@@ -63,10 +100,36 @@ $khong_co_de_thi = mysqli_num_rows($result_de_thi)== 0;
         </li>
         <?php endwhile; ?>
     </ul>
-    <?php endif;?>
+
+    <!-- PHÂN TRANG ĐỀ THI -->
+    <?php if ($total_pages_de > 1): ?>
+    <nav>
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item <?= ($page_de <= 1) ? 'disabled' : '' ?>">
+                <a class="page-link" href="?q=<?= $keyword ?>&page_de=<?= $page_de - 1 ?>">Trước</a>
+            </li>
+
+            <?php for ($i = 1; $i <= $total_pages_de; $i++): ?>
+            <li class="page-item <?= ($i == $page_de) ? 'active' : '' ?>">
+                <a class="page-link" href="?q=<?= $keyword ?>&page_de=<?= $i ?>"><?= $i ?></a>
+            </li>
+            <?php endfor; ?>
+
+            <li class="page-item <?= ($page_de >= $total_pages_de) ? 'disabled' : '' ?>">
+                <a class="page-link" href="?q=<?= $keyword ?>&page_de=<?= $page_de + 1 ?>">Sau</a>
+            </li>
+
+        </ul>
+    </nav>
+    <?php endif; ?>
+    <?php endif; ?>
 
 
+
+    <!-- ====================== BÀI HỌC ====================== -->
     <?php if (mysqli_num_rows($result_bai_hoc) > 0): ?>
+    <h4 class="mt-4">Bài học</h4>
     <ul>
         <?php while ($row = mysqli_fetch_assoc($result_bai_hoc)): ?>
         <li>
@@ -81,7 +144,7 @@ $khong_co_de_thi = mysqli_num_rows($result_de_thi)== 0;
 
                     <h6 class="card-title fw-bold"><?= $row['tieu_de'] ?></h6>
 
-                    <p class="text-secondary  mb-2">
+                    <p class="text-secondary mb-2">
                         <?= substr($row['noi_dung'], 0, 20) ?>...
                     </p>
 
@@ -90,7 +153,6 @@ $khong_co_de_thi = mysqli_num_rows($result_de_thi)== 0;
                         Tài liệu tham khảo: <?= substr($row['link_bai_hoc'], 0, 15) ?>...
                     </p>
                     <?php endif; ?>
-
 
                     <a href="chi_tiet_bai_hoc.php?id_bh=<?= $row['id'] ?>" class="btn btn-outline-primary btn-sm w-100">
                         Xem chi tiết
@@ -101,8 +163,32 @@ $khong_co_de_thi = mysqli_num_rows($result_de_thi)== 0;
         </li>
         <?php endwhile; ?>
     </ul>
-    <?php endif;?>
 
+    <!-- PHÂN TRANG BÀI HỌC -->
+    <?php if ($total_pages_bh > 1): ?>
+    <nav>
+        <ul class="pagination justify-content-center">
+
+            <li class="page-item <?= ($page_bh <= 1) ? 'disabled' : '' ?>">
+                <a class="page-link" href="?q=<?= $keyword ?>&page_bh=<?= $page_bh - 1 ?>"><i
+                        class="bi bi-chevron-left"></i></a>
+            </li>
+
+            <?php for ($i = 1; $i <= $total_pages_bh; $i++): ?>
+            <li class="page-item <?= ($i == $page_bh) ? 'active' : '' ?>">
+                <a class="page-link" href="?q=<?= $keyword ?>&page_bh=<?= $i ?>"><?= $i ?></a>
+            </li>
+            <?php endfor; ?>
+
+            <li class="page-item <?= ($page_bh >= $total_pages_bh) ? 'disabled' : '' ?>">
+                <a class="page-link" href="?q=<?= $keyword ?>&page_bh=<?= $page_bh + 1 ?>"><i
+                        class="bi bi-chevron-right"></i></a>
+            </li>
+
+        </ul>
+    </nav>
+    <?php endif; ?>
+    <?php endif; ?>
 
 </div>
 

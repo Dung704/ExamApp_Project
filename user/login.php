@@ -1,5 +1,6 @@
 <?php
-include("./header.php");
+
+include_once("./header.php");
 
 if (isset($_GET['tmp']) && $_GET['tmp'] == 'yeu_cau_dang_nhap') {
     echo "<div class='alert alert-warning text-center mt-3'>Vui lòng đăng nhập để tiếp tục sử dụng tính năng này !</div>";

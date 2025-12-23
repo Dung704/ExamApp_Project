@@ -56,7 +56,30 @@ if (!empty($kq['thoi_gian_bat_dau']) && !empty($kq['thoi_gian_nop'])) {
 
     $thoi_gian_lam = $phut . " phút " . $giay . " giây";
 }
+/* =========================
+   6. CHỌN CÂU CHÚC MỪNG THEO ĐIỂM
+========================= */
+
+$diem = $kq['diem_so'];
+$thang = $kq['thang_diem'];
+
+$loi_chuc = "";
+
+if ($diem == $thang) {
+    $loi_chuc = "Xuất sắc! Bạn đã đạt điểm tuyệt đối!";
+}
+else if ($diem >= $thang * 0.8) {
+    $loi_chuc = "Rất tốt! Bạn đã làm bài rất chính xác.";
+}
+else if ($diem >= $thang * 0.5) {
+    $loi_chuc = "Bạn làm khá ổn, nhưng vẫn có thể cải thiện thêm.";
+}
+else {
+    $loi_chuc = "Đừng buồn nhé, hãy luyện tập thêm để tiến bộ hơn.";
+}
+
 ?>
+
 
 
 
@@ -76,7 +99,7 @@ if (!empty($kq['thoi_gian_bat_dau']) && !empty($kq['thoi_gian_nop'])) {
         <img src="./image_giao_dien/gau_truc_chuc_mung.jpg" class="card-img-top"
             style="width: 50%; height: 50%; object-fit: cover; margin: auto; display: block;" alt="Gấu trúc chúc mừng">
         <div class="card-body text-center">
-            <p class="card-text">Bạn đã làm rất tốt, tiếp tục phát huy nhé!</p>
+            <p class="card-text text-fw" style="font-weight: bold; font-size: 1.2rem;"><?= $loi_chuc ?></p>
         </div>
     </div>
 
@@ -118,9 +141,16 @@ if (!empty($kq['thoi_gian_bat_dau']) && !empty($kq['thoi_gian_nop'])) {
     </div>
 
     <!-- NÚT XEM CHI TIẾT -->
-    <div class="mt-4">
-        <a href="xem_dap_an.php?id_kq=<?= $id_kq ?>" class="btn btn-info w-100 fw-bold">
+    <div class="mt-4 text-center">
+        <a href="xem_dap_an.php?id_kq=<?= $id_kq ?>" class="btn btn-info w-50 fw-bold">
             Xem chi tiết từng câu hỏi
+        </a>
+
+    </div>
+    <!-- Nút bắt đầu -->
+    <div class="text-center mt-4">
+        <a href="thi.php?id=<?= $kq["id_de_thi"] ?>" class="btn btn-primary btn-lg px-5 py-3 fw-bold">
+            <i class="bi bi-arrow-counterclockwise"></i> Làm lại bài thi này
         </a>
     </div>
 
