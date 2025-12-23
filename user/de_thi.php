@@ -71,24 +71,26 @@ include("./header.php");
     // Lấy danh sách xếp hạng theo số đề đã làm (mỗi đề chỉ tính 1 lần)
     $sql_rank = "
     SELECT 
-        nd.id,
-        nd.ho_ten,
-        nd.anh_dai_dien,
-        COALESCE(COUNT(kq_max.id_de_thi), 0) AS so_de_da_lam,
-        COALESCE(SUM(kq_max.diem_cao_nhat), 0) AS tong_diem
-    FROM nguoi_dung nd
-    LEFT JOIN (
-        SELECT 
-            id_nguoi_dung,
-            id_de_thi,
-            MAX(diem_so) AS diem_cao_nhat
-        FROM ket_qua_thi
-        GROUP BY id_nguoi_dung, id_de_thi
-    ) AS kq_max
+    nd.id,
+    nd.ho_ten,
+    nd.anh_dai_dien,
+    COALESCE(COUNT(kq_max.id_de_thi), 0) AS so_de_da_lam,
+    COALESCE(SUM(kq_max.diem_cao_nhat), 0) AS tong_diem
+FROM nguoi_dung nd
+LEFT JOIN (
+    SELECT 
+        id_nguoi_dung,
+        id_de_thi,
+        MAX(diem_so) AS diem_cao_nhat
+    FROM ket_qua_thi
+    GROUP BY id_nguoi_dung, id_de_thi
+) AS kq_max
     ON nd.id = kq_max.id_nguoi_dung
-    GROUP BY nd.id, nd.ho_ten, nd.anh_dai_dien
-    ORDER BY tong_diem DESC, so_de_da_lam DESC
-    LIMIT 10
+WHERE nd.id_quyen = 'Q2'
+GROUP BY nd.id, nd.ho_ten, nd.anh_dai_dien
+ORDER BY tong_diem DESC, so_de_da_lam DESC
+LIMIT 10;
+
 ";
 
 
@@ -134,11 +136,11 @@ include("./header.php");
                             <tr class="<?php echo $mau_xep_hang?>">
                                 <th><?= $stt ?></th>
 
-                                <td>
-                                    <img src="<?= $avatar ?>" class="rounded-circle me-2"
-                                        style="width: 35px; height: 35px; object-fit: cover;">
-                                    <?= $row['ho_ten'] ?>
-                                </td>
+                                <td> <a href="trang_ca_nhan_nguoi_dung.php?id=<?= $row['id'] ?>"
+                                        class="text-decoration-none text-dark">
+                                        <img src="<?= $avatar ?>" class="rounded-circle me-2"
+                                            style="width: 35px; height: 35px; object-fit: cover;"> <?= $row['ho_ten'] ?>
+                                    </a> </td>
 
                                 <td><?= $row['so_de_da_lam'] ?></td>
                                 <td><?= $row['tong_diem'] ?> </td>

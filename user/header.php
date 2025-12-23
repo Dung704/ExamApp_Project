@@ -13,27 +13,12 @@ include("../app/config/config.php");
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        .nav-link {
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        .nav-link:hover {
-            background-color: #E3ECF6;
-            color: black !important;
-            border-radius: 5px;
-            padding: 6px 12px;
-        }
+    <link rel="stylesheet" href="./CSS/style_user.css">
 
-        .nav-link.active {
-            background-color: #E3ECF6;
-            color: black !important;
-            border-radius: 5px;
-            padding: 6px 12px;
-
-        }
-    </style>
 </head>
 
 <body>
@@ -66,36 +51,38 @@ include("../app/config/config.php");
                         Thiệu</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Cộng đồng</a>
+                    <a class="nav-link <?= ($current_page == 'cong_dong.php') ? 'active' : '' ?>"
+                        href="./cong_dong.php">Cộng
+                        đồng</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link <?= ($current_page == 'lich_su_lam_bai.php') ? 'active' : '' ?>"
                         href="./lich_su_lam_bai.php">Lịch Sử Làm Bài</a>
                 </li>
                 <?php if (isset($_SESSION['id_quyen']) && $_SESSION['id_quyen'] == 'Q1'): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="../admin/index_admin.php">Trang quản lý</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../admin/index_admin.php">Trang quản lý</a>
+                </li>
                 <?php endif; ?>
             </ul>
             <div class="d-flex align-items-center">
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <div class="dropdown">
-                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle ms-2 me-2"
-                            id="userDropdown" data-bs-toggle="dropdown">
-                            <?php $anh_avatar =  $_SESSION['anh_dai_dien'] ?? 'default.png'; ?>
-                            <img src="./image_user/<?php echo $anh_avatar ?>" alt="Ảnh đại diện" class="rounded-circle me-2"
-                                style="width: 40px; height: 40px; object-fit: cover;">
-                            <span><?php echo $_SESSION['ho_ten']; ?></span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="./person.php">Trang cá nhân</a></li>
-                            <li><a class="dropdown-item" href="./logout.php">Đăng xuất</a></li>
-                        </ul>
-                    </div>
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle ms-2 me-2"
+                        id="userDropdown" data-bs-toggle="dropdown">
+                        <?php $anh_avatar =  $_SESSION['anh_dai_dien'] ?? 'default.png'; ?>
+                        <img src="./image_user/<?php echo $anh_avatar ?>" alt="Ảnh đại diện" class="rounded-circle me-2"
+                            style="width: 40px; height: 40px; object-fit: cover;">
+                        <span><?php echo $_SESSION['ho_ten']; ?></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="./person.php">Trang cá nhân</a></li>
+                        <li><a class="dropdown-item" href="./logout.php">Đăng xuất</a></li>
+                    </ul>
+                </div>
                 <?php else: ?>
-                    <a href="./login.php"><button class="btn btn-outline-primary me-2">Đăng nhập</button></a>
-                    <a href="./register.php"><button class="btn btn-primary">Đăng ký</button></a>
+                <a href="./login.php"><button class="btn btn-outline-primary me-2">Đăng nhập</button></a>
+                <a href="./register.php"><button class="btn btn-primary">Đăng ký</button></a>
                 <?php endif; ?>
             </div>
 
