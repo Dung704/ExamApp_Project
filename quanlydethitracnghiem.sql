@@ -52,26 +52,6 @@ INSERT INTO `bai_hoc` (`id`, `tieu_de`, `noi_dung`, `anh_bai_hoc`, `link_bai_hoc
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tap_tin_bai_hoc`
---
-
-CREATE TABLE `tap_tin_bai_hoc` (
-  `id` varchar(10) NOT NULL,
-  `id_bai_hoc` varchar(10) NOT NULL,
-  `duong_dan` varchar(255) NOT NULL,
-  `loai_tap_tin` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `tap_tin_bai_hoc`
---
-
-INSERT INTO `tap_tin_bai_hoc` (`id`, `id_bai_hoc`, `duong_dan`, `loai_tap_tin`) VALUES
-('TT1', 'BH1', 'file1.pdf', 'pdf'),
-('TT2', 'BH2', 'file2.pdf', 'pdf');
-
--- --------------------------------------------------------
---
 -- Table structure for table `cau_hoi`
 --
 
@@ -188,17 +168,17 @@ CREATE TABLE `de_thi` (
   `mo_ta` text DEFAULT NULL,
   `thoi_gian` int(11) DEFAULT NULL,
   `thang_diem` int(11) DEFAULT 10,
-  `ngay_tao` datetime DEFAULT current_timestamp()
+  `ngay_tao` datetime DEFAULT current_timestamp(),
+  `trang_thai` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `de_thi`
 --
 
-INSERT INTO `de_thi` (`id`, `id_danh_muc`, `ten_de_thi`, `mo_ta`, `thoi_gian`, `thang_diem`, `ngay_tao`) VALUES
-('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 1, 10, '2025-12-01 04:37:38'),
-('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 10, '2025-12-01 04:37:38'),
-('DT_HSK1_01', 1, 'HSK1 - Luyện tập tổng hợp', 'Luyện tập HSK1', 3, 100, '2025-12-17 16:23:59');
+INSERT INTO `de_thi` (`id`, `id_danh_muc`, `ten_de_thi`, `mo_ta`, `thoi_gian`, `id_bai_hoc`, `thang_diem`, `ngay_tao`, `trang_thai`) VALUES
+('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 1, 'BH1', 10, '2025-12-01 04:37:38', 0),
+('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 'BH2', 10, '2025-12-01 04:37:38', 0);
 
 -- --------------------------------------------------------
 
@@ -500,6 +480,25 @@ INSERT INTO `phan_quyen` (`id`, `ten_quyen`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tap_tin_bai_hoc`
+--
+
+CREATE TABLE `tap_tin_bai_hoc` (
+  `id` varchar(10) NOT NULL,
+  `id_bai_hoc` varchar(10) NOT NULL,
+  `duong_dan` varchar(255) NOT NULL,
+  `loai_tap_tin` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tap_tin_bai_hoc`
+--
+
+INSERT INTO `tap_tin_bai_hoc` (`id`, `id_bai_hoc`, `duong_dan`, `loai_tap_tin`) VALUES
+('TT1', 'BH1', 'file1.pdf', 'pdf'),
+('TT2', 'BH2', 'file2.pdf', 'pdf');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -509,13 +508,6 @@ INSERT INTO `phan_quyen` (`id`, `ten_quyen`) VALUES
 ALTER TABLE `bai_hoc`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_baihoc_danhmuc` (`id_danh_muc`);
-
---
--- Indexes for table `tap_tin_bai_hoc`
---
-ALTER TABLE `tap_tin_bai_hoc`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_taptin_baihoc` (`id_bai_hoc`);
 
 --
 -- Indexes for table `cau_hoi`
@@ -601,6 +593,13 @@ ALTER TABLE `phan_quyen`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `tap_tin_bai_hoc`
+--
+ALTER TABLE `tap_tin_bai_hoc`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_taptin_baihoc` (`id_bai_hoc`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -625,12 +624,6 @@ ALTER TABLE `ket_qua_chi_tiet`
 --
 ALTER TABLE `bai_hoc`
   ADD CONSTRAINT `fk_baihoc_danhmuc` FOREIGN KEY (`id_danh_muc`) REFERENCES `danh_muc_de_thi` (`id`);
-
---
--- Constraints for table `tap_tin_bai_hoc`
---
-ALTER TABLE `tap_tin_bai_hoc`
-  ADD CONSTRAINT `fk_taptin_baihoc` FOREIGN KEY (`id_bai_hoc`) REFERENCES `bai_hoc` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `cau_hoi`
@@ -691,6 +684,12 @@ ALTER TABLE `lua_chon`
 --
 ALTER TABLE `nguoi_dung`
   ADD CONSTRAINT `fk_nguoidung_quyen` FOREIGN KEY (`id_quyen`) REFERENCES `phan_quyen` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `tap_tin_bai_hoc`
+--
+ALTER TABLE `tap_tin_bai_hoc`
+  ADD CONSTRAINT `fk_taptin_baihoc` FOREIGN KEY (`id_bai_hoc`) REFERENCES `bai_hoc` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
