@@ -1,476 +1,80 @@
 <?php
-// Doanh thu theo giờ/ngày/tháng (start)
-// Doanh thu theo GIỜ (24 giờ trong ngày hôm nay)
-$sql_doanhThu_gio = "
-SELECT 
-    HOUR(hd.Ngay_tao) AS gio,
-    SUM(hd.Tong_tien) AS doanh_thu
-FROM hoa_don AS hd
-WHERE hd.Trang_thai = 3   
-    AND DATE(hd.Ngay_tao) = CURDATE()
-GROUP BY HOUR(hd.Ngay_tao)
-ORDER BY gio ASC
+//Tổng số người dùng
+$sql = "SELECT COUNT(*) AS total FROM nguoi_dung";
+$rs = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($rs);
+$tong_nguoi_dung = $row['total'];
+
+//Tổng số đề thi
+$sql = "SELECT COUNT(*) AS total FROM de_thi";
+$rs = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($rs);
+$tong_de_thi = $row['total'];
+
+//Tổng câu hỏi
+$sql_tong_cau_hoi = "SELECT COUNT(*) AS tong_cau_hoi FROM cau_hoi";
+$result_tong_cau_hoi = mysqli_query($conn, $sql_tong_cau_hoi);
+$row_tong_cau_hoi = mysqli_fetch_assoc($result_tong_cau_hoi);
+$tong_cau_hoi = $row_tong_cau_hoi['tong_cau_hoi'];
+
+//Tổng bài học
+$sql_tong_bai_hoc = "SELECT COUNT(*) AS tong_bai_hoc FROM bai_hoc";
+$result_tong_bai_hoc = mysqli_query($conn, $sql_tong_bai_hoc);
+$row_tong_bai_hoc = mysqli_fetch_assoc($result_tong_bai_hoc);
+$tong_bai_hoc = $row_tong_bai_hoc['tong_bai_hoc'];
+
+//Tổng số lượt thi
+$sql_tong_luot_thi = "SELECT COUNT(*) AS tong_luot_thi FROM ket_qua_thi";
+$result_tong_luot_thi = mysqli_query($conn, $sql_tong_luot_thi);
+$row_tong_luot_thi = mysqli_fetch_assoc($result_tong_luot_thi);
+$tong_luot_thi = $row_tong_luot_thi['tong_luot_thi'];
+
+//Số câu hỏi đã đặt
+$sql_so_cau_hoi_da_dat = "SELECT COUNT(*) AS so_cau_hoi_da_dat FROM cau_hoi_nguoi_dung";
+$result_so_cau_hoi_da_dat = mysqli_query($conn, $sql_so_cau_hoi_da_dat);
+$row_so_cau_hoi_da_dat = mysqli_fetch_assoc($result_so_cau_hoi_da_dat);
+$so_cau_hoi_da_dat = $row_so_cau_hoi_da_dat['so_cau_hoi_da_dat'];
+
+//Số câu trả lời 
+$sql_so_cau_tra_loi = "SELECT COUNT(*) AS so_cau_tra_loi FROM cau_tra_loi_nguoi_dung";
+$result_so_cau_tra_loi = mysqli_query($conn, $sql_so_cau_tra_loi);
+$row_so_cau_tra_loi = mysqli_fetch_assoc($result_so_cau_tra_loi);
+$so_cau_tra_loi = $row_so_cau_tra_loi['so_cau_tra_loi'];
+
+//số câu hỏi cộng đồng chưa trả lời
+$sql_chua_tra_loi = "
+SELECT COUNT(*) AS so_cau_chua_tra_loi
+FROM cau_hoi_nguoi_dung AS ch
+LEFT JOIN cau_tra_loi_nguoi_dung AS ctl
+    ON ch.id = ctl.id_cau_hoi
+WHERE ctl.id IS NULL
 ";
-$result_doanhThu_gio = mysqli_query($conn, $sql_doanhThu_gio);
+$result_chua_tra_loi = mysqli_query($conn, $sql_chua_tra_loi);
+$row_chua_tra_loi = mysqli_fetch_assoc($result_chua_tra_loi);
+$so_cau_chua_tra_loi = $row_chua_tra_loi['so_cau_chua_tra_loi'];
 
-// Khởi tạo mảng 24 giờ với giá trị 0
-$data_doanhThu_gio = array_fill(0, 24, 0);
-while ($row = mysqli_fetch_assoc($result_doanhThu_gio)) {
-    $data_doanhThu_gio[(int)$row['gio']] = (float)$row['doanh_thu'];
-}
-$labels_doanhThu_gio = range(0, 23); // [0, 1, 2, ..., 23]
-
-// Doanh thu theo NGÀY (các ngày trong tháng hiện tại)
-$sql_doanhThu_ngay = "
-SELECT 
-    DAY(hd.Ngay_tao) AS ngay,
-    SUM(hd.Tong_tien) AS doanh_thu
-FROM hoa_don AS hd
-WHERE hd.Trang_thai = 3   
-    AND MONTH(hd.Ngay_tao) = MONTH(CURDATE())
-    AND YEAR(hd.Ngay_tao) = YEAR(CURDATE())
-GROUP BY DAY(hd.Ngay_tao)
-ORDER BY ngay ASC
+//số người dùng mới trong tuần này
+$sql_nguoi_dung_moi = "
+SELECT COUNT(*) AS so_nguoi_dung_moi
+FROM nguoi_dung
+WHERE YEARWEEK(ngay_tao, 1) = YEARWEEK(CURDATE(), 1)
 ";
-$result_doanhThu_ngay = mysqli_query($conn, $sql_doanhThu_ngay);
-
-// Lấy số ngày trong tháng hiện tại
-$soNgayTrongThang = date('t');
-$data_doanhThu_ngay = array_fill(0, $soNgayTrongThang, 0);
-while ($row = mysqli_fetch_assoc($result_doanhThu_ngay)) {
-    $data_doanhThu_ngay[(int)$row['ngay'] - 1] = (float)$row['doanh_thu'];
-}
-$labels_doanhThu_ngay = range(1, $soNgayTrongThang); // [1, 2, 3, ..., 30/31]
-
-// Doanh thu theo THÁNG (12 tháng trong năm hiện tại)
-$sql_doanhThu_thang = "
-SELECT 
-    MONTH(hd.Ngay_tao) AS thang,
-    SUM(hd.Tong_tien) AS doanh_thu
-FROM hoa_don AS hd
-WHERE hd.Trang_thai = 3   
-    AND YEAR(hd.Ngay_tao) = YEAR(CURDATE())
-GROUP BY MONTH(hd.Ngay_tao)
-ORDER BY thang ASC
-";
-$result_doanhThu_thang = mysqli_query($conn, $sql_doanhThu_thang);
-
-// Khởi tạo mảng 12 tháng với giá trị 0
-$data_doanhThu_thang = array_fill(0, 12, 0);
-while ($row = mysqli_fetch_assoc($result_doanhThu_thang)) {
-    $data_doanhThu_thang[(int)$row['thang'] - 1] = (float)$row['doanh_thu'];
-}
-$labels_doanhThu_thang = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
-// Doanh thu theo giờ/ngày/tháng (end)
-
-//Top 5 nhà cung cấp bán ít/nhiều nhất (start)
-// TOP 5 bán nhiều nhất
-$sql_topNhieu_nhaCungCapSeller = "
-SELECT 
-    ncc.Ten_nha_cung_cap,
-    SUM(ct.So_luong) AS tong_so_luong
-FROM chi_tiet_hoa_don AS ct
-JOIN san_pham AS sp 
-    ON ct.Ma_san_pham = sp.Ma_san_pham
-JOIN nha_cung_cap AS ncc
-    ON sp.Ma_nha_cung_cap = ncc.Ma_nha_cung_cap
-JOIN hoa_don AS hd
-    ON ct.Ma_hoa_don = hd.Ma_hoa_don
-WHERE hd.Trang_thai = 3   -- chỉ tính đơn hoàn thành
-GROUP BY ncc.Ma_nha_cung_cap, ncc.Ten_nha_cung_cap
-ORDER BY tong_so_luong DESC
-LIMIT 5;
-
-
-";
-$result_topNhieu_nhaCungCapSeller = mysqli_query($conn, $sql_topNhieu_nhaCungCapSeller);
-
-$labels_topNhieu_nhaCungCapSeller = [];
-$data_topNhieu_nhaCungCapSeller = [];
-
-while ($row = mysqli_fetch_assoc($result_topNhieu_nhaCungCapSeller)) {
-    $labels_topNhieu_nhaCungCapSeller[] = $row['Ten_nha_cung_cap'];
-    $data_topNhieu_nhaCungCapSeller[] = (int)$row['tong_so_luong'];
-}
-
-// TOP 5 bán ít nhất
-$sql_topIt_nhaCungCapSeller = "
-SELECT 
-    ncc.Ten_nha_cung_cap,
-    SUM(ct.So_luong) AS tong_so_luong
-FROM chi_tiet_hoa_don AS ct
-JOIN san_pham AS sp 
-    ON ct.Ma_san_pham = sp.Ma_san_pham
-JOIN nha_cung_cap AS ncc
-    ON sp.Ma_nha_cung_cap = ncc.Ma_nha_cung_cap
-JOIN hoa_don AS hd
-    ON ct.Ma_hoa_don = hd.Ma_hoa_don
-WHERE hd.Trang_thai = 3   -- chỉ tính đơn hoàn thành
-GROUP BY ncc.Ma_nha_cung_cap, ncc.Ten_nha_cung_cap
-ORDER BY tong_so_luong ASC
-LIMIT 5;
-
-
-";
-$result_topIt_nhaCungCapSeller = mysqli_query($conn, $sql_topIt_nhaCungCapSeller);
-
-$labels_topIt_nhaCungCapSeller = [];
-$data_topIt_nhaCungCapSeller = [];
-
-while ($row = mysqli_fetch_assoc($result_topIt_nhaCungCapSeller)) {
-    $labels_topIt_nhaCungCapSeller[] = $row['Ten_nha_cung_cap'];
-    $data_topIt_nhaCungCapSeller[] = (int)$row['tong_so_luong'];
-}
-//Top 5 nhà cung cấp bán ít/nhiều nhất (end)
-
-//Top 5 sản phẩm tồn kho ít/nhiều nhất (start)
-// TOP 5 tồn kho nhiều nhất
-$sql_topNhieu_sanPham = "
-    SELECT Ten_san_pham, So_luong
-    FROM san_pham
-    ORDER BY So_luong DESC
-    LIMIT 5
-";
-$result_topNhieu_sanPham = mysqli_query($conn, $sql_topNhieu_sanPham);
-
-$labels_topNhieu_sanPham = [];
-$data_topNhieu_sanPham = [];
-
-while ($row = mysqli_fetch_assoc($result_topNhieu_sanPham)) {
-    $labels_topNhieu_sanPham[] = $row['Ten_san_pham'];
-    $data_topNhieu_sanPham[] = (int)$row['So_luong'];
-}
-
-// TOP 5 tồn kho ít nhất
-$sql_topIt_sanPham = "
-    SELECT Ten_san_pham, So_luong
-    FROM san_pham
-    ORDER BY So_luong ASC
-    LIMIT 5
-";
-$result_topIt_sanPham = mysqli_query($conn, $sql_topIt_sanPham);
-
-$labels_topIt_sanPham = [];
-$data_topIt_sanPham = [];
-
-while ($row = mysqli_fetch_assoc($result_topIt_sanPham)) {
-    $labels_topIt_sanPham[] = $row['Ten_san_pham'];
-    $data_topIt_sanPham[] = (int)$row['So_luong'];
-}
-//Top 5 sản phẩm tồn kho ít/nhiều nhất (end)
-
-//Top 5 sản phẩm bán ít/nhiều nhất (start)
-// TOP 5 bán nhiều nhất
-$sql_topNhieu_sanPhamSeller = "
-    SELECT 
-        sp.Ten_san_pham,
-        SUM(cthd.So_luong) AS tong_ban
-    FROM chi_tiet_hoa_don AS cthd
-    JOIN san_pham AS sp 
-        ON cthd.Ma_san_pham = sp.Ma_san_pham
-    JOIN hoa_don AS hd 
-        ON cthd.Ma_hoa_don = hd.Ma_hoa_don
-    WHERE hd.Trang_thai = 3  
-    GROUP BY sp.Ma_san_pham, sp.Ten_san_pham
-    ORDER BY tong_ban DESC
-    LIMIT 5
-";
-$result_topNhieu_sanPhamSeller = mysqli_query($conn, $sql_topNhieu_sanPhamSeller);
-
-$labels_topNhieu_sanPhamSeller = [];
-$data_topNhieu_sanPhamSeller = [];
-
-while ($row = mysqli_fetch_assoc($result_topNhieu_sanPhamSeller)) {
-    $labels_topNhieu_sanPhamSeller[] = $row['Ten_san_pham'];
-    $data_topNhieu_sanPhamSeller[] = (int)$row['tong_ban'];
-}
-
-// TOP 5 bán ít nhất
-$sql_topIt_sanPhamSeller = "
-    SELECT 
-        sp.Ten_san_pham,
-        SUM(cthd.So_luong) AS tong_ban
-    FROM chi_tiet_hoa_don AS cthd
-    JOIN san_pham AS sp 
-        ON cthd.Ma_san_pham = sp.Ma_san_pham
-    JOIN hoa_don AS hd 
-        ON cthd.Ma_hoa_don = hd.Ma_hoa_don
-    WHERE hd.Trang_thai = 3  
-    GROUP BY sp.Ma_san_pham, sp.Ten_san_pham
-    ORDER BY tong_ban ASC
-    LIMIT 5
-";
-$result_topIt_sanPhamSeller = mysqli_query($conn, $sql_topIt_sanPhamSeller);
-
-$labels_topIt_sanPhamSeller = [];
-$data_topIt_sanPhamSeller = [];
-
-while ($row = mysqli_fetch_assoc($result_topIt_sanPhamSeller)) {
-    $labels_topIt_sanPhamSeller[] = $row['Ten_san_pham'];
-    $data_topIt_sanPhamSeller[] = (int)$row['tong_ban'];
-}
-//Top 5 sản phẩm bán ít/nhiều nhất (end)
-
-//Tổng tiền theo nền tảng (start)
-$sql_sanphamOnOff_Tien = "
-    SELECT 
-        Loai_don_hang,
-        SUM(Tong_tien) AS tong_tien
-    FROM hoa_don
-    WHERE Trang_thai = 3
-    GROUP BY Loai_don_hang
-";
-
-$result_sanphamOnOff_Tien = mysqli_query($conn, $sql_sanphamOnOff_Tien);
-
-$labels_sanphamOnOff_Tien = [];
-$data_sanphamOnOff_Tien = [];
-
-while ($row = mysqli_fetch_assoc($result_sanphamOnOff_Tien)) {
-    $labels_sanphamOnOff_Tien[] = ($row['Loai_don_hang'] == 0 ? 'Offline' : 'Online');
-    $data_sanphamOnOff_Tien[] = (int)$row['tong_tien'];
-}
-//Tổng tiền theo nền tảng (end)
-
-//Tổng hoá đơn theo nền tảng (start)
-$sql_sanphamOnOff_hoaDon = "
-    SELECT 
-        Loai_don_hang,
-        COUNT(*) AS so_hoa_don
-    FROM hoa_don
-    WHERE Trang_thai = 3
-    GROUP BY Loai_don_hang
-";
-$result_sanphamOnOff_hoaDon = mysqli_query($conn, $sql_sanphamOnOff_hoaDon);
-$labels_sanphamOnOff_hoaDon = [];
-$data_sanphamOnOff_hoaDon = [];
-while ($row = mysqli_fetch_assoc($result_sanphamOnOff_hoaDon)) {
-    $labels_sanphamOnOff_hoaDon[] = ($row['Loai_don_hang'] == 0 ? 'Offline' : 'Online');
-    $data_sanphamOnOff_hoaDon[] = (int)$row['so_hoa_don'];
-}
-//Tổng hoá đơn theo nền tảng (end)
-
-// Chờ xác nhận (0)
-$q0 = mysqli_query($conn, "SELECT COUNT(*) AS so_don FROM hoa_don WHERE Trang_thai = 0");
-$don_0 = (int) mysqli_fetch_assoc($q0)['so_don'];
-
-// Đã giao vận chuyển (2)
-$q2 = mysqli_query($conn, "SELECT COUNT(*) AS so_don FROM hoa_don WHERE Trang_thai = 2");
-$don_2 = (int) mysqli_fetch_assoc($q2)['so_don'];
-
-// Tổng số tài khoản nhân viên (Ma_nhan_vien NOT NULL)
-$sql_nv = "SELECT COUNT(*) AS total_nv FROM tai_khoan WHERE Ma_nhan_vien IS NOT NULL";
-$result_nv = mysqli_query($conn, $sql_nv);
-$total_nv = (int)mysqli_fetch_assoc($result_nv)['total_nv'];
-
-// Tổng số tài khoản khách hàng (Ma_khach_hang NOT NULL)
-$sql_kh = "SELECT COUNT(*) AS total_kh FROM tai_khoan WHERE Ma_khach_hang IS NOT NULL";
-$result_kh = mysqli_query($conn, $sql_kh);
-$total_kh = (int)mysqli_fetch_assoc($result_kh)['total_kh'];
-
-//Top 5 loại sản phẩm bán ít/nhiều nhất (start)
-// TOP 5 bán nhiều nhất
-$sql_topNhieu_loaiSanPhamSeller = "
-    SELECT 
-    lsp.Ten_loai,
-    SUM(ct.So_luong) AS tong_so_luong
-FROM chi_tiet_hoa_don AS ct
-JOIN san_pham AS sp ON ct.Ma_san_pham = sp.Ma_san_pham
-JOIN loai_san_pham AS lsp ON sp.Ma_loai = lsp.Ma_loai
-JOIN hoa_don AS hd ON ct.Ma_hoa_don = hd.Ma_hoa_don
-WHERE hd.Trang_thai = 3
-GROUP BY lsp.Ma_loai, lsp.Ten_loai
-ORDER BY tong_so_luong DESC
-LIMIT 5;
-
-";
-$result_topNhieu_loaiSanPhamSeller = mysqli_query($conn, $sql_topNhieu_loaiSanPhamSeller);
-
-$labels_topNhieu_loaiSanPhamSeller = [];
-$data_topNhieu_loaiSanPhamSeller = [];
-
-while ($row = mysqli_fetch_assoc($result_topNhieu_loaiSanPhamSeller)) {
-    $labels_topNhieu_loaiSanPhamSeller[] = $row['Ten_loai'];
-    $data_topNhieu_loaiSanPhamSeller[] = (int)$row['tong_so_luong'];
-}
-
-// TOP 5 bán ít nhất
-$sql_topIt_loaiSanPhamSeller = "
-   SELECT 
-    lsp.Ten_loai,
-    SUM(ct.So_luong) AS tong_so_luong
-FROM chi_tiet_hoa_don AS ct
-JOIN san_pham AS sp ON ct.Ma_san_pham = sp.Ma_san_pham
-JOIN loai_san_pham AS lsp ON sp.Ma_loai = lsp.Ma_loai
-JOIN hoa_don AS hd ON ct.Ma_hoa_don = hd.Ma_hoa_don
-WHERE hd.Trang_thai = 3
-GROUP BY lsp.Ma_loai, lsp.Ten_loai
-ORDER BY tong_so_luong ASC
-LIMIT 5;
-
-";
-$result_topIt_loaiSanPhamSeller = mysqli_query($conn, $sql_topIt_loaiSanPhamSeller);
-
-$labels_topIt_loaiSanPhamSeller = [];
-$data_topIt_loaiSanPhamSeller = [];
-
-while ($row = mysqli_fetch_assoc($result_topIt_loaiSanPhamSeller)) {
-    $labels_topIt_loaiSanPhamSeller[] = $row['Ten_loai'];
-    $data_topIt_loaiSanPhamSeller[] = (int)$row['tong_so_luong'];
-}
-//Top 5 loại sản phẩm bán ít/nhiều nhất (end)
-
-
-$result_tong_hd = mysqli_query($conn, "SELECT COUNT(*) AS tong_hoa_don FROM hoa_don WHERE Trang_thai = 3");
-$row_tong_hd = mysqli_fetch_assoc($result_tong_hd);
-$tong_hoa_don = (int)$row_tong_hd['tong_hoa_don'];
-
-$result_tong_tien_hd = mysqli_query($conn, "SELECT SUM(Tong_tien) AS tong_tien_hoan_thanh FROM hoa_don WHERE Trang_thai = 3");
-$row_tong_tien_hd = mysqli_fetch_assoc($result_tong_tien_hd);
-$tong_tien_hd = (float)$row_tong_tien_hd['tong_tien_hoan_thanh'];
-
-// Tổng số tài khoản
-$sql_total = "SELECT COUNT(*) AS total FROM tai_khoan";
-$result_total = mysqli_query($conn, $sql_total);
-$total_accounts = (int)mysqli_fetch_assoc($result_total)['total'];
-// Tổng sản phẩm
-$sql_tong_san_pham = "SELECT SUM(So_luong) AS tong_so_luong FROM san_pham";
-$result_tong_san_pham = mysqli_query($conn, $sql_tong_san_pham);
-$total_products = mysqli_fetch_assoc($result_tong_san_pham)['tong_so_luong'];
-
-
+$result_nguoi_dung_moi = mysqli_query($conn, $sql_nguoi_dung_moi);
+$row_nguoi_dung_moi = mysqli_fetch_assoc($result_nguoi_dung_moi);
+$so_nguoi_dung_moi = $row_nguoi_dung_moi['so_nguoi_dung_moi'];
 ?>
 
 <div class="row">
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                            Chờ xác nhận
-                        </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            <?php echo $don_0; ?>
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-hourglass-start fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-info shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                            Đang giao hàng
-                        </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            <?php echo $don_2; ?>
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-shipping-fast fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Tài khoản nhân viên -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-info shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                            Tài khoản nhân viên
-                        </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            <?php echo $total_nv; ?>
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-user-tie fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Tài khoản khách hàng -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                            Tài khoản khách hàng
-                        </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            <?php echo $total_kh; ?>
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-user fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-info shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                            Tổng hóa đơn
-                        </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            <?php echo $tong_hoa_don; ?>
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-file-invoice fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-info shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                            Tổng doanh thu
-                        </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            <?php echo number_format($tong_tien_hd, 0, ',', '.') . " VND";
-                            ?>
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Tổng tài khoản -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card border-left-primary  shadow py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            Tổng tài khoản
+                            Người dùng
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            <?php echo $total_accounts; ?>
+                            <?= $tong_nguoi_dung ?>
                         </div>
                     </div>
                     <div class="col-auto">
@@ -480,26 +84,168 @@ $total_products = mysqli_fetch_assoc($result_tong_san_pham)['tong_so_luong'];
             </div>
         </div>
     </div>
-    <!-- Tổng sản phẩm -->
+
     <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card border-left-success shadow  py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                            Tổng sản phẩm
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Đề thi
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            <?php echo number_format($total_products, 0, ',', '.'); ?>
+                            <?= $tong_de_thi ?>
                         </div>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-box fa-2x text-gray-300"></i>
+                        <i class="fas fa-file-alt fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Tổng số câu hỏi
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <?= $tong_cau_hoi ?>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-question-circle fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Bài học
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <?= $tong_bai_hoc ?>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-book-open fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            Lượt thi
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <?= $tong_luot_thi ?>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-stopwatch fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Câu hỏi đã đặt
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <?= $so_cau_hoi_da_dat ?>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-question fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            Câu trả lời đóng góp
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <?= $so_cau_tra_loi ?>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-reply fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Câu hỏi chưa trả lời
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <?= $so_cau_chua_tra_loi ?>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-exclamation fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-secondary shadow py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                            Người dùng mới tuần này
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <?= $so_nguoi_dung_moi ?>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-user-plus fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div class="row">

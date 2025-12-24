@@ -13,27 +13,12 @@ include("../app/config/config.php");
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
 
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-    .nav-link {
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    .nav-link:hover {
-        background-color: #E3ECF6;
-        color: black !important;
-        border-radius: 5px;
-        padding: 6px 12px;
-    }
+    <link rel="stylesheet" href="./CSS/style_user.css">
 
-    .nav-link.active {
-        background-color: #E3ECF6;
-        color: black !important;
-        border-radius: 5px;
-        padding: 6px 12px;
-
-    }
-    </style>
 </head>
 
 <body>

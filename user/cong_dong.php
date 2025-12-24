@@ -46,15 +46,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['noi_dung'])) {
     <!-- Ô tìm kiếm -->
     <form method="GET">
         <div class="d-flex justify-content-center my-5">
-            <div class="input-group" style="max-width: 600px;">
-                <input type="text" name="keyword" class="form-control" placeholder="Nhập nội dung">
-                <span class="input-group-text bg-white border-start-0">
-                    <i class="bi bi-search me-2"></i>|
-                    <i class="bi bi-mic-fill ms-2"></i>
-                </span>
+            <div class="input-group search-box" style="max-width: 600px;">
+                <input type="text" name="keyword" class="form-control" placeholder="Nhập nội dung"
+                    value="<?= isset($_GET['keyword']) ? $_GET['keyword'] : '' ?>">
+                <button class="input-group-text bg-black text-white border-start-0" type="submit">
+                    <i class="bi bi-search me-2"></i>
+                </button>
             </div>
         </div>
     </form>
+
 
 
     <div class="row">
@@ -90,34 +91,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['noi_dung'])) {
             </div>
 
             <?php
-                $keyword = $_GET['keyword'] ?? '';
+$keyword = isset($_GET['keyword']) ? mysqli_real_escape_string($dbc, $_GET['keyword']) : '';
 
-                if ($keyword != '') {
-                    // Tìm kiếm theo từ khóa
-                    $sql_q = "
-                        SELECT ch.id, ch.noi_dung, ch.thoi_gian_tao, ch.anh_dinh_kem,
-                            nd.ho_ten, nd.anh_dai_dien
-                        FROM cau_hoi_nguoi_dung AS ch
-                        JOIN nguoi_dung AS nd ON ch.id_nguoi_hoi = nd.id
-                        WHERE ch.noi_dung LIKE '%$keyword%'
-                        ORDER BY ch.thoi_gian_tao DESC
-                    ";
-                } else {
-                    // Hiển thị mặc định
-                    $sql_q = "
-                        SELECT ch.id, ch.noi_dung, ch.thoi_gian_tao, ch.anh_dinh_kem,
-                            nd.ho_ten, nd.anh_dai_dien
-                        FROM cau_hoi_nguoi_dung AS ch
-                        JOIN nguoi_dung AS nd ON ch.id_nguoi_hoi = nd.id
-                        ORDER BY ch.thoi_gian_tao DESC
-                        LIMIT 20
-                    ";
-                }
+// Phân trang
+$limit = 10; 
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$start = ($page - 1) * $limit;
 
-                $rs_q = mysqli_query($dbc, $sql_q);
+// Đếm tổng số câu hỏi để phân trang
+$sql_count = "
+    SELECT COUNT(*) AS total
+    FROM cau_hoi_nguoi_dung AS ch
+    JOIN nguoi_dung AS nd ON ch.id_nguoi_hoi = nd.id
+    WHERE ch.noi_dung LIKE '%$keyword%'
+";
+$rs_count = mysqli_query($dbc, $sql_count);
+$total = mysqli_fetch_assoc($rs_count)['total'];
+$total_pages = ceil($total / $limit);
 
+// Lấy danh sách câu hỏi
+$sql_q = "
+    SELECT ch.id, ch.noi_dung, ch.thoi_gian_tao, ch.anh_dinh_kem,
+           nd.ho_ten, nd.anh_dai_dien
+    FROM cau_hoi_nguoi_dung AS ch
+    JOIN nguoi_dung AS nd ON ch.id_nguoi_hoi = nd.id
+    WHERE ch.noi_dung LIKE '%$keyword%'
+    ORDER BY ch.thoi_gian_tao DESC
+    LIMIT $start, $limit
+";
 
-            ?>
+$rs_q = mysqli_query($dbc, $sql_q);
+?>
+
 
             <!-- DANH SÁCH CÂU HỎI -->
             <div class="card shadow-sm">
@@ -176,6 +181,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['noi_dung'])) {
                     <?php endwhile; ?>
 
                 </ul>
+                <nav class="mt-3">
+                    <ul class="pagination justify-content-center">
+
+                        <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+                            <a class="page-link" href="?page=<?= $page - 1 ?>&keyword=<?= $keyword ?>"><i
+                                    class="bi bi-chevron-left"></i></a>
+                        </li>
+
+                        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                        <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                            <a class="page-link" href="?page=<?= $i ?>&keyword=<?= $keyword ?>">
+                                <?= $i ?>
+                            </a>
+                        </li>
+                        <?php endfor; ?>
+
+                        <li class="page-item <?= ($page >= $total_pages) ? 'disabled' : '' ?>">
+                            <a class="page-link" href="?page=<?= $page + 1 ?>&keyword=<?= $keyword ?>"><i
+                                    class="bi bi-chevron-right"></i></a>
+                        </li>
+
+                    </ul>
+                </nav>
+
 
             </div>
 

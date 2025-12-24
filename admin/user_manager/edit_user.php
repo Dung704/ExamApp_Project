@@ -30,11 +30,12 @@ if (isset($_POST['submit'])) {
 
         if ($row_image = mysqli_fetch_assoc($result_query_image)) {
             $file_name = $row_image['anh_dai_dien'];
-            $path = __DIR__ . "/../user/image_user/" . $file_name;
+            $path = "../user/image_user/" . $file_name;
             if (file_exists($path)) unlink($path);
         }
 
         $anh_dai_dien = time() . '_' . $_FILES['anh_dai_dien']['name'];
+        $_SESSION['anh_dai_dien'] = $anh_dai_dien;
         move_uploaded_file($_FILES['anh_dai_dien']['tmp_name'],     '../user/image_user/' . $anh_dai_dien);
     } else {
         // Giữ ảnh cũ
@@ -138,33 +139,38 @@ if (isset($_POST['submit'])) {
                         <?php endwhile; ?>
                     </select>
                 </div>
-
-
             </div>
 
-            <div class="mb-3">
-                <div class="col-md-8">
+            <div class="row mb-3">
+                <div class="col-md-12">
                     <label>Ảnh đại diện:</label>
+                    <input type="file" name="anh_dai_dien" class="form-control" accept="image/*">
+                </div>
+                <div class="col-md-8">
                     <div class="row">
-                        <div class="col">
-                            <input type="file" name="anh_dai_dien" class="form-control" accept="image/*">
-                        </div>
-                        <div class="col">
+                        <div class="col-6">
+                            <label class="text-success">Ảnh hiện tại:</label>
                             <?php
                             // Đường dẫn tương đối để hiển thị ảnh
                             $avatarPath = "../user/image_user/" . $u['anh_dai_dien'];
                             if (!empty($u['anh_dai_dien'])) {
                                 echo '<img src="' . $avatarPath . '" 
-                style="width:300px;height:300px;object-fit:cover;border-radius:8px;">';
+                style="width:600px;object-fit:cover;border-radius:8px;">';
                             } else {
                                 echo '<span style="color:gray;">Không có ảnh</span>';
                             }
                             ?>
                         </div>
-
+                        <div class="col-6">
+                            <label class="text-success">Preview ảnh mới:</label>
+                            <img id="preview_image" src="" alt=""
+                                style="width:100%;max-width:600px;object-fit:cover;border-radius:8px;border:2px solid #28a745;display:none;">
+                            <div id="no_preview_text" style="width:100%;max-width:300px;height:300px;display:flex;align-items:center;justify-content:center;border:2px dashed #ccc;border-radius:8px;color:#999;">
+                                Chọn ảnh để xem preview
+                            </div>
+                        </div>
                     </div>
                 </div>
-
             </div>
 
             <button type="submit" name="submit" class="btn btn-primary">Cập nhật</button>
@@ -173,3 +179,34 @@ if (isset($_POST['submit'])) {
         <?php } ?>
     </form>
 </div>
+
+<script>
+    document.querySelector('input[name="anh_dai_dien"]').addEventListener('change', function() {
+        const file = this.files[0];
+        const previewImg = document.getElementById('preview_image');
+        const noPreviewText = document.getElementById('no_preview_text');
+
+        if (!file) {
+            previewImg.style.display = 'none';
+            noPreviewText.style.display = 'flex';
+            return;
+        }
+
+        // Chỉ cho phép ảnh
+        if (!file.type.startsWith('image/')) {
+            alert('File không phải là hình ảnh');
+            this.value = '';
+            previewImg.style.display = 'none';
+            noPreviewText.style.display = 'flex';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            previewImg.style.display = 'block';
+            noPreviewText.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    });
+</script>

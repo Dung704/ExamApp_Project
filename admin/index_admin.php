@@ -17,8 +17,18 @@ $pages = [
   'add_exam_category' => 'exam_manager/add_exam_category.php',
   'edit_exam_category' => 'exam_manager/edit_exam_category.php',
   'list_lesson' => 'exam_manager/list_lesson.php',
+  'list_file_lesson' => 'exam_manager/list_file_lesson.php',
   'add_lesson' => 'exam_manager/add_lesson.php',
   'edit_lesson' => 'exam_manager/edit_lesson.php',
+  'list_exam' => 'exam_manager/list_exam.php',
+  'add_exam' => 'exam_manager/add_exam.php',
+  'edit_exam' => 'exam_manager/edit_exam.php',
+  'list_exam_question' => 'exam_manager/list_exam_question.php',
+  'add_exam_question' => 'exam_manager/add_exam_question.php',
+  'edit_exam_question' => 'exam_manager/edit_exam_question.php',
+  'list_select_question' => 'exam_manager/list_select_question.php',
+  'add_select_question' => 'exam_manager/add_select_question.php',
+  'edit_select_question' => 'exam_manager/edit_select_question.php',
   'dashboard' => 'dashboard_manager/dashboard.php'
 ];
 
@@ -54,11 +64,12 @@ if (!isset($_SESSION['id_quyen']) || $_SESSION['id_quyen'] !== 'Q1') {
 
   <!-- jQuery UI cho autocomplete -->
   <link rel="stylesheet" href="_assets/custom_css/jquery-ui.css">
-  <script src="_assets/custom_js/jquery-ui.min.js"></script>
+
   <link rel="stylesheet" href="_assets/custom_css/dataTable_235.css">
   <script src="_assets/custom_js/jquery_371.js"></script>
   <script src="_assets/custom_js/dataTable_235.js"></script>
   <link rel="stylesheet" href="_assets/custom_css/style.css">
+  <script src="https://cdn.ckeditor.com/ckeditor5/latest/super-build/ckeditor.js"></script>
 </head>
 <?php if ($isValidPage): ?>
 
@@ -228,6 +239,26 @@ if (!isset($_SESSION['id_quyen']) || $_SESSION['id_quyen'] !== 'Q1') {
         }
       }
     });
+    $('#examTable').DataTable({
+      "pageLength": 10, // số dòng mỗi trang
+      "ordering": true, // cho sắp xếp cột
+      "searching": true, // bật tìm kiếm
+      "lengthChange": true, // chọn số dòng/trang
+      order: [
+        [0, 'desc']
+      ],
+      "language": {
+        "lengthMenu": "Hiển thị _MENU_ dòng",
+        "zeroResults": "Không tìm thấy dữ liệu",
+        "info": "Trang _PAGE_ / _PAGES_",
+        "infoEmpty": "Không có dữ liệu",
+        "search": "Tìm:",
+        "paginate": {
+          "previous": "Trước",
+          "next": "Sau"
+        }
+      }
+    });
   });
 </script>
 
@@ -295,4 +326,19 @@ if (!isset($_SESSION['id_quyen']) || $_SESSION['id_quyen'] !== 'Q1') {
   //     document.getElementById("sidebar").classList.remove("active");
   //   }
   // }
+</script>
+
+
+
+
+<script>
+  ClassicEditor.create(document.querySelector('#noi_dung'), {
+    toolbar: [
+      'bold', 'italic', 'underline',
+      'bulletedList', 'numberedList',
+      'link', 'blockQuote',
+      'insertTable',
+      'undo', 'redo'
+    ]
+  });
 </script>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 18, 2025 at 03:21 AM
+-- Generation Time: Dec 18, 2025 at 05:24 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -136,6 +136,53 @@ INSERT INTO `cau_tra_loi_nguoi_dung` (`id`, `id_cau_hoi`, `id_nguoi_tra_loi`, `n
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cau_hoi_nguoi_dung`
+--
+
+CREATE TABLE `cau_hoi_nguoi_dung` (
+  `id` varchar(50) NOT NULL,
+  `noi_dung` text NOT NULL,
+  `anh_dinh_kem` varchar(255) DEFAULT NULL,
+  `id_nguoi_hoi` varchar(10) NOT NULL,
+  `thoi_gian_tao` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cau_hoi_nguoi_dung`
+--
+
+INSERT INTO `cau_hoi_nguoi_dung` (`id`, `noi_dung`, `anh_dinh_kem`, `id_nguoi_hoi`, `thoi_gian_tao`) VALUES
+('CHND_20251211_23a9652133', 'Có ai có tài liệu học HSK không ạ, \r\ngửi cho em qua mail này với ạ, admin không cho upload file lên đây ạ.', NULL, 'ND8', '2025-12-11 11:57:03'),
+('CHND_20251211_3e3007cd52', 'Nên học trong bao lâu thì đi thi lấy chứng chỉ HSK được ạ', NULL, 'ND8', '2025-12-11 11:55:29'),
+('CHND_20251211_7a206e4836', 'Mọi người ơi , có ai học tốt tiếng Nhật không ạ , em săp đi nhật rồi ạ.', NULL, 'ND6', '2025-12-11 12:01:28'),
+('CHND_20251211_81c1a011ca', 'Chữ trong ảnh này đọc thế nào ạ', 'CHND_20251211_81c1a011ca.jpg', 'ND6', '2025-12-11 14:06:05'),
+('CHND_20251211_e3201d6b8f', 'Làm sao để nhớ được từ vựng nhanh vậy mọi người \nMong được giải đáp ạ.', NULL, 'ND8', '2025-12-11 11:54:33');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cau_tra_loi_nguoi_dung`
+--
+
+CREATE TABLE `cau_tra_loi_nguoi_dung` (
+  `id` varchar(50) NOT NULL,
+  `id_cau_hoi` varchar(50) NOT NULL,
+  `id_nguoi_tra_loi` varchar(10) NOT NULL,
+  `noi_dung` text NOT NULL,
+  `anh_dinh_kem` varchar(255) DEFAULT NULL,
+  `thoi_gian_tao` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cau_tra_loi_nguoi_dung`
+--
+
+INSERT INTO `cau_tra_loi_nguoi_dung` (`id`, `id_cau_hoi`, `id_nguoi_tra_loi`, `noi_dung`, `anh_dinh_kem`, `thoi_gian_tao`) VALUES
+('05a350d28267658c8427', 'CHND_20251211_23a9652133', 'ND6', 'Có nha bạn', '1765439929_736462.png', '2025-12-11 14:58:49');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `danh_muc_de_thi`
 --
 
@@ -176,9 +223,10 @@ CREATE TABLE `de_thi` (
 -- Dumping data for table `de_thi`
 --
 
-INSERT INTO `de_thi` (`id`, `id_danh_muc`, `ten_de_thi`, `mo_ta`, `thoi_gian`, `id_bai_hoc`, `thang_diem`, `ngay_tao`, `trang_thai`) VALUES
-('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 1, 'BH1', 10, '2025-12-01 04:37:38', 0),
-('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 'BH2', 10, '2025-12-01 04:37:38', 0);
+INSERT INTO `de_thi` (`id`, `id_danh_muc`, `ten_de_thi`, `mo_ta`, `thoi_gian`, `thang_diem`, `ngay_tao`, `trang_thai`) VALUES
+('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 1, 10, '2025-12-01 04:37:38', 0),
+('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 10, '2025-12-01 04:37:38', 0),
+('DT_HSK1_01', 1, 'HSK1 - Luyện tập tổng hợp', 'Luyện tập HSK1', 3, 100, '2025-12-17 16:23:59', 0);
 
 -- --------------------------------------------------------
 
@@ -299,7 +347,17 @@ INSERT INTO `ket_qua_chi_tiet` (`id`, `id_ket_qua`, `id_cau_hoi`, `id_lua_chon`)
 (160, 'KQ32', 'CH_HSK1_07', 'LC107A'),
 (161, 'KQ32', 'CH_HSK1_08', 'LC108A'),
 (162, 'KQ32', 'CH_HSK1_09', 'LC109A'),
-(163, 'KQ32', 'CH_HSK1_10', 'LC110A');
+(163, 'KQ32', 'CH_HSK1_10', 'LC110A'),
+(164, 'KQ33', 'CH_HSK1_01', NULL),
+(165, 'KQ33', 'CH_HSK1_02', NULL),
+(166, 'KQ33', 'CH_HSK1_03', NULL),
+(167, 'KQ33', 'CH_HSK1_04', NULL),
+(168, 'KQ33', 'CH_HSK1_05', NULL),
+(169, 'KQ33', 'CH_HSK1_06', NULL),
+(170, 'KQ33', 'CH_HSK1_07', NULL),
+(171, 'KQ33', 'CH_HSK1_08', NULL),
+(172, 'KQ33', 'CH_HSK1_09', NULL),
+(173, 'KQ33', 'CH_HSK1_10', NULL);
 
 -- --------------------------------------------------------
 
@@ -347,6 +405,7 @@ INSERT INTO `ket_qua_thi` (`id`, `id_nguoi_dung`, `id_de_thi`, `diem_so`, `thoi_
 ('KQ30', 'ND6', 'DT1', NULL, '2025-12-17 14:47:48', '2025-12-17 14:47:48'),
 ('KQ31', 'ND6', 'DT_HSK1_01', 0, '2025-12-17 16:33:53', '2025-12-17 16:28:36'),
 ('KQ32', 'ND6', 'DT_HSK1_01', 60, '2025-12-17 16:36:35', '2025-12-17 16:35:19'),
+('KQ33', 'ND6', 'DT_HSK1_01', 0, '2025-12-18 11:07:02', '2025-12-18 11:06:59'),
 ('KQ4', 'ND7', 'DT1', 5, '2025-12-10 16:01:38', '2025-12-10 16:01:21'),
 ('KQ5', 'ND7', 'DT1', 10, '2025-12-10 16:13:03', '2025-12-10 16:12:07'),
 ('KQ6', 'ND8', 'DT1', 10, '2025-12-11 10:38:27', '2025-12-11 10:38:19'),
@@ -370,20 +429,6 @@ CREATE TABLE `lich_su_lam_bai` (
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `lua_chon`
---
-
-CREATE TABLE `lua_chon` (
-  `id` varchar(10) NOT NULL,
-  `id_cau_hoi` varchar(10) NOT NULL,
-  `noi_dung` text NOT NULL,
-  `dung_sai` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `lua_chon`
---
 
 INSERT INTO `lua_chon` (`id`, `id_cau_hoi`, `noi_dung`, `dung_sai`) VALUES
 ('LC1', 'CH1', 'Bạn bè', 0),
@@ -613,7 +658,7 @@ ALTER TABLE `danh_muc_de_thi`
 -- AUTO_INCREMENT for table `ket_qua_chi_tiet`
 --
 ALTER TABLE `ket_qua_chi_tiet`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=164;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=174;
 
 --
 -- Constraints for dumped tables
