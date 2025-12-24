@@ -1,11 +1,15 @@
 <?php
 include("./header.php");
 
+
 /* ================= KIỂM TRA ID ĐỀ THI ================= */
 if (!isset($_GET['id'])) {
     die("Lỗi: Thiếu tham số id đề thi.");
 }
 $id_de_thi = $_GET['id'];
+// Đánh dấu bắt đầu phiên thi
+$_SESSION['exam_active'] = true;
+$_SESSION['exam_id'] = $id_de_thi;
 
 /* ================= LẤY THÔNG TIN ĐỀ THI ================= */
 $dt = mysqli_fetch_assoc(mysqli_query($dbc,
@@ -21,32 +25,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 $id_user = $_SESSION['user_id'];
 
-/* ================= KIỂM TRA / TẠO KẾT QUẢ ================= */
-$sql_check = "
-    SELECT id FROM ket_qua_thi
-    WHERE id_nguoi_dung = '$id_user'
-      AND id_de_thi = '$id_de_thi'
-      AND diem_so IS NULL
-    ORDER BY thoi_gian_bat_dau DESC
-    LIMIT 1
-";
-$res_check = mysqli_query($dbc, $sql_check);
 
-if ($row_check = mysqli_fetch_assoc($res_check)) {
-    $id_kq = $row_check['id'];
-} else {
-    $row_max = mysqli_fetch_assoc(mysqli_query($dbc, "
-        SELECT MAX(CAST(SUBSTRING(id, 3) AS UNSIGNED)) AS max_id
-        FROM ket_qua_thi
-    "));
-    $so_moi = ($row_max['max_id'] ?? 0) + 1;
-    $id_kq = 'KQ' . $so_moi;
-
-    mysqli_query($dbc, "
-        INSERT INTO ket_qua_thi(id, id_nguoi_dung, id_de_thi, diem_so, thoi_gian_bat_dau)
-        VALUES('$id_kq', '$id_user', '$id_de_thi', NULL, NOW())
-    ");
-}
 
 /* ================= LẤY DANH SÁCH CÂU HỎI ================= */
 $result_q = mysqli_query($dbc,
@@ -151,6 +130,8 @@ $result_q = mysqli_query($dbc,
 
 <script>
 function beforeUnloadHandler(e) {
+    navigator.sendBeacon("huy_phien_thi.php");
+
     e.preventDefault();
     e.returnValue = "";
 }
@@ -266,6 +247,25 @@ document.getElementById("examForm").addEventListener("submit", function(e) {
             this.submit();
         }
     });
+});
+
+let allowSubmit = false;
+
+/* Khi người dùng rời trang mà KHÔNG nộp bài */
+window.addEventListener("beforeunload", function() {
+    if (!allowSubmit) {
+        navigator.sendBeacon(
+            "huy_phien_thi.php",
+            new URLSearchParams({
+                exam_id: "<?= $id_de_thi ?>"
+            })
+        );
+    }
+});
+
+/* Khi nộp bài hợp lệ */
+document.getElementById("examForm").addEventListener("submit", function() {
+    allowSubmit = true;
 });
 </script>
 

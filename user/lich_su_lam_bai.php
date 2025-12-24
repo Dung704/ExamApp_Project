@@ -3,6 +3,7 @@ include("./header.php");
 
 // Kiểm tra login
 if (!isset($_SESSION['user_id'])) {
+    $_SESSION['duong_dan_sau_khi_dang_nhap'] = $_SERVER['REQUEST_URI'];
     header("Location: login.php?tmp=yeu_cau_dang_nhap");
     exit();
 }

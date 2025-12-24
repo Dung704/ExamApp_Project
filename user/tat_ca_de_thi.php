@@ -14,7 +14,8 @@ $start = ($page - 1) * $limit;
 $sql_count = "
     SELECT COUNT(*) AS total
     FROM de_thi
-    WHERE id_danh_muc = $id_dm
+    WHERE id_danh_muc = $id_dm AND trang_thai = 1
+
     AND (
     ten_de_thi LIKE '%$keyword%'
     OR mo_ta  LIKE '%$keyword%'
@@ -27,7 +28,7 @@ $total_pages = ceil($total / $limit);
 $sql = "
     SELECT *
     FROM de_thi
-    WHERE id_danh_muc = $id_dm
+    WHERE id_danh_muc = $id_dm AND trang_thai = 1
      AND (
     ten_de_thi LIKE '%$keyword%'
     OR mo_ta  LIKE '%$keyword%'

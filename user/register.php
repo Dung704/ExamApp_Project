@@ -93,8 +93,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <label for="gioiTinh" class="form-label">Giới tính</label>
         <select class="form-select" id="gioiTinh" name="gioi_tinh">
             <option value="">Chọn giới tính</option>
-            <option value="Nam">Nam</option>
-            <option value="Nữ">Nữ</option>
+            <option value="0">Nam</option>
+            <option value="1">Nữ</option>
         </select>
     </div>
 

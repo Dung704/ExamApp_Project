@@ -35,7 +35,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($row['id_quyen'] === 'Q1') {
                     header("Location: ../admin/index_admin.php");
                 } else {
-                    header("Location: index.php"); 
+                    // Nếu có trang cần quay lại
+                    if (isset($_SESSION['duong_dan_sau_khi_dang_nhap'])) {
+                        $duong_dan_url = $_SESSION['duong_dan_sau_khi_dang_nhap'];
+                        unset($_SESSION['duong_dan_sau_khi_dang_nhap']);
+                        header("Location: $duong_dan_url");
+                    } else {
+                        header("Location: index.php");
+                    }
                 }
                         
                 exit();

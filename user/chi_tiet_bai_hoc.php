@@ -1,6 +1,7 @@
 <?php
 include("./header.php");
 if (!isset($_SESSION['user_id'])) {
+    $_SESSION['duong_dan_sau_khi_dang_nhap'] = $_SERVER['REQUEST_URI'];
     header("Location: login.php?tmp=yeu_cau_dang_nhap");
     exit();
 }
@@ -49,10 +50,18 @@ if ($id_bai_hoc) {
                         <?php endif; ?>
                         <div style="max-height: 500px; overflow-y:auto;">
                             <p><?= nl2br($bai_hoc['noi_dung']) ?></p>
-                            <?php if(!empty($bai_hoc['link_bai_hoc'])): ?>
-                            <p>Link tham khảo: <a href="<?= $bai_hoc['link_bai_hoc'] ?>"
-                                    target="_blank"><?= $bai_hoc['link_bai_hoc'] ?></a></p>
+                            <?php if (!empty($bai_hoc['link_bai_hoc'])): ?>
+                            <p>Link tham khảo:</p>
+                            <?php foreach (explode("\n", $bai_hoc['link_bai_hoc']) as $link): ?>
+                            <?php $link = trim($link); if ($link === '') continue; ?>
+                            <p>
+                                <a href="<?= htmlspecialchars($link) ?>" target="_blank">
+                                    <?= htmlspecialchars($link) ?>
+                                </a>
+                            </p>
+                            <?php endforeach; ?>
                             <?php endif; ?>
+
                         </div>
 
                         <?php if(mysqli_num_rows($result_files) > 0): ?>
@@ -77,7 +86,7 @@ if ($id_bai_hoc) {
     <!-- Các đề thi liên quan  -->
     <?php
 $id_danh_muc = $bai_hoc['id_danh_muc'];
-$sql_lien_quan = "SELECT * FROM de_thi WHERE id_danh_muc = '$id_danh_muc' LIMIT 10";
+$sql_lien_quan = "SELECT * FROM de_thi WHERE id_danh_muc = '$id_danh_muc' AND trang_thai = 1 LIMIT 10";
 $result_lien_quan = mysqli_query($dbc, $sql_lien_quan);
 
 ?>
