@@ -7,9 +7,6 @@ include("./header.php");
 
         <!-- danh sách bài kiểm tra -->
         <div class="col-lg-8 mb-4">
-
-            <h4 class="mb-4">Danh sách bài kiểm tra</h4>
-
             <?php
             $sql_dm = "SELECT * FROM danh_muc_de_thi ORDER BY id ASC";
             $result_dm = mysqli_query($dbc, $sql_dm);
@@ -30,7 +27,7 @@ include("./header.php");
                 <div class="d-flex flex-row overflow-auto gap-3">
 
                     <?php
-                    $sql_dt = "SELECT * FROM de_thi WHERE id_danh_muc = {$dm['id']} ORDER BY id DESC";
+                    $sql_dt = "SELECT * FROM de_thi WHERE id_danh_muc = {$dm['id']} AND trang_thai = 1 ORDER BY id DESC";
                     $result_dt = mysqli_query($dbc, $sql_dt);
                     ?>
 
