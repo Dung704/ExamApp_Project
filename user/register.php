@@ -1,5 +1,6 @@
 <?php
 include("./header.php");
+require_once 'gui_mail.php';
 ?>
 
 <?php
@@ -20,13 +21,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<div class='alert alert-danger'>Mật khẩu không khớp!</div>";
     } elseif ($ho_ten == '' || $email == '' || $mat_khau == '') {
         echo "<div class='alert alert-danger'>Vui lòng điền đầy đủ thông tin bắt buộc!</div>";
+    } elseif (strlen($mat_khau) < 6) {
+        echo "<div class='alert alert-danger'>Mật khẩu phải có ít nhất 6 ký tự!</div>";
     } else {
-        $check_email = "SELECT * FROM nguoi_dung WHERE email = '$email'";
-        $result = mysqli_query($dbc, $check_email);
+        // Escape dữ liệu đầu vào
+        $email_escaped = mysqli_real_escape_string($dbc, $email);
+        $so_dien_thoai_escaped = mysqli_real_escape_string($dbc, $so_dien_thoai);
+        
+        //  KIỂM TRA EMAIL ĐÃ TỒN TẠI
+        $check_email = "SELECT email FROM nguoi_dung WHERE email = '$email_escaped'";
+        $result_email = mysqli_query($dbc, $check_email);
 
-        if (mysqli_num_rows($result) > 0) {
-            echo "<div class='alert alert-danger'>Email đã được đăng ký!</div>";
+        //  KIỂM TRA SỐ ĐIỆN THOẠI ĐÃ TỒN TẠI (nếu có nhập)
+        $result_phone = null;
+        if (!empty($so_dien_thoai)) {
+            $check_phone = "SELECT so_dien_thoai FROM nguoi_dung WHERE so_dien_thoai = '$so_dien_thoai_escaped'";
+            $result_phone = mysqli_query($dbc, $check_phone);
+        }
+
+        // Kiểm tra kết quả
+        if (mysqli_num_rows($result_email) > 0) {
+            echo "<div class='alert alert-danger'>
+                    </i> Email <strong>$email</strong> đã được đăng ký!
+                  </div>";
+        } elseif ($result_phone && mysqli_num_rows($result_phone) > 0) {
+            echo "<div class='alert alert-danger'>
+                    </i> Số điện thoại <strong>$so_dien_thoai</strong> đã được đăng ký!
+                  </div>";
         } else {
+            // Tạo ID mới
             $res = mysqli_query($dbc, "SELECT id FROM nguoi_dung ORDER BY id DESC LIMIT 1");
             if (mysqli_num_rows($res) > 0) {
                 $row = mysqli_fetch_assoc($res);
@@ -37,40 +60,85 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $new_id = "ND1";
             }
 
+            // Xử lý upload ảnh
             $anh_dai_dien_sql = "NULL";
             if (isset($_FILES['anh_dai_dien']) && $_FILES['anh_dai_dien']['error'] == 0) {
-                $fileName = time() . "_" . basename($_FILES['anh_dai_dien']['name']);
-                $fileTmp = $_FILES['anh_dai_dien']['tmp_name'];
-                $uploadDir = "./image_user";
-                if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
-                move_uploaded_file($fileTmp, $uploadDir . "/" . $fileName);
-                $anh_dai_dien_sql = "'$fileName'";
+                $allowed_types = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+                $file_type = $_FILES['anh_dai_dien']['type'];
+                
+                if (in_array($file_type, $allowed_types)) {
+                    $fileName = time() . "_" . basename($_FILES['anh_dai_dien']['name']);
+                    $fileTmp = $_FILES['anh_dai_dien']['tmp_name'];
+                    $uploadDir = "./image_user";
+                    
+                    if (!is_dir($uploadDir)) {
+                        mkdir($uploadDir, 0777, true);
+                    }
+                    
+                    if (move_uploaded_file($fileTmp, $uploadDir . "/" . $fileName)) {
+                        $anh_dai_dien_sql = "'" . mysqli_real_escape_string($dbc, $fileName) . "'";
+                    }
+                } else {
+                    echo "<div class='alert alert-warning'>Chỉ chấp nhận file ảnh (JPG, PNG, GIF)!</div>";
+                }
             }
 
+            // Tạo token và hash mật khẩu
+            $verify_token = bin2hex(random_bytes(32));
             $mat_khau_hash = password_hash($mat_khau, PASSWORD_DEFAULT);
+            
+            // Escape tất cả dữ liệu
+            $new_id_escaped = mysqli_real_escape_string($dbc, $new_id);
+            $ho_ten_escaped = mysqli_real_escape_string($dbc, $ho_ten);
+            $mat_khau_hash_escaped = mysqli_real_escape_string($dbc, $mat_khau_hash);
+            $id_quyen_escaped = mysqli_real_escape_string($dbc, $id_quyen);
+            $gioi_tinh_escaped = mysqli_real_escape_string($dbc, $gioi_tinh);
+            $dia_chi_escaped = mysqli_real_escape_string($dbc, $dia_chi);
+            $ngay_tao_escaped = mysqli_real_escape_string($dbc, $ngay_tao);
+            $verify_token_escaped = mysqli_real_escape_string($dbc, $verify_token);
+            
+            $ngay_sinh_sql = $ngay_sinh ? "'" . mysqli_real_escape_string($dbc, $ngay_sinh) . "'" : "NULL";
 
-           $insert = "INSERT INTO nguoi_dung 
-            (id, ho_ten, email, mat_khau, so_dien_thoai, anh_dai_dien, id_quyen, ngay_sinh, gioi_tinh, dia_chi, ngay_tao)
+            // Insert vào database
+            $insert = "INSERT INTO nguoi_dung 
+            (id, ho_ten, email, mat_khau, so_dien_thoai, anh_dai_dien, id_quyen, ngay_sinh, gioi_tinh, dia_chi, ngay_tao, is_verified, verify_token)
             VALUES (
-                '$new_id',
-                '$ho_ten',
-                '$email',
-                '$mat_khau_hash',
-                '$so_dien_thoai',
+                '$new_id_escaped',
+                '$ho_ten_escaped',
+                '$email_escaped',
+                '$mat_khau_hash_escaped',
+                '$so_dien_thoai_escaped',
                 $anh_dai_dien_sql,
-                '$id_quyen',
-                " . ($ngay_sinh ? "'$ngay_sinh'" : "NULL") . ",
-                '$gioi_tinh',
-                '$dia_chi',
-                '$ngay_tao'
+                '$id_quyen_escaped',
+                $ngay_sinh_sql,
+                '$gioi_tinh_escaped',
+                '$dia_chi_escaped',
+                '$ngay_tao_escaped',
+                0,
+                '$verify_token_escaped'
             )";
 
-
-
             if (mysqli_query($dbc, $insert)) {
-                echo "<div class='alert alert-success'>Đăng ký thành công! <a href='./login.php'>Đăng nhập ngay</a></div>";
+                require_once './gui_mail.php';
+                
+                // Gửi email xác thực
+                $mail_sent = sendRegisterMail($email, $ho_ten, $verify_token);
+
+                if ($mail_sent) {
+                    echo "<div class='alert alert-success'>
+                             <strong>Đăng ký thành công!</strong><br>
+                            Vui lòng kiểm tra email <strong>$email</strong> để xác nhận tài khoản.
+                          </div>";
+                } else {
+                    echo "<div class='alert alert-warning'>
+                            <i class='bi bi-exclamation-circle'></i>  Không gửi được email xác thực.<br>
+                            Vui lòng liên hệ admin để được hỗ trợ.
+                          </div>";
+                }
             } else {
-                echo "<div class='alert alert-danger'>Lỗi đăng ký: " . mysqli_error($dbc) . "</div>";
+                echo "<div class='alert alert-danger'>
+                        <i class='bi bi-x-circle'></i> Lỗi đăng ký: " . mysqli_error($dbc) . "
+                      </div>";
             }
         }
     }
@@ -121,8 +189,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="mb-3">
         <label for="soDienThoai" class="form-label">Số điện thoại</label>
-        <input type="tel" class="form-control" id="soDienThoai" name="so_dien_thoai">
+        <input type="text" class="form-control" id="soDienThoai" name="so_dien_thoai" maxlength="11" required
+            oninput="this.value = this.value.replace(/[^0-9]/g, '')">
     </div>
+
+
 
     <div class="mb-3">
         <label for="anhDaiDien" class="form-label">Ảnh đại diện</label>

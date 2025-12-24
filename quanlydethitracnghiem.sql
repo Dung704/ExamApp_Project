@@ -1,14 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Máy chủ: localhost
--- Thời gian đã tạo: Th12 24, 2025 lúc 02:23 AM
--- Phiên bản máy phục vụ: 8.0.43
--- Phiên bản PHP: 8.2.29
-DROP DATABASE IF EXISTS quanlydethitracnghiem;
-CREATE DATABASE quanlydethitracnghiem CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE quanlydethitracnghiem;
+-- Host: 127.0.0.1
+-- Generation Time: Dec 24, 2025 at 10:13 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -21,72 +18,75 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `quanlydethitracnghiem`
+-- Database: `quanlydethitracnghiem`
 --
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `bai_hoc`
+-- Table structure for table `bai_hoc`
 --
 
 CREATE TABLE `bai_hoc` (
-  `id` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `tieu_de` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `noi_dung` text COLLATE utf8mb4_general_ci,
-  `anh_bai_hoc` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `link_bai_hoc` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ngay_tao` datetime DEFAULT CURRENT_TIMESTAMP,
-  `id_danh_muc` int DEFAULT NULL
+  `id` varchar(10) NOT NULL,
+  `tieu_de` varchar(255) NOT NULL,
+  `noi_dung` text DEFAULT NULL,
+  `anh_bai_hoc` varchar(255) DEFAULT NULL,
+  `link_bai_hoc` varchar(255) DEFAULT NULL,
+  `ngay_tao` datetime DEFAULT current_timestamp(),
+  `id_danh_muc` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `bai_hoc`
+-- Dumping data for table `bai_hoc`
 --
 
 INSERT INTO `bai_hoc` (`id`, `tieu_de`, `noi_dung`, `anh_bai_hoc`, `link_bai_hoc`, `ngay_tao`, `id_danh_muc`) VALUES
 ('BH1', 'Bài học 1', 'Nội dung bài học 1', 'bai1.jpg', 'https://www.youtube.com/watch?v=svZSkXxCnbs', '2025-12-01 04:37:38', 3),
-('BH2', 'Bài học 2', 'Nội dung bài học 2', 'bai2.jpg', 'link2.html', '2025-12-01 04:37:38', 1);
+('BH2', 'Bài học 2', 'Nội dung bài học 2', 'bai2.jpg', 'link2.html', '2025-12-01 04:37:38', 1),
+('BH3', 'Bài học Test', 'Luyện Tập Test', '1766549984_42d5806e0d8bb423c977cd87b44e3202.jpg', 'https://www.youtube.com/\r\nhttps://www.youtube.com/watch?v=iB-FkHr_2tk&list=PLu1JbR18PKPGrRX7to0ZSFUHzh51Zq6OG', '2025-12-24 11:19:44', 1),
+('BH4', 'Các Cách Dùng Của Chữ 得  Trong Tiếng Trung', 'Lời bài hát Chất Gây Hại\r\n[Verse 1: Quang Hùng MasterD]\r\n\r\nMặc quần ống loe (Loe)\r\n\r\nÁo anh oversize\r\n\r\nChỉnh trang lại tóc tai (Tai)\r\n\r\nDưới chân Nike\r\n\r\nChạy xe qua đón em (Đón em)\r\n\r\nTrái tim còn e ngại (Oh-oh)\r\n\r\nGiữ chặt tay lái\r\n\r\nMuốn được bên em sớm mai\r\n\r\n \r\n\r\n[Pre-Chorus: Quang Hùng MasterD]\r\n\r\nAnh không nói điêu đâu (Nói điêu đâu)\r\n\r\nAnh không thích làm màu (Ah-ah)\r\n\r\nAnh chỉ muốn thêm giàu để được lo cho em đến bạc đầu\r\n\r\nNhững nụ hôn tới sát lại\r\n\r\nMang nhiều thêm chất gây hại\r\n\r\nAnh như cảm giác là kẻ may mắn\r\n\r\nKhi em trao chiếc cúp anh là người thắng\r\n\r\n \r\n\r\n[Chorus: Quang Hùng MasterD]\r\n\r\nOh baby girl, em là vàng bạc châu báu\r\n\r\nChỉ muốn giữ em thật lâu để cuộc đời này lắm sắc màu\r\n\r\nEm khiến anh như chết điêu\r\n\r\nYêu em là điều chẳng thể thiếu\r\n\r\nCưa em là phải dùng hết chiêu\r\n\r\nTrao em cuộc tình này mãi real\r\n\r\nOh baby girl, em ngọt hơn socola\r\n\r\nĐôi mi khép chạm bờ môi\r\n\r\nChỉ vậy thôi anh muốn điên rồi\r\n\r\nAnh chẳng phải là người xấu xa\r\n\r\nĐưa em về quê thưa ba má\r\n\r\nTrên tay anh cầm một đóa hoa\r\n\r\nMong em gật đầu đồng ý nha\r\n\r\nSee upcoming pop shows\r\n\r\nGet tickets for your favorite artists\r\n\r\n \r\n\r\nYou might also like\r\n\r\nĐừng Để Tiền Rơi\r\n\r\nLow G (VNM)\r\n\r\nLần Cuối Anh Suy\r\n\r\nQuang Hùng MasterD & Hino (VNM)\r\n\r\nSau Tan Ca\r\n\r\nQuang Hùng MasterD', '1766551419_35bd5ef10c134bd9c76b0c723d94763f.jpg', 'https://www.youtube.com/watch?v=iB-FkHr_2tk&list=PLu1JbR18PKPGrRX7to0ZSFUHzh51Zq6OG\r\nhttps://www.youtube.com/watch?v=eX5b0T6VKXk', '2025-12-24 11:43:39', 1);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `cau_hoi`
+-- Table structure for table `cau_hoi`
 --
 
 CREATE TABLE `cau_hoi` (
-  `id` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `id_de_thi` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `noi_dung` text COLLATE utf8mb4_general_ci NOT NULL,
-  `hinh_anh` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `muc_do` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `id` varchar(10) NOT NULL,
+  `id_de_thi` varchar(10) NOT NULL,
+  `noi_dung` text NOT NULL,
+  `hinh_anh` varchar(255) DEFAULT NULL,
+  `muc_do` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `cau_hoi`
+-- Dumping data for table `cau_hoi`
 --
 
 INSERT INTO `cau_hoi` (`id`, `id_de_thi`, `noi_dung`, `hinh_anh`, `muc_do`) VALUES
 ('CH1', 'DT1', 'Chữ trong hình sau có nghĩa là gì ?', 'images.jpg', 'dễ'),
 ('CH2', 'DT1', '照片里有多少人？', 'hinh-anh-gia-dinh-hanh-phuc-cute-1.jpg', 'trung bình'),
-('CH3', 'DT2', '1+1 = ?', NULL, 'khó');
+('CH3', 'DT2', '1+1 = ?', NULL, 'khó'),
+('CH4', 'DT3', 'Lớp 1A có 30 học sinh lớp 1B có 20 học sinh hỏi có tất cả bao nhiêu học sinh ở 2 lướp', '1766550414_42d5806e0d8bb423c977cd87b44e3202.jpg', 'dễ');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `cau_hoi_nguoi_dung`
+-- Table structure for table `cau_hoi_nguoi_dung`
 --
 
 CREATE TABLE `cau_hoi_nguoi_dung` (
-  `id` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `noi_dung` text COLLATE utf8mb4_general_ci NOT NULL,
-  `anh_dinh_kem` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `id_nguoi_hoi` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `id` varchar(50) NOT NULL,
+  `noi_dung` text NOT NULL,
+  `anh_dinh_kem` varchar(255) DEFAULT NULL,
+  `id_nguoi_hoi` varchar(10) NOT NULL,
   `thoi_gian_tao` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `cau_hoi_nguoi_dung`
+-- Dumping data for table `cau_hoi_nguoi_dung`
 --
 
 INSERT INTO `cau_hoi_nguoi_dung` (`id`, `noi_dung`, `anh_dinh_kem`, `id_nguoi_hoi`, `thoi_gian_tao`) VALUES
@@ -99,20 +99,20 @@ INSERT INTO `cau_hoi_nguoi_dung` (`id`, `noi_dung`, `anh_dinh_kem`, `id_nguoi_ho
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `cau_tra_loi_nguoi_dung`
+-- Table structure for table `cau_tra_loi_nguoi_dung`
 --
 
 CREATE TABLE `cau_tra_loi_nguoi_dung` (
-  `id` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `id_cau_hoi` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `id_nguoi_tra_loi` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `noi_dung` text COLLATE utf8mb4_general_ci NOT NULL,
-  `anh_dinh_kem` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id` varchar(50) NOT NULL,
+  `id_cau_hoi` varchar(50) NOT NULL,
+  `id_nguoi_tra_loi` varchar(10) NOT NULL,
+  `noi_dung` text NOT NULL,
+  `anh_dinh_kem` varchar(255) DEFAULT NULL,
   `thoi_gian_tao` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `cau_tra_loi_nguoi_dung`
+-- Dumping data for table `cau_tra_loi_nguoi_dung`
 --
 
 INSERT INTO `cau_tra_loi_nguoi_dung` (`id`, `id_cau_hoi`, `id_nguoi_tra_loi`, `noi_dung`, `anh_dinh_kem`, `thoi_gian_tao`) VALUES
@@ -121,17 +121,17 @@ INSERT INTO `cau_tra_loi_nguoi_dung` (`id`, `id_cau_hoi`, `id_nguoi_tra_loi`, `n
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `danh_muc_de_thi`
+-- Table structure for table `danh_muc_de_thi`
 --
 
 CREATE TABLE `danh_muc_de_thi` (
-  `id` int NOT NULL,
-  `ten_danh_muc` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `mo_ta` text COLLATE utf8mb4_general_ci
+  `id` int(11) NOT NULL,
+  `ten_danh_muc` varchar(100) NOT NULL,
+  `mo_ta` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `danh_muc_de_thi`
+-- Dumping data for table `danh_muc_de_thi`
 --
 
 INSERT INTO `danh_muc_de_thi` (`id`, `ten_danh_muc`, `mo_ta`) VALUES
@@ -143,167 +143,167 @@ INSERT INTO `danh_muc_de_thi` (`id`, `ten_danh_muc`, `mo_ta`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `de_thi`
+-- Table structure for table `de_thi`
 --
 
 CREATE TABLE `de_thi` (
-  `id` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `id_danh_muc` int DEFAULT NULL,
-  `ten_de_thi` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `mo_ta` text COLLATE utf8mb4_general_ci,
-  `thoi_gian` int DEFAULT NULL,
-  `id_bai_hoc` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `thang_diem` int DEFAULT '10',
-  `ngay_tao` datetime DEFAULT CURRENT_TIMESTAMP,
-  `trang_thai` tinyint(1) NOT NULL DEFAULT '0'
+  `id` varchar(10) NOT NULL,
+  `id_danh_muc` int(11) DEFAULT NULL,
+  `ten_de_thi` varchar(255) NOT NULL,
+  `mo_ta` text DEFAULT NULL,
+  `thoi_gian` int(11) DEFAULT NULL,
+  `id_bai_hoc` varchar(10) DEFAULT NULL,
+  `thang_diem` int(11) DEFAULT 10,
+  `ngay_tao` datetime DEFAULT current_timestamp(),
+  `trang_thai` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `de_thi`
+-- Dumping data for table `de_thi`
 --
 
 INSERT INTO `de_thi` (`id`, `id_danh_muc`, `ten_de_thi`, `mo_ta`, `thoi_gian`, `id_bai_hoc`, `thang_diem`, `ngay_tao`, `trang_thai`) VALUES
 ('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 1, 'BH1', 10, '2025-12-01 04:37:38', 0),
-('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 'BH2', 10, '2025-12-01 04:37:38', 0);
+('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 'BH2', 10, '2025-12-01 04:37:38', 0),
+('DT3', 4, 'Đề thi Toán lớp 1', 'Đề thi dành cho học sinh tiểu học', 5, NULL, 10, '2025-12-24 10:32:58', 1);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `ket_qua_chi_tiet`
+-- Table structure for table `ket_qua_chi_tiet`
 --
 
 CREATE TABLE `ket_qua_chi_tiet` (
-  `id` int NOT NULL,
-  `id_ket_qua` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `id_cau_hoi` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `id_lua_chon` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `id` int(11) NOT NULL,
+  `id_ket_qua` varchar(10) NOT NULL,
+  `id_cau_hoi` varchar(10) NOT NULL,
+  `id_lua_chon` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `ket_qua_chi_tiet`
+-- Dumping data for table `ket_qua_chi_tiet`
 --
 
 INSERT INTO `ket_qua_chi_tiet` (`id`, `id_ket_qua`, `id_cau_hoi`, `id_lua_chon`) VALUES
-(47, 'KQ8', 'CH1', 'LC2'),
-(48, 'KQ8', 'CH2', 'LC4'),
-(49, 'KQ9', 'CH1', NULL),
-(50, 'KQ9', 'CH2', 'LC3'),
-(51, 'KQ10', 'CH3', 'LC5');
+(58, 'KQ1', 'CH1', 'LC1'),
+(59, 'KQ1', 'CH2', 'LC3');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `ket_qua_thi`
+-- Table structure for table `ket_qua_thi`
 --
 
 CREATE TABLE `ket_qua_thi` (
-  `id` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `id_nguoi_dung` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `id_de_thi` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `id` varchar(10) NOT NULL,
+  `id_nguoi_dung` varchar(10) NOT NULL,
+  `id_de_thi` varchar(10) NOT NULL,
   `diem_so` float DEFAULT NULL,
-  `thoi_gian_nop` datetime DEFAULT CURRENT_TIMESTAMP,
-  `thoi_gian_bat_dau` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `thoi_gian_nop` datetime DEFAULT current_timestamp(),
+  `thoi_gian_bat_dau` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `ket_qua_thi`
+-- Dumping data for table `ket_qua_thi`
 --
 
 INSERT INTO `ket_qua_thi` (`id`, `id_nguoi_dung`, `id_de_thi`, `diem_so`, `thoi_gian_nop`, `thoi_gian_bat_dau`) VALUES
-('KQ1', 'ND6', 'DT1', 5, '2025-12-10 15:19:09', '2025-12-10 15:19:02'),
-('KQ10', 'ND8', 'DT2', 10, '2025-12-11 15:02:51', '2025-12-11 15:02:49'),
-('KQ2', 'ND6', 'DT2', 10, '2025-12-10 15:19:42', '2025-12-10 15:19:36'),
-('KQ3', 'ND7', 'DT1', 10, '2025-12-10 15:52:45', '2025-12-10 15:52:36'),
-('KQ4', 'ND7', 'DT1', 5, '2025-12-10 16:01:38', '2025-12-10 16:01:21'),
-('KQ5', 'ND7', 'DT1', 10, '2025-12-10 16:13:03', '2025-12-10 16:12:07'),
-('KQ6', 'ND8', 'DT1', 10, '2025-12-11 10:38:27', '2025-12-11 10:38:19'),
-('KQ7', 'ND8', 'DT1', 5, '2025-12-11 11:21:15', '2025-12-11 11:21:10'),
-('KQ8', 'ND6', 'DT1', 5, '2025-12-11 14:58:11', '2025-12-11 14:58:07'),
-('KQ9', 'ND8', 'DT1', 5, '2025-12-11 15:02:32', '2025-12-11 15:02:28');
+('KQ1', 'ND6', 'DT1', 5, '2025-12-24 11:07:09', '2025-12-24 11:07:09'),
+('KQ2', 'ND6', 'DT1', 0, '2025-12-24 11:26:44', '2025-12-24 11:26:44');
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `lich_su_lam_bai`
+-- Table structure for table `lich_su_lam_bai`
 --
 
 CREATE TABLE `lich_su_lam_bai` (
-  `id` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `id_ket_qua` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `id_cau_hoi` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `id_lua_chon` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
+  `id` varchar(10) NOT NULL,
+  `id_ket_qua` varchar(10) NOT NULL,
+  `id_cau_hoi` varchar(10) NOT NULL,
+  `id_lua_chon` varchar(10) NOT NULL,
   `dung_sai` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `lua_chon`
+-- Table structure for table `lua_chon`
 --
 
 CREATE TABLE `lua_chon` (
-  `id` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `id_cau_hoi` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `noi_dung` text COLLATE utf8mb4_general_ci NOT NULL,
-  `dung_sai` tinyint(1) DEFAULT '0'
+  `id` varchar(10) NOT NULL,
+  `id_cau_hoi` varchar(10) NOT NULL,
+  `noi_dung` text NOT NULL,
+  `dung_sai` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `lua_chon`
+-- Dumping data for table `lua_chon`
 --
 
 INSERT INTO `lua_chon` (`id`, `id_cau_hoi`, `noi_dung`, `dung_sai`) VALUES
 ('LC1', 'CH1', 'Bạn bè', 0),
+('LC10', 'CH4', '100', 0),
 ('LC2', 'CH1', 'Chúng ta', 1),
 ('LC3', 'CH2', '六个人', 1),
 ('LC4', 'CH2', '四个人', 0),
 ('LC5', 'CH3', '2', 1),
-('LC6', 'CH3', '3', 0);
+('LC6', 'CH3', '3', 0),
+('LC7', 'CH4', '40', 0),
+('LC8', 'CH4', '50', 1),
+('LC9', 'CH4', '60', 0);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `nguoi_dung`
+-- Table structure for table `nguoi_dung`
 --
 
 CREATE TABLE `nguoi_dung` (
-  `id` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `ho_ten` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
-  `mat_khau` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `so_dien_thoai` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `anh_dai_dien` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `id_quyen` varchar(10) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id` varchar(10) NOT NULL,
+  `ho_ten` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `mat_khau` varchar(255) NOT NULL,
+  `so_dien_thoai` varchar(20) DEFAULT NULL,
+  `anh_dai_dien` varchar(255) DEFAULT NULL,
+  `id_quyen` varchar(10) DEFAULT NULL,
   `ngay_sinh` date DEFAULT NULL,
   `gioi_tinh` tinyint(1) DEFAULT NULL,
-  `dia_chi` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `ngay_tao` datetime DEFAULT CURRENT_TIMESTAMP
+  `dia_chi` varchar(255) DEFAULT NULL,
+  `ngay_tao` datetime DEFAULT current_timestamp(),
+  `is_verified` tinyint(1) DEFAULT 0,
+  `verify_token` varchar(64) DEFAULT NULL,
+  `reset_token` varchar(100) DEFAULT NULL,
+  `reset_token_expiry` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `nguoi_dung`
+-- Dumping data for table `nguoi_dung`
 --
 
-INSERT INTO `nguoi_dung` (`id`, `ho_ten`, `email`, `mat_khau`, `so_dien_thoai`, `anh_dai_dien`, `id_quyen`, `ngay_sinh`, `gioi_tinh`, `dia_chi`, `ngay_tao`) VALUES
-('ND1', 'Hv', 'hv@gmail.com', '$2y$10$IKwGeijwumwxkIJRQdIvuOiEXqHAv4iYbNhy3XWjjyDtKErCpxYIy', '0123456789', NULL, 'Q2', NULL, NULL, NULL, '2025-12-01 04:37:38'),
-('ND3', 'Admin', 'admin@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0123000000', NULL, 'Q1', NULL, NULL, NULL, '2025-12-01 04:37:38'),
-('ND6', 'Nguyễn Hoàng Huy Phong', 'trucmai124@gmail.com', '$2y$10$/eKlII/ePr30VH0Cnj/zxO07ejKnivbp33XNTLCz3uWBWk.cGJyIO', '35341962145', '1765355921_42d5806e0d8bb423c977cd87b44e3202.jpg', 'Q2', NULL, NULL, NULL, '2025-12-01 07:01:15'),
-('ND7', 'Nguyễn Vũ Huy Hoàng', 'hoang.nvh.66cnnt@ntu.edu.vn', '$2y$10$.XHNfTlebGyy5Wc9oWrUzu..gu1tuvqudvqAB4IuhsR.M8EI5fY22', '187641784', '1765356153_images.jpg', 'Q2', NULL, NULL, NULL, '2025-12-10 09:42:33'),
-('ND8', 'Phạm Nhật Trường', 'truong.pn.64cntt@ntu.edu.vn', '$2y$10$Qgh0uan3FB8aw9UZrRZdR.HevB5cDj/rXPE3gB2c4XtIQz/0rd1/O', '0377875295', '1765421826_z6269562799673_7ef78d977acba491d670974db406e681.jpg', 'Q2', '2004-01-28', 0, 'Ninh Thuận', '2025-12-11 03:57:06');
+INSERT INTO `nguoi_dung` (`id`, `ho_ten`, `email`, `mat_khau`, `so_dien_thoai`, `anh_dai_dien`, `id_quyen`, `ngay_sinh`, `gioi_tinh`, `dia_chi`, `ngay_tao`, `is_verified`, `verify_token`, `reset_token`, `reset_token_expiry`) VALUES
+('ND1', 'Hv', 'hv@gmail.com', '$2y$10$IKwGeijwumwxkIJRQdIvuOiEXqHAv4iYbNhy3XWjjyDtKErCpxYIy', '0123456789', NULL, 'Q2', NULL, NULL, NULL, '2025-12-01 04:37:38', 0, NULL, NULL, NULL),
+('ND10', 'Phạm Nhật Trường', 'truongpham28124@gmail.com', '$2y$10$Jt1EJtGC.ftKzKCijwgi8ODK.dv8RIjK23pkKt5.Djb2LzoGlGZj6', '0377875294', '1766567178_ChatGPT Image 12_34_34 15 thg 4, 2025.png', 'Q2', '2004-01-28', 0, 'Ninh Thuận', '2025-12-24 10:06:18', 1, NULL, NULL, NULL),
+('ND3', 'Admin', 'admin@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0123000000', NULL, 'Q1', NULL, NULL, NULL, '2025-12-01 04:37:38', 0, NULL, NULL, NULL),
+('ND6', 'Nguyễn Hoàng Huy Phong', 'trucmai124@gmail.com', '$2y$10$/eKlII/ePr30VH0Cnj/zxO07ejKnivbp33XNTLCz3uWBWk.cGJyIO', '0377875291', '1766549459_images.jpg', 'Q2', '0000-00-00', 0, '', '2025-12-01 07:01:15', 0, NULL, NULL, NULL),
+('ND7', 'Nguyễn Vũ Huy Hoàng', 'hoang.nvh.66cnnt@ntu.edu.vn', '$2y$10$.XHNfTlebGyy5Wc9oWrUzu..gu1tuvqudvqAB4IuhsR.M8EI5fY22', '187641784', '1765356153_images.jpg', 'Q2', NULL, NULL, NULL, '2025-12-10 09:42:33', 0, NULL, NULL, NULL),
+('ND8', 'Phạm Nhật Trường', 'truong.pn.64cntt@ntu.edu.vn', '$2y$10$Qgh0uan3FB8aw9UZrRZdR.HevB5cDj/rXPE3gB2c4XtIQz/0rd1/O', '0377875295', '1765421826_z6269562799673_7ef78d977acba491d670974db406e681.jpg', 'Q2', '2004-01-28', 0, 'Ninh Thuận', '2025-12-11 03:57:06', 0, NULL, NULL, NULL),
+('ND9', 'hgcvhg', 'truong@gmail.com', '$2y$10$gPhTdnobU5GRq331UMIhfuT6tG4Of0ddY2vfVJi8bZMQ51DimA40y', '75576576576', '1766551608_images.jpg', 'Q2', '2007-04-02', 0, 'vftfc', '2025-12-24 05:46:48', 0, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `phan_quyen`
+-- Table structure for table `phan_quyen`
 --
 
 CREATE TABLE `phan_quyen` (
-  `id` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `ten_quyen` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
+  `id` varchar(10) NOT NULL,
+  `ten_quyen` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `phan_quyen`
+-- Dumping data for table `phan_quyen`
 --
 
 INSERT INTO `phan_quyen` (`id`, `ten_quyen`) VALUES
@@ -313,51 +313,54 @@ INSERT INTO `phan_quyen` (`id`, `ten_quyen`) VALUES
 -- --------------------------------------------------------
 
 --
--- Cấu trúc bảng cho bảng `tap_tin_bai_hoc`
+-- Table structure for table `tap_tin_bai_hoc`
 --
 
 CREATE TABLE `tap_tin_bai_hoc` (
-  `id` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `id_bai_hoc` varchar(10) COLLATE utf8mb4_general_ci NOT NULL,
-  `duong_dan` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `loai_tap_tin` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `id` varchar(10) NOT NULL,
+  `id_bai_hoc` varchar(10) NOT NULL,
+  `duong_dan` varchar(255) NOT NULL,
+  `loai_tap_tin` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Đang đổ dữ liệu cho bảng `tap_tin_bai_hoc`
+-- Dumping data for table `tap_tin_bai_hoc`
 --
 
 INSERT INTO `tap_tin_bai_hoc` (`id`, `id_bai_hoc`, `duong_dan`, `loai_tap_tin`) VALUES
 ('TT1', 'BH1', 'file1.pdf', 'pdf'),
-('TT2', 'BH2', 'file2.pdf', 'pdf');
+('TT2', 'BH2', 'file2.pdf', 'pdf'),
+('TT3', 'BH3', 'Đề N2 T7-2023 (230710)_250611_194144.pdf', 'pdf'),
+('TT4', 'BH3', 'GetX_StateManagement.pdf', 'pdf'),
+('TT5', 'BH4', 'file2.docx', 'docx');
 
 --
--- Chỉ mục cho các bảng đã đổ
+-- Indexes for dumped tables
 --
 
 --
--- Chỉ mục cho bảng `bai_hoc`
+-- Indexes for table `bai_hoc`
 --
 ALTER TABLE `bai_hoc`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_baihoc_danhmuc` (`id_danh_muc`);
 
 --
--- Chỉ mục cho bảng `cau_hoi`
+-- Indexes for table `cau_hoi`
 --
 ALTER TABLE `cau_hoi`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_cauhoi_dethi` (`id_de_thi`);
 
 --
--- Chỉ mục cho bảng `cau_hoi_nguoi_dung`
+-- Indexes for table `cau_hoi_nguoi_dung`
 --
 ALTER TABLE `cau_hoi_nguoi_dung`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_nguoi_hoi` (`id_nguoi_hoi`);
 
 --
--- Chỉ mục cho bảng `cau_tra_loi_nguoi_dung`
+-- Indexes for table `cau_tra_loi_nguoi_dung`
 --
 ALTER TABLE `cau_tra_loi_nguoi_dung`
   ADD PRIMARY KEY (`id`),
@@ -365,14 +368,14 @@ ALTER TABLE `cau_tra_loi_nguoi_dung`
   ADD KEY `id_nguoi_tra_loi` (`id_nguoi_tra_loi`);
 
 --
--- Chỉ mục cho bảng `danh_muc_de_thi`
+-- Indexes for table `danh_muc_de_thi`
 --
 ALTER TABLE `danh_muc_de_thi`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `ten_danh_muc` (`ten_danh_muc`);
 
 --
--- Chỉ mục cho bảng `de_thi`
+-- Indexes for table `de_thi`
 --
 ALTER TABLE `de_thi`
   ADD PRIMARY KEY (`id`),
@@ -380,7 +383,7 @@ ALTER TABLE `de_thi`
   ADD KEY `fk_de_thi_danh_muc` (`id_danh_muc`);
 
 --
--- Chỉ mục cho bảng `ket_qua_chi_tiet`
+-- Indexes for table `ket_qua_chi_tiet`
 --
 ALTER TABLE `ket_qua_chi_tiet`
   ADD PRIMARY KEY (`id`),
@@ -389,7 +392,7 @@ ALTER TABLE `ket_qua_chi_tiet`
   ADD KEY `id_lua_chon` (`id_lua_chon`);
 
 --
--- Chỉ mục cho bảng `ket_qua_thi`
+-- Indexes for table `ket_qua_thi`
 --
 ALTER TABLE `ket_qua_thi`
   ADD PRIMARY KEY (`id`),
@@ -397,7 +400,7 @@ ALTER TABLE `ket_qua_thi`
   ADD KEY `fk_ketqua_dethi` (`id_de_thi`);
 
 --
--- Chỉ mục cho bảng `lich_su_lam_bai`
+-- Indexes for table `lich_su_lam_bai`
 --
 ALTER TABLE `lich_su_lam_bai`
   ADD PRIMARY KEY (`id`),
@@ -406,14 +409,14 @@ ALTER TABLE `lich_su_lam_bai`
   ADD KEY `fk_lichsu_luachon` (`id_lua_chon`);
 
 --
--- Chỉ mục cho bảng `lua_chon`
+-- Indexes for table `lua_chon`
 --
 ALTER TABLE `lua_chon`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_luachon_cauhoi` (`id_cau_hoi`);
 
 --
--- Chỉ mục cho bảng `nguoi_dung`
+-- Indexes for table `nguoi_dung`
 --
 ALTER TABLE `nguoi_dung`
   ADD PRIMARY KEY (`id`),
@@ -421,72 +424,72 @@ ALTER TABLE `nguoi_dung`
   ADD KEY `fk_nguoidung_quyen` (`id_quyen`);
 
 --
--- Chỉ mục cho bảng `phan_quyen`
+-- Indexes for table `phan_quyen`
 --
 ALTER TABLE `phan_quyen`
   ADD PRIMARY KEY (`id`);
 
 --
--- Chỉ mục cho bảng `tap_tin_bai_hoc`
+-- Indexes for table `tap_tin_bai_hoc`
 --
 ALTER TABLE `tap_tin_bai_hoc`
   ADD PRIMARY KEY (`id`),
   ADD KEY `fk_taptin_baihoc` (`id_bai_hoc`);
 
 --
--- AUTO_INCREMENT cho các bảng đã đổ
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT cho bảng `danh_muc_de_thi`
+-- AUTO_INCREMENT for table `danh_muc_de_thi`
 --
 ALTER TABLE `danh_muc_de_thi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT cho bảng `ket_qua_chi_tiet`
+-- AUTO_INCREMENT for table `ket_qua_chi_tiet`
 --
 ALTER TABLE `ket_qua_chi_tiet`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
--- Ràng buộc đối với các bảng kết xuất
+-- Constraints for dumped tables
 --
 
 --
--- Ràng buộc cho bảng `bai_hoc`
+-- Constraints for table `bai_hoc`
 --
 ALTER TABLE `bai_hoc`
   ADD CONSTRAINT `fk_baihoc_danhmuc` FOREIGN KEY (`id_danh_muc`) REFERENCES `danh_muc_de_thi` (`id`);
 
 --
--- Ràng buộc cho bảng `cau_hoi`
+-- Constraints for table `cau_hoi`
 --
 ALTER TABLE `cau_hoi`
   ADD CONSTRAINT `fk_cauhoi_dethi` FOREIGN KEY (`id_de_thi`) REFERENCES `de_thi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ràng buộc cho bảng `cau_hoi_nguoi_dung`
+-- Constraints for table `cau_hoi_nguoi_dung`
 --
 ALTER TABLE `cau_hoi_nguoi_dung`
   ADD CONSTRAINT `cau_hoi_nguoi_dung_ibfk_1` FOREIGN KEY (`id_nguoi_hoi`) REFERENCES `nguoi_dung` (`id`);
 
 --
--- Ràng buộc cho bảng `cau_tra_loi_nguoi_dung`
+-- Constraints for table `cau_tra_loi_nguoi_dung`
 --
 ALTER TABLE `cau_tra_loi_nguoi_dung`
   ADD CONSTRAINT `cau_tra_loi_nguoi_dung_ibfk_1` FOREIGN KEY (`id_cau_hoi`) REFERENCES `cau_hoi_nguoi_dung` (`id`),
   ADD CONSTRAINT `cau_tra_loi_nguoi_dung_ibfk_2` FOREIGN KEY (`id_nguoi_tra_loi`) REFERENCES `nguoi_dung` (`id`);
 
 --
--- Ràng buộc cho bảng `de_thi`
+-- Constraints for table `de_thi`
 --
 ALTER TABLE `de_thi`
   ADD CONSTRAINT `fk_de_thi_danh_muc` FOREIGN KEY (`id_danh_muc`) REFERENCES `danh_muc_de_thi` (`id`),
   ADD CONSTRAINT `fk_dethi_baihoc` FOREIGN KEY (`id_bai_hoc`) REFERENCES `bai_hoc` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ràng buộc cho bảng `ket_qua_chi_tiet`
+-- Constraints for table `ket_qua_chi_tiet`
 --
 ALTER TABLE `ket_qua_chi_tiet`
   ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_1` FOREIGN KEY (`id_ket_qua`) REFERENCES `ket_qua_thi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -494,14 +497,14 @@ ALTER TABLE `ket_qua_chi_tiet`
   ADD CONSTRAINT `ket_qua_chi_tiet_ibfk_3` FOREIGN KEY (`id_lua_chon`) REFERENCES `lua_chon` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ràng buộc cho bảng `ket_qua_thi`
+-- Constraints for table `ket_qua_thi`
 --
 ALTER TABLE `ket_qua_thi`
   ADD CONSTRAINT `fk_ketqua_dethi` FOREIGN KEY (`id_de_thi`) REFERENCES `de_thi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_ketqua_nguoidung` FOREIGN KEY (`id_nguoi_dung`) REFERENCES `nguoi_dung` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ràng buộc cho bảng `lich_su_lam_bai`
+-- Constraints for table `lich_su_lam_bai`
 --
 ALTER TABLE `lich_su_lam_bai`
   ADD CONSTRAINT `fk_lichsu_cauhoi` FOREIGN KEY (`id_cau_hoi`) REFERENCES `cau_hoi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -509,19 +512,19 @@ ALTER TABLE `lich_su_lam_bai`
   ADD CONSTRAINT `fk_lichsu_luachon` FOREIGN KEY (`id_lua_chon`) REFERENCES `lua_chon` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ràng buộc cho bảng `lua_chon`
+-- Constraints for table `lua_chon`
 --
 ALTER TABLE `lua_chon`
   ADD CONSTRAINT `fk_luachon_cauhoi` FOREIGN KEY (`id_cau_hoi`) REFERENCES `cau_hoi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ràng buộc cho bảng `nguoi_dung`
+-- Constraints for table `nguoi_dung`
 --
 ALTER TABLE `nguoi_dung`
   ADD CONSTRAINT `fk_nguoidung_quyen` FOREIGN KEY (`id_quyen`) REFERENCES `phan_quyen` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
--- Ràng buộc cho bảng `tap_tin_bai_hoc`
+-- Constraints for table `tap_tin_bai_hoc`
 --
 ALTER TABLE `tap_tin_bai_hoc`
   ADD CONSTRAINT `fk_taptin_baihoc` FOREIGN KEY (`id_bai_hoc`) REFERENCES `bai_hoc` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
