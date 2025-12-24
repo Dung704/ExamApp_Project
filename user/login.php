@@ -19,6 +19,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($result && mysqli_num_rows($result) == 1) {
             $row = mysqli_fetch_assoc($result);
+
+            if ($row['is_verified'] == 0) {
+        echo "<div class='alert alert-warning text-center mt-3'>
+                Tài khoản chưa được xác thực email.  
+                Vui lòng kiểm tra hộp thư và xác nhận trước khi đăng nhập.
+              </div>";
+        include_once('./footer.php');
+        exit();
+    }
+
+
             if (password_verify($mat_khau, $row['mat_khau'])) {
                 $_SESSION['email'] = $row['email'];
                 $_SESSION['user_id'] = $row['id'];
@@ -35,7 +46,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($row['id_quyen'] === 'Q1') {
                     header("Location: ../admin/index_admin.php");
                 } else {
-                    // Nếu có trang cần quay lại
                     if (isset($_SESSION['duong_dan_sau_khi_dang_nhap'])) {
                         $duong_dan_url = $_SESSION['duong_dan_sau_khi_dang_nhap'];
                         unset($_SESSION['duong_dan_sau_khi_dang_nhap']);
@@ -85,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <div class="text-center mt-3">
-        <a href="forgot_password.php" class="text-decoration-none">Quên mật khẩu?</a>
+        <a href="./forgot_password.php" class="text-decoration-none">Quên mật khẩu?</a>
     </div>
 
     <div class="text-center mt-3">
