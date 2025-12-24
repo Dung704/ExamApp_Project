@@ -1,11 +1,15 @@
 <?php
 include("./header.php");
 
+
 /* ================= KIỂM TRA ID ĐỀ THI ================= */
 if (!isset($_GET['id'])) {
     die("Lỗi: Thiếu tham số id đề thi.");
 }
 $id_de_thi = $_GET['id'];
+// Đánh dấu bắt đầu phiên thi
+$_SESSION['exam_active'] = true;
+$_SESSION['exam_id'] = $id_de_thi;
 
 /* ================= LẤY THÔNG TIN ĐỀ THI ================= */
 $dt = mysqli_fetch_assoc(mysqli_query($dbc,
@@ -266,6 +270,25 @@ document.getElementById("examForm").addEventListener("submit", function(e) {
             this.submit();
         }
     });
+});
+
+let allowSubmit = false;
+
+/* Khi người dùng rời trang mà KHÔNG nộp bài */
+window.addEventListener("beforeunload", function() {
+    if (!allowSubmit) {
+        navigator.sendBeacon(
+            "huy_phien_thi.php",
+            new URLSearchParams({
+                exam_id: "<?= $id_de_thi ?>"
+            })
+        );
+    }
+});
+
+/* Khi nộp bài hợp lệ */
+document.getElementById("examForm").addEventListener("submit", function() {
+    allowSubmit = true;
 });
 </script>
 

@@ -1,17 +1,35 @@
 <?php
 include("./header.php");
 
+/* ===== KIỂM TRA ĐĂNG NHẬP ===== */
+if (!isset($_SESSION['user_id'])) {
+    die("Chưa đăng nhập.");
+}
+
+/* ===== KIỂM TRA PHIÊN THI HỢP LỆ ===== */
+if (
+    !isset($_SESSION['exam_active'], $_SESSION['exam_id']) ||
+    $_SESSION['exam_active'] !== true
+) {
+    die("Phiên làm bài không hợp lệ hoặc đã bị hủy.");
+}
+
 if (!isset($_POST['id_de_thi'], $_POST['id_kq'])) {
     die("Thiếu dữ liệu.");
 }
 
 $id_de_thi = $_POST['id_de_thi'];
 $id_kq     = $_POST['id_kq'];
-$id_user   = $_SESSION['user_id'] ?? die("Chưa đăng nhập");
+$id_user   = $_SESSION['user_id'];
+
+/* ===== ĐẢM BẢO ĐÚNG PHIÊN ===== */
+if ($_SESSION['exam_id'] != $id_de_thi) {
+    die("Dữ liệu phiên không khớp.");
+}
 
 $diem = 0;
 
-/* ===== XÓA KẾT QUẢ CHI TIẾT CŨ (RẤT QUAN TRỌNG) ===== */
+/* ===== XÓA KẾT QUẢ CHI TIẾT CŨ ===== */
 mysqli_query($dbc, "
     DELETE FROM ket_qua_chi_tiet
     WHERE id_ket_qua = '$id_kq'
@@ -28,9 +46,7 @@ while ($q = mysqli_fetch_assoc($q_list)) {
 
     $id_cau_hoi = $q['id'];
 
-    /* --- ĐÁP ÁN NGƯỜI DÙNG CHỌN --- */
     $user_answers = $_POST['cau_hoi'][$id_cau_hoi] ?? [];
-
     if (!is_array($user_answers)) {
         $user_answers = [$user_answers];
     }
@@ -47,12 +63,11 @@ while ($q = mysqli_fetch_assoc($q_list)) {
         $correct_answers[] = $row['id'];
     }
 
-    /* --- SO SÁNH TUYỆT ĐỐI --- */
     sort($user_answers);
     sort($correct_answers);
 
     if ($user_answers === $correct_answers) {
-        $diem++; // +1 điểm cho 1 câu
+        $diem++;
     }
 
     /* --- LƯU CHI TIẾT --- */
@@ -85,6 +100,10 @@ mysqli_query($dbc, "
         thoi_gian_nop = NOW()
     WHERE id = '$id_kq'
 ");
+
+/* ===== KẾT THÚC PHIÊN THI ===== */
+unset($_SESSION['exam_active']);
+unset($_SESSION['exam_id']);
 
 header("Location: ket_qua.php?id=$id_kq");
 exit;
