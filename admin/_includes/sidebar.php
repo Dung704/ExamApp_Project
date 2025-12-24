@@ -21,8 +21,6 @@
                 class="submenu-item <?php echo ($_GET['page'] ?? '') == 'dashboard' ? 'active' : ''; ?>">
                 <i class="fas fa-home"></i> Dashboard
             </a>
-
-
         </div>
     </div>
 
