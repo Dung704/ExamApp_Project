@@ -122,7 +122,7 @@ if (isset($_POST['submit'])) {
 
                 <!-- Khung preview -->
                 <img id="preview_img" src="#"
-                    style="display:none; width:200px; height:200px; object-fit:cover; border-radius:8px; margin-top:10px;">
+                    style="display:none; width:100%; min-height:50%; object-fit:cover; border-radius:8px; margin-top:10px;">
 
                 <?php if (isset($hinh_anh) && $hinh_anh != ''): ?>
                     <small class="text-success">File đã tải lên: <?php echo $hinh_anh; ?></small>

@@ -75,7 +75,7 @@ if (isset($_POST['submit'])) {
                 <script>
                     setTimeout(function() {
                         window.location.href = 'index_admin.php?page=edit_user&id=$id_detail';
-                    }, 200);
+                    });
                 </script>
             ";
         } else {
@@ -147,30 +147,41 @@ if (isset($_POST['submit'])) {
                     <input type="file" name="anh_dai_dien" class="form-control" accept="image/*">
                 </div>
                 <div class="col-md-8">
-                    <div class="row">
-                        <div class="col-6">
-                            <label class="text-success">Ảnh hiện tại:</label>
-                            <?php
-                            // Đường dẫn tương đối để hiển thị ảnh
-                            $avatarPath = "../user/image_user/" . $u['anh_dai_dien'];
-                            if (!empty($u['anh_dai_dien'])) {
-                                echo '<img src="' . $avatarPath . '" 
-                style="width:600px;object-fit:cover;border-radius:8px;">';
-                            } else {
-                                echo '<span style="color:gray;">Không có ảnh</span>';
-                            }
-                            ?>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="text-success d-block mb-2">Ảnh hiện tại:</label>
+                            <div class="border rounded p-2 text-center">
+                                <?php
+                                $avatarPath = "../user/image_user/" . $u['anh_dai_dien'];
+                                if (!empty($u['anh_dai_dien'])) {
+                                    echo '<img src="' . $avatarPath . '"
+                        style="width:100%;max-width:100%;min-height:350px;
+                               object-fit:contain;border-radius:8px;">';
+                                } else {
+                                    echo '<span style="color:gray;">Không có ảnh</span>';
+                                }
+                                ?>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <label class="text-success">Preview ảnh mới:</label>
-                            <img id="preview_image" src="" alt=""
-                                style="width:100%;max-width:600px;object-fit:cover;border-radius:8px;border:2px solid #28a745;display:none;">
-                            <div id="no_preview_text" style="width:100%;max-width:300px;height:300px;display:flex;align-items:center;justify-content:center;border:2px dashed #ccc;border-radius:8px;color:#999;">
-                                Chọn ảnh để xem preview
+
+                        <div class="col-md-6">
+                            <label class="text-success d-block mb-2">Preview ảnh mới:</label>
+                            <div class="border rounded p-2 text-center">
+                                <img id="preview_image" src="" alt=""
+                                    style="width:100%;max-width:100%;min-height:350px;
+                           object-fit:contain;border-radius:8px;
+                           border:2px solid #28a745;display:none;">
+                                <div id="no_preview_text"
+                                    style="width:100%;min-height:350px;
+                           display:flex;align-items:center;justify-content:center;
+                           border:2px dashed #ccc;border-radius:8px;color:#999;">
+                                    Chọn ảnh để xem preview
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
 
             <button type="submit" name="submit" class="btn btn-primary">Cập nhật</button>
