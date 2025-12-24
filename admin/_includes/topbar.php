@@ -1,80 +1,41 @@
- <?php if (false): ?>
-     <?php
-        $tenNV = $_SESSION["ho_ten"];
-        $hinh_anh = $_SESSION["anh_dai_dien"];
-        ?>
-     <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-         <!-- Sidebar Toggle (Topbar) -->
-         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-             <i class="fa fa-bars"></i>
-         </button>
-         <!-- Topbar Navbar -->
-         <ul class="navbar-nav ml-auto">
-             <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-             <div class="topbar-divider d-none d-sm-block"></div>
-             <!-- Nav Item - User Information -->
-             <li class="nav-item dropdown no-arrow">
-                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                     aria-haspopup="true" aria-expanded="false">
-                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">Xin chào <?php echo $tenNV ?> </span>
-                     <img class="img-profile rounded-circle" src="../user/image_user/<?php echo $hinh_anh ?>" />
-                 </a>
-                 <!-- Dropdown - User Information -->
-                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                     <a class="dropdown-item" href="../user/index.php">
-                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                         Về trang chủ shop
-                     </a>
-                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                         Đăng xuất
-                     </a>
-                 </div>
-             </li>
-         </ul>
-     </nav>
+<?php
+$ho_ten = $_SESSION['ho_ten'];
+$anh_dai_dien = $_SESSION['anh_dai_dien'];
+?>
 
+<button class="toggle-btn" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</button>
 
-     <div
-         class="modal fade"
-         id="logoutModal"
-         tabindex="-1"
-         role="dialog"
-         aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-         <div class="modal-dialog" role="document">
-             <div class="modal-content">
-                 <div class="modal-header">
-                     <h5 class="modal-title" id="exampleModalLabel">Muốn thoát?</h5>
-                     <button
-                         class="close"
-                         type="button"
-                         data-dismiss="modal"
-                         aria-label="Close">
-                         <span aria-hidden="true">×</span>
-                     </button>
-                 </div>
-                 <div class="modal-body">
-                     Chọn "Đăng xuất" bên dưới nếu bạn muốn đăng xuất khỏi phiên đăng nhập này
-                 </div>
-                 <div class="modal-footer">
-                     <button
-                         class="btn btn-secondary"
-                         type="button"
-                         data-dismiss="modal">
-                         Huỷ
-                     </button>
-                     <a class="btn btn-primary" href="../user/logout.php">Đăng xuất</a>
-                 </div>
-             </div>
-         </div>
-     </div>
- <?php endif; ?>
+<div class="dropdown user-profile">
+    <a href="#"
+        class="d-flex align-items-center gap-2 text-decoration-none dropdown-toggle"
+        id="userDropdown"
+        data-bs-toggle="dropdown"
+        aria-expanded="false">
 
- <button class="toggle-btn" onclick="toggleSidebar()">
-     <i class="fas fa-bars"></i>
- </button>
- <div class="user-profile">
-     <span>Admin User</span>
-     <div class="user-avatar">A</div>
- </div>
+        <span>Xin chào <?= htmlspecialchars($ho_ten) ?></span>
+
+        <div class="user-avatar">
+            <img src="../user/image_user/<?= htmlspecialchars($anh_dai_dien) ?>" alt="">
+        </div>
+    </a>
+
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+        <li>
+            <a class="dropdown-item" href="../user/index.php">
+                <i class="fas fa-home me-2"></i> Về trang chủ
+            </a>
+        </li>
+        <li>
+            <hr class="dropdown-divider">
+        </li>
+        <li>
+            <a class="dropdown-item text-danger"
+                href="../user/logout.php"
+                onclick="return confirm('Bạn có chắc chắn muốn đăng xuất không?')">
+                <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+            </a>
+        </li>
+    </ul>
+</div>
