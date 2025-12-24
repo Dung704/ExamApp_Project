@@ -22,7 +22,7 @@ if (isset($_POST['submit'])) {
     $hinh_anh = '';
     if (isset($_FILES['hinh_anh']) && $_FILES['hinh_anh']['error'] == 0) {
         $hinh_anh = time() . '_' . $_FILES['hinh_anh']['name'];
-        move_uploaded_file($_FILES['hinh_anh']['tmp_name'], '../user/image_user/' . $hinh_anh);
+        move_uploaded_file($_FILES['hinh_anh']['tmp_name'], '../use/image_cauhoi' . $hinh_anh);
     }
 
     $insert = "INSERT INTO cau_hoi (id, id_de_thi, noi_dung, hinh_anh, muc_do)
@@ -70,20 +70,24 @@ $result_to_show = mysqli_query($conn, $query_to_show);
             <div class="col-md-8">
                 <label>Ảnh bài học:</label>
                 <div class="row">
-                    <div class="col"><input type="file" name="hinh_anh" id="hinh_anh" class="form-control" accept="image/*"></div>
-                    <div class="col"> <img id="preview_img" src="#" style="display:none; width:400px; object-fit:cover; margin-top:10px;"></div>
+                    <div class="col"><input type="file" name="hinh_anh" id="hinh_anh" class="form-control"
+                            accept="image/*"></div>
+                    <div class="col"> <img id="preview_img" src="#"
+                            style="display:none; width:400px; object-fit:cover; margin-top:10px;"></div>
                 </div>
             </div>
         </div>
         <div class="row mb-3">
             <div class="col-md-12">
                 <label>Nội dung</label>
-                <textarea id="noi_dung" name="mo_ta" class="form-control" required rows="10"><?php echo isset($_POST['mo_ta']) ? $_POST['mo_ta'] : ''; ?></textarea>
+                <textarea id="noi_dung" name="mo_ta" class="form-control" required
+                    rows="10"><?php echo isset($_POST['mo_ta']) ? $_POST['mo_ta'] : ''; ?></textarea>
             </div>
         </div>
 
         <button type="submit" name="submit" class="btn btn-primary">Thêm câu hỏi</button>
-        <a href="index_admin.php?page=list_exam_question&id=<?= $id_dThi ?>" class="btn btn-secondary">Về trang câu hỏi</a>
+        <a href="index_admin.php?page=list_exam_question&id=<?= $id_dThi ?>" class="btn btn-secondary">Về trang câu
+            hỏi</a>
     </form>
 
 
@@ -106,28 +110,28 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                 <?php
                 $i = 1;
                 while ($row = mysqli_fetch_assoc($result_to_show)) { ?>
-                    <tr>
-                        <td><?= $i ?></td>
+                <tr>
+                    <td><?= $i ?></td>
 
-                        <!-- <td><?= $row['id'] ?></td> -->
+                    <!-- <td><?= $row['id'] ?></td> -->
 
-                        <!-- <td>
+                    <!-- <td>
                             <?= $row['id_de_thi'] ?>
                             <?= $row['ten_de_thi'] ? ' (' . $row['ten_de_thi'] . ')' : '' ?>
                         </td> -->
 
-                        <td>
-                            <?= mb_strimwidth($row['noi_dung'], 0, 100, '...') ?>
-                        </td>
+                    <td>
+                        <?= mb_strimwidth($row['noi_dung'], 0, 100, '...') ?>
+                    </td>
 
-                        <td>
-                            <?php if (!empty($row['hinh_anh'])): ?>
-                                <img src="../user/image_user/<?= $row['hinh_anh'] ?>"
-                                    style="width:200px;object-fit:cover;border-radius:6px;">
-                            <?php else: ?>
-                                <span class="text-muted">Không có</span>
-                            <?php endif; ?>
-                        </td>
+                    <td>
+                        <?php if (!empty($row['hinh_anh'])): ?>
+                        <img src="../user/image_user/<?= $row['hinh_anh'] ?>"
+                            style="width:200px;object-fit:cover;border-radius:6px;">
+                        <?php else: ?>
+                        <span class="text-muted">Không có</span>
+                        <?php endif; ?>
+                    </td>
 
                         <td><?= $row['muc_do'] ?? 'Chưa xác định' ?></td>
                         <td>
@@ -147,16 +151,16 @@ $result_to_show = mysqli_query($conn, $query_to_show);
 </div>
 
 <script>
-    // Preview ảnh bài học
-    document.getElementById('hinh_anh').addEventListener('change', function(event) {
-        const preview = document.getElementById('preview_img');
-        const file = event.target.files[0];
-        if (file) {
-            preview.src = URL.createObjectURL(file);
-            preview.style.display = 'block';
-        } else {
-            preview.src = "";
-            preview.style.display = "none";
-        }
-    });
+// Preview ảnh bài học
+document.getElementById('hinh_anh').addEventListener('change', function(event) {
+    const preview = document.getElementById('preview_img');
+    const file = event.target.files[0];
+    if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = 'block';
+    } else {
+        preview.src = "";
+        preview.style.display = "none";
+    }
+});
 </script>

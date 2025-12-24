@@ -64,18 +64,13 @@ $result_bai_hoc = mysqli_query($dbc, $sql_bai_hoc);
                                         <h5 class="card-title fw-bold"><?= $row['tieu_de'] ?></h5>
                                         <p class="text-muted mb-1">Ngày tạo: <?= $row['ngay_tao'] ?></p>
 
-                                        <p class="card-text text-truncate" style="max-height: 4.5em;">
-                                            <?= $row['noi_dung'] ?>
+                                        <p class="card-text">
+                                            <?= mb_strlen($row['noi_dung']) > 120
+                                                ? mb_substr($row['noi_dung'], 0, 120,) . '...'
+                                                : $row['noi_dung'] ?>
                                         </p>
 
-                                        <?php if(!empty($row['link_bai_hoc'])): ?>
-                                        <p class="mt-2">
-                                            <small>Link tham khảo:</small><br>
-                                            <a href="<?= $row['link_bai_hoc'] ?>" target="_blank" class="text-primary">
-                                                <?= $row['link_bai_hoc'] ?>
-                                            </a>
-                                        </p>
-                                        <?php endif; ?>
+
                                     </div>
 
                                     <div class="col-4 text-end">
