@@ -33,7 +33,7 @@ if(isset($_GET['id_dm'])){
                     <p class="card-text mb-2">Mô tả : <?php echo $row['mo_ta']?></p>
                     <p class="card-text mb-2">Thang Điểm: <?php echo $row['thang_diem']?></p>
                     <p class="card-text mb-2">Ngày Tạo : <?php echo $row['thang_diem']?></p>
-                    <a href="./lam_de.php?id_dt=<?= $row['id'] ?>" class="btn btn-primary w-100">Bắt đầu</a>
+                    <a href="./chi_tiet_de_thi.php?id=<?= $row['id'] ?>" class="btn btn-primary w-100">Bắt đầu</a>
                 </div>
             </div>
         </div>

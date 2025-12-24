@@ -42,7 +42,42 @@ $ngay_tao_fmt  = $ngay_tao  ? date("d/m/Y", strtotime($ngay_tao))  : "---";
 
 // Tab
 $tab = $_GET['tab'] ?? 'info';
+
+// Truy vấn câu hỏi đóng gớp
+
+$sql_count = "
+    SELECT COUNT(*) AS total
+    FROM cau_hoi_nguoi_dung
+    WHERE id_nguoi_hoi = '$user_id'
+";
+$rs_count = mysqli_query($dbc, $sql_count);
+$row_count = mysqli_fetch_assoc($rs_count);
+$total_records = $row_count['total'];
+
+// ====== PHÂN TRANG ======
+$limit = 5;
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($page < 1) $page = 1;
+$offset = ($page - 1) * $limit;
+$total_pages = ceil($total_records / $limit);
+
+// ====== LẤY DANH SÁCH ======
+$sql_q = "
+    SELECT *
+    FROM cau_hoi_nguoi_dung
+    WHERE id_nguoi_hoi = '$user_id'
+    ORDER BY id DESC
+    LIMIT $limit OFFSET $offset
+";
+$rs_q = mysqli_query($dbc, $sql_q);
+
+
+
 ?>
+
+
+
+
 
 <div class="container my-5" style="max-width: 900px;">
 
@@ -73,7 +108,8 @@ $tab = $_GET['tab'] ?? 'info';
 
             <a href="?id=<?= $user_id ?>&tab=questions"
                 class="text-decoration-none fw-semibold <?= $tab=='questions'?'text-primary':'text-dark' ?>">
-                Câu hỏi đã đăng
+                Đóng góp (<?= $total_records ?>)
+
             </a>
 
         </div>
@@ -115,47 +151,61 @@ $tab = $_GET['tab'] ?? 'info';
 
     <?php elseif ($tab == 'questions'): ?>
 
-    <!-- CÂU HỎI ĐÃ ĐĂNG -->
+
 
     <div class="card shadow-sm">
-        <div class="card-header bg-white fw-bold">Câu hỏi đã đăng</div>
+
+
         <div class="card-body">
 
+            <?php if (mysqli_num_rows($rs_q) == 0): ?>
+            <p class="text-muted">Người này chưa đăng câu hỏi nào.</p>
+            <?php else: ?>
+            <?php while ($q = mysqli_fetch_assoc($rs_q)): ?>
             <?php
-                $sql_q = "SELECT * FROM cau_hoi_nguoi_dung WHERE id_nguoi_hoi = '$user_id' ORDER BY id DESC";
-                $rs_q = mysqli_query($dbc, $sql_q);
-
-               
-
-                if (mysqli_num_rows($rs_q) == 0) {
-                    echo "<p class='text-muted'>Người này chưa đăng câu hỏi nào.</p>";
-                } else { 
-                    while ($q = mysqli_fetch_assoc($rs_q)) { 
-                        $anh_cau_hoi = (!empty($q['anh_dinh_kem']))
-                                            ? "./image_cauhoi/" . $q['anh_dinh_kem']
-                                            : null;
-                    ?>
-
-
+                $anh_cau_hoi = !empty($q['anh_dinh_kem'])
+                    ? "./image_cauhoi/" . $q['anh_dinh_kem']
+                    : null;
+                ?>
             <a href="chi_tiet_cau_hoi_nguoi_dung.php?id=<?= $q['id'] ?>" class="text-decoration-none text-dark">
                 <div class="mb-3 p-3 border rounded hover-shadow">
                     <?php if ($anh_cau_hoi): ?>
-                    <div class="mt-2">
-                        <img src="<?= $anh_cau_hoi ?>" style="max-width: 50px; border-radius: 6px;" alt="Ảnh câu hỏi">
-                    </div>
+                    <img src="<?= $anh_cau_hoi ?>" style="max-width:50px; border-radius:6px;">
                     <?php endif; ?>
-                    <strong> <?= $q['noi_dung'] ?></strong><br>
-                    <span class="text-muted">Ngày đăng: <?= date("d/m/Y", strtotime($q['thoi_gian_tao'])) ?></span>
+                    <strong><?= htmlspecialchars($q['noi_dung']) ?></strong><br>
+                    <span class="text-muted">
+                        Ngày đăng: <?= date("d/m/Y", strtotime($q['thoi_gian_tao'])) ?>
+                    </span>
                 </div>
             </a>
-            <?php
-                    } 
-            } 
+            <?php endwhile; ?>
+            <?php endif; ?>
 
-            ?>
+            <!-- PHÂN TRANG -->
+            <?php if ($total_pages > 1): ?>
+            <nav>
+                <ul class="pagination justify-content-center">
+                    <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?page=<?= $page - 1 ?>">«</a>
+                    </li>
+
+                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                        <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                    </li>
+                    <?php endfor; ?>
+
+                    <li class="page-item <?= ($page >= $total_pages) ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?page=<?= $page + 1 ?>">»</a>
+                    </li>
+                </ul>
+            </nav>
+            <?php endif; ?>
 
         </div>
     </div>
+
+
 
     <?php endif; ?>
 
