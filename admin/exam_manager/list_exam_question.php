@@ -81,7 +81,7 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                         </td> -->
 
                         <td>
-                            <?= mb_strimwidth($row['noi_dung'], 0, 100, '...') ?>
+                            <?= $row['noi_dung'] ?>
                         </td>
 
                         <td>
