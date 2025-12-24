@@ -93,7 +93,7 @@ if (isset($_POST['submit'])) {
 
                     for ($i = 0; $i < count($files['name']); $i++) {
                         if ($files['error'][$i] == 0) {
-                            $file_name = $files['name'][$i];
+                            $file_name = uniqid() . '_' . $files['name'][$i];
                             $tmp_name  = $files['tmp_name'][$i];
                             $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
