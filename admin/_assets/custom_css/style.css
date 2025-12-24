@@ -46,30 +46,6 @@ body {
   padding: 1rem 0;
 }
 
-.menu-item {
-  padding: 0.75rem 1.5rem;
-  color: #cbd5e1;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  transition: all 0.3s;
-}
-
-.menu-item:hover {
-  background: var(--sidebar-hover);
-  color: white;
-}
-
-.menu-item.active {
-  background: var(--primary-color);
-  color: white;
-}
-
-.menu-item i {
-  width: 20px;
-  margin-right: 10px;
-}
-
 /* Main Content */
 .main-content {
   margin-left: var(--sidebar-width);
@@ -194,27 +170,27 @@ body {
   }
 }
 
-/* Menu item cơ bản */
 .menu-item {
   display: flex;
   align-items: center;
   padding: 12px 20px;
   color: #ecf0f1;
   text-decoration: none;
-  transition: all 0.3s ease;
   cursor: pointer;
+  transition: all 0.3s ease;
   border-left: 3px solid transparent;
 }
 
 .menu-item:hover {
   background: #34495e;
+  color: #fff;
   border-left-color: #3498db;
 }
 
 .menu-item.active {
   background: #34495e;
-  border-left-color: #3498db;
   color: #3498db;
+  border-left-color: #3498db;
 }
 
 .menu-item i {
@@ -222,17 +198,14 @@ body {
   margin-right: 10px;
 }
 
-/* Menu có submenu */
 .menu-item.has-submenu {
-  justify-content: space-between;
   position: relative;
 }
 
 .menu-item.has-submenu .arrow {
-  transition: transform 0.3s ease;
+  margin-left: auto;
   font-size: 12px;
-  width: auto;
-  margin-right: 0;
+  transition: transform 0.3s ease;
 }
 
 .menu-item.has-submenu.open .arrow {

@@ -99,6 +99,7 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                     <th>Hình ảnh</th>
                     <th>Mức độ</th>
                     <th>Tổng số lựa chọn</th>
+                    <th>Hành động</th>
                 </tr>
             </thead>
             <tbody>
@@ -134,6 +135,8 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                                 <?= $row['tong_lua_chon'] ?>
                             </span>
                         </td>
+
+                        <td><a href="index_admin.php?page=add_select_question&id=<?= $row['id'] ?>&TT=<?= $i ?>" class="btn btn-sm btn-warning text-white text-nowrap">Thêm lựa chọn</a></td>
                     </tr>
                 <?php
                     $i++;
