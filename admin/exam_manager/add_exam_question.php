@@ -22,7 +22,7 @@ if (isset($_POST['submit'])) {
     $hinh_anh = '';
     if (isset($_FILES['hinh_anh']) && $_FILES['hinh_anh']['error'] == 0) {
         $hinh_anh = time() . '_' . $_FILES['hinh_anh']['name'];
-        move_uploaded_file($_FILES['hinh_anh']['tmp_name'], '../use/image_cauhoi' . $hinh_anh);
+        move_uploaded_file($_FILES['hinh_anh']['tmp_name'], '../user/image_cauhoi/' . $hinh_anh);
     }
 
     $insert = "INSERT INTO cau_hoi (id, id_de_thi, noi_dung, hinh_anh, muc_do)
@@ -126,7 +126,7 @@ $result_to_show = mysqli_query($conn, $query_to_show);
 
                     <td>
                         <?php if (!empty($row['hinh_anh'])): ?>
-                        <img src="../user/image_user/<?= $row['hinh_anh'] ?>"
+                        <img src="../user/image_cauhoi/<?= $row['hinh_anh'] ?>"
                             style="width:200px;object-fit:cover;border-radius:6px;">
                         <?php else: ?>
                         <span class="text-muted">Không có</span>

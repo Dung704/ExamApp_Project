@@ -86,7 +86,7 @@ $result_to_show = mysqli_query($conn, $query_to_show);
 
                         <td>
                             <?php if (!empty($row['hinh_anh'])): ?>
-                                <img src="../user/image_user/<?= $row['hinh_anh'] ?>"
+                                <img src="../user/image_cauhoi/<?= $row['hinh_anh'] ?>"
                                     style="width:200px;object-fit:cover;border-radius:6px;">
                             <?php else: ?>
                                 <span class="text-muted">Không có</span>
