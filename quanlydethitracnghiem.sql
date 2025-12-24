@@ -6,6 +6,9 @@
 -- Thời gian đã tạo: Th12 24, 2025 lúc 02:23 AM
 -- Phiên bản máy phục vụ: 8.0.43
 -- Phiên bản PHP: 8.2.29
+DROP DATABASE IF EXISTS quanlydethitracnghiem;
+CREATE DATABASE quanlydethitracnghiem CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE quanlydethitracnghiem;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
