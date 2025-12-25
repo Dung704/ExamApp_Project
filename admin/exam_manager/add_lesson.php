@@ -40,6 +40,11 @@ $result_to_show = mysqli_query($conn, $query_to_show);
 
 // --- Submit form
 if (isset($_POST['submit'])) {
+    foreach ($_POST as $key => $value) {
+        if (is_string($value)) {
+            $_POST[$key] = mysqli_real_escape_string($conn, trim($value));
+        }
+    }
     // Kiểm tra kích thước POST trước
     $max_post_size = ini_get('post_max_size');
     $max_post_bytes = return_bytes($max_post_size);

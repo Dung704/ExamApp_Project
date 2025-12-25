@@ -34,6 +34,11 @@ $result_to_show = mysqli_query($conn, $query_to_show);
 
 // Xử lý submit form
 if (isset($_POST['submit'])) {
+    foreach ($_POST as $key => $value) {
+        if (is_string($value)) {
+            $_POST[$key] = mysqli_real_escape_string($conn, trim($value));
+        }
+    }
     $noi_dung = trim($_POST['noi_dung']);
     $dung_sai = $_POST['dung_sai'];
     $insert = "INSERT INTO lua_chon (id, id_cau_hoi, noi_dung, dung_sai)

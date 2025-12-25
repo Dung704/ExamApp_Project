@@ -15,7 +15,11 @@ $result_dm = mysqli_query($conn, $query_dm);
 
 // Submit form
 if (isset($_POST['submit'])) {
-
+    foreach ($_POST as $key => $value) {
+        if (is_string($value)) {
+            $_POST[$key] = mysqli_real_escape_string($conn, trim($value));
+        }
+    }
     $ten_de_thi   = trim($_POST['ten_de_thi']);
     $id_danh_muc  = (int)$_POST['id_danh_muc'];
     $mo_ta        = trim($_POST['mo_ta']);

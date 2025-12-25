@@ -12,6 +12,11 @@ $IDdeThi = mysqli_fetch_assoc($query_IDdeThi_result);
 
 // Xử lý submit form
 if (isset($_POST['submit'])) {
+    foreach ($_POST as $key => $value) {
+        if (is_string($value)) {
+            $_POST[$key] = mysqli_real_escape_string($conn, trim($value));
+        }
+    }
     $noi_dung = trim($_POST['noi_dung']);
     $muc_do = $_POST['muc_do'];
     // Xử lý ảnh đại diện
@@ -63,89 +68,89 @@ if (isset($_POST['submit'])) {
         <h3>Cập nhật câu hỏi số <?= $tt ?>
         </h3>
         <?php while ($u = mysqli_fetch_assoc($query_detail_result)) { ?>
-        <div class="row mb-3">
-            <!-- <div class="col-md-1">
+            <div class="row mb-3">
+                <!-- <div class="col-md-1">
                     <label>Mã câu hỏi:</label>
                     <input type="text" readonly class="form-control" value="<?php echo $u['id']; ?>" disabled>
                 </div> -->
-            <div class="col-md-1">
-                <label>Mức độ</label>
-                <select name="muc_do" class="form-select">
-                    <option value="dễ" <?= $u['muc_do'] == 'dễ' ? 'selected' : '' ?>>Dễ</option>
-                    <option value="trung bình" <?= $u['muc_do'] == 'trung bình' ? 'selected' : '' ?>>Trung bình</option>
-                    <option value="khó" <?= $u['muc_do'] == 'khó' ? 'selected' : '' ?>>Khó</option>
-                </select>
-            </div>
-            <div class="col-md-10">
-                <label>Ảnh câu hỏi:</label>
-                <div class="row">
-                    <div class="col-3">
-                        <input type="file" name="hinh_anh" id="hinh_anh" class="form-control" accept="image/*">
-                    </div>
-
-                    <div class="col-9 d-flex gap-3">
-                        <!-- ẢNH CŨ -->
-                        <?php if (!empty($u['hinh_anh'])): ?>
-                        <div>
-                            <small>Ảnh hiện tại</small><br>
-                            <img src="../user/image_cauhoi/<?= htmlspecialchars($u['hinh_anh']) ?>"
-                                style="max-width:500px; object-fit:contain; ">
+                <div class="col-md-1">
+                    <label>Mức độ</label>
+                    <select name="muc_do" class="form-select">
+                        <option value="dễ" <?= $u['muc_do'] == 'dễ' ? 'selected' : '' ?>>Dễ</option>
+                        <option value="trung bình" <?= $u['muc_do'] == 'trung bình' ? 'selected' : '' ?>>Trung bình</option>
+                        <option value="khó" <?= $u['muc_do'] == 'khó' ? 'selected' : '' ?>>Khó</option>
+                    </select>
+                </div>
+                <div class="col-md-10">
+                    <label>Ảnh câu hỏi:</label>
+                    <div class="row">
+                        <div class="col-3">
+                            <input type="file" name="hinh_anh" id="hinh_anh" class="form-control" accept="image/*">
                         </div>
-                        <?php endif; ?>
 
-                        <!-- ẢNH MỚI -->
-                        <div>
-                            <small>Ảnh mới</small><br>
-                            <img id="preview_image" style="display:none; max-width:500px; object-fit:contain; ">
+                        <div class="col-9 d-flex gap-3">
+                            <!-- ẢNH CŨ -->
+                            <?php if (!empty($u['hinh_anh'])): ?>
+                                <div>
+                                    <small>Ảnh hiện tại</small><br>
+                                    <img src="../user/image_cauhoi/<?= htmlspecialchars($u['hinh_anh']) ?>"
+                                        style="max-width:500px; object-fit:contain; ">
+                                </div>
+                            <?php endif; ?>
+
+                            <!-- ẢNH MỚI -->
+                            <div>
+                                <small>Ảnh mới</small><br>
+                                <img id="preview_image" style="display:none; max-width:500px; object-fit:contain; ">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <label>Nội dung câu hỏi</label>
-                <textarea class="form-control" rows="4" name="noi_dung"
-                    required><?php echo htmlspecialchars($u['noi_dung']) ?></textarea>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label>Nội dung câu hỏi</label>
+                    <textarea class="form-control" rows="4" name="noi_dung"
+                        required><?php echo htmlspecialchars($u['noi_dung']) ?></textarea>
+                </div>
             </div>
-        </div>
 
-        <div class="row mb-3">
+            <div class="row mb-3">
 
 
-        </div>
+            </div>
 
-        <button type="submit" name="submit" id="btnSubmit" class="btn btn-primary"
-            onclick="return confirm('Bạn có chắc muốn cập nhật câu hỏi này?')">Cập nhật câu hỏi</button>
-        <a href="index_admin.php?page=list_exam_question&id=<?= $IDdeThi['id_de_thi'] ?>
+            <button type="submit" name="submit" id="btnSubmit" class="btn btn-primary"
+                onclick="return confirm('Bạn có chắc muốn cập nhật câu hỏi này?')">Cập nhật câu hỏi</button>
+            <a href="index_admin.php?page=list_exam_question&id=<?= $IDdeThi['id_de_thi'] ?>
 " class="btn btn-secondary">Về trang danh sách</a>
         <?php } ?>
     </form>
 </div>
 
 <script>
-const anhInput = document.getElementById('hinh_anh');
-const previewImg = document.getElementById('preview_image');
+    const anhInput = document.getElementById('hinh_anh');
+    const previewImg = document.getElementById('preview_image');
 
-if (anhInput) {
-    anhInput.addEventListener('change', function() {
-        const file = this.files[0];
+    if (anhInput) {
+        anhInput.addEventListener('change', function() {
+            const file = this.files[0];
 
-        if (!file) {
-            previewImg.style.display = 'none';
-            return;
-        }
+            if (!file) {
+                previewImg.style.display = 'none';
+                return;
+            }
 
-        if (!file.type.startsWith('image/')) {
-            alert('Chỉ được chọn file ảnh');
-            this.value = '';
-            previewImg.style.display = 'none';
-            return;
-        }
+            if (!file.type.startsWith('image/')) {
+                alert('Chỉ được chọn file ảnh');
+                this.value = '';
+                previewImg.style.display = 'none';
+                return;
+            }
 
-        previewImg.src = URL.createObjectURL(file);
-        previewImg.style.display = 'block';
-    });
-}
+            previewImg.src = URL.createObjectURL(file);
+            previewImg.style.display = 'block';
+        });
+    }
 </script>

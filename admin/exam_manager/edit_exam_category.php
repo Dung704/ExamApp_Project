@@ -5,7 +5,11 @@ $query_detail_result = mysqli_query($conn, $query_detail);
 
 // Xử lý submit form
 if (isset($_POST['submit'])) {
-
+    foreach ($_POST as $key => $value) {
+        if (is_string($value)) {
+            $_POST[$key] = mysqli_real_escape_string($conn, trim($value));
+        }
+    }
     $ten = trim($_POST['Ten_danh_muc_de_thi']);
     $mo_ta = trim($_POST['mo_ta']);
     //Kiểm tra trùng
