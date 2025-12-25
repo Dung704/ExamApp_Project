@@ -50,15 +50,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   </div>";
         } else {
             // Tạo ID mới
-            $res = mysqli_query($dbc, "SELECT id FROM nguoi_dung ORDER BY id DESC LIMIT 1");
-            if (mysqli_num_rows($res) > 0) {
-                $row = mysqli_fetch_assoc($res);
-                $last_id = $row['id'];
-                $num = intval(substr($last_id, 2)) + 1;
-                $new_id = "ND" . $num;
+            $res = mysqli_query($dbc, "SELECT MAX(CAST(SUBSTRING(id, 3) AS UNSIGNED)) AS max_id FROM nguoi_dung");
+            $row = mysqli_fetch_assoc($res);
+            if ($row['max_id']) {
+                $num = $row['max_id'] + 1;
             } else {
-                $new_id = "ND1";
+                $num = 1;
             }
+            $new_id = "ND" . $num;
+
 
             // Xử lý upload ảnh
             $anh_dai_dien_sql = "NULL";
