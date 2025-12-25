@@ -155,6 +155,7 @@ if (isset($_POST['submit'])) {
             }
         }
     }
+    $result_to_show = mysqli_query($conn, $query_to_show);
 }
 
 // Lấy giới hạn upload từ PHP
