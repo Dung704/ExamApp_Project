@@ -22,6 +22,22 @@ $result_max = mysqli_query($conn, $query_max);
 $row_max = mysqli_fetch_assoc($result_max);
 $new_id = 'BH' . (($row_max['max_id'] ?? 0) + 1);
 
+$query_to_show = "
+    SELECT 
+        bh.*, 
+        dmdt.ten_danh_muc,
+        COUNT(tt.id) AS so_luong_file
+    FROM bai_hoc AS bh
+    LEFT JOIN danh_muc_de_thi AS dmdt
+        ON bh.id_danh_muc = dmdt.id
+    LEFT JOIN tap_tin_bai_hoc AS tt
+        ON bh.id = tt.id_bai_hoc
+    GROUP BY bh.id
+    ORDER BY bh.ngay_tao ASC    
+";
+
+$result_to_show = mysqli_query($conn, $query_to_show);
+
 // --- Submit form
 if (isset($_POST['submit'])) {
     // Kiểm tra kích thước POST trước
@@ -148,11 +164,8 @@ $max_post_size = ini_get('post_max_size');
 
 <div class="table-card">
     <h3>Thêm bài học mới</h3>
-
     <form method="post" enctype="multipart/form-data">
-
         <div class="row mb-3">
-
             <div class="col-md-6">
                 <label>Mã bài học:</label>
                 <input type="text" class="form-control" value="<?= $new_id ?>" disabled>
@@ -216,6 +229,84 @@ $max_post_size = ini_get('post_max_size');
         <button type="submit" name="submit" id="submit_btn" class="btn btn-primary">Thêm bài học</button>
         <a href="index_admin.php?page=list_lesson" class="btn btn-secondary">Về trang bài học</a>
     </form>
+
+
+    <div class="table-responsive">
+        <table class="table table-hover" id="examTable">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã bài học</th>
+                    <th>Tiêu đề</th>
+                    <th>Nội dung</th>
+                    <th>Ảnh bài học</th>
+                    <th>Link bài học</th>
+                    <th>Danh mục</th>
+                    <!-- <th>Tập tin bài học</th> -->
+                    <th>Số lượng tập tin bài học</th>
+                    <th>Ngày tạo</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $i = 1;
+                while ($row = mysqli_fetch_assoc($result_to_show)) { ?>
+                    <tr>
+                        <td><?= $i ?></td>
+                        <td><?= $row['id'] ?></td>
+                        <td><?= $row['tieu_de'] ?></td>
+                        <td><?= $row['noi_dung'] ?></td>
+                        <td>
+                            <?php if ($row['anh_bai_hoc'] != null): ?>
+                                <img src="../user/image_baihoc/<?= $row['anh_bai_hoc'] ?>"
+                                    style="width:100px; height:100px; object-fit:cover;">
+                            <?php else: ?>
+                                Không có
+                            <?php endif; ?>
+                        </td>
+
+                        <td>
+                            <a href="<?= $row['link_bai_hoc'] ?>" target="_blank">
+                                <?= $row['link_bai_hoc'] ?>
+                            </a>
+                        </td>
+                        <td><?= $row['ten_danh_muc'] ?></td>
+                        <?php if (false): ?>
+                            <td>
+                                <?php
+                                // Lấy file bài học cho mỗi bài
+                                $lesson_id = $row['id'];
+                                $query_files = "SELECT * FROM tap_tin_bai_hoc WHERE id_bai_hoc = '$lesson_id'";
+                                $result_files = mysqli_query($conn, $query_files);
+                                if (mysqli_num_rows($result_files) > 0) {
+                                    while ($file = mysqli_fetch_assoc($result_files)) {
+                                        echo '<a href="../user/file_pdf' . $file['duong_dan'] . '" target="_blank">' . $file['duong_dan'] . '</a><br>';
+                                    }
+                                } else {
+                                    echo "Không có";
+                                }
+                                ?>
+                            </td>
+                        <?php endif ?>
+                        <td><?= $row['so_luong_file'] ?></td>
+                        <td><?= $row['ngay_tao'] ?></td>
+                        <td>
+                            <a href="index_admin.php?page=edit_lesson&id=<?= $row['id'] ?>"
+                                class="btn btn-sm btn-warning">Sửa</a>
+
+                            <a href="index_admin.php?page=list_lesson&id=<?= $row['id'] ?>"
+                                class="btn btn-sm btn-danger"
+                                onclick="return confirm('Bạn có chắc muốn xoá bài học này?')">
+                                Xoá
+                            </a>
+                        </td>
+                    </tr>
+                <?php $i++;
+                } ?>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>

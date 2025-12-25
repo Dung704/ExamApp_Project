@@ -249,43 +249,7 @@ $so_nguoi_dung_moi = $row_nguoi_dung_moi['so_nguoi_dung_moi'];
     </div>
 
 </div>
-<?php if (false): ?>
-    <div class="row">
-        <div class="col-xl-12 col-lg-12">
-            <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary" id="chartTitle_doanhThu">
-                        Doanh thu theo giờ (Hôm nay)
-                    </h6>
-                    <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle btn btn-sm btn-outline-primary" href="#" role="button"
-                            id="dropdownTime_doanhThu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-calendar-alt"></i> <span id="timeLabel_doanhThu">Theo giờ</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                            aria-labelledby="dropdownTime_doanhThu">
-                            <div class="dropdown-header">Chọn thời gian:</div>
-                            <a class="dropdown-item" href="#" onclick="changeTimeFilter_doanhThu('gio'); return false;">
-                                <i class="fas fa-clock"></i> Theo giờ (Hôm nay)
-                            </a>
-                            <a class="dropdown-item" href="#" onclick="changeTimeFilter_doanhThu('ngay'); return false;">
-                                <i class="fas fa-calendar-day"></i> Theo ngày (Tháng này)
-                            </a>
-                            <a class="dropdown-item" href="#" onclick="changeTimeFilter_doanhThu('thang'); return false;">
-                                <i class="fas fa-calendar"></i> Theo tháng (Năm nay)
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    <canvas id="myChart_doanhThu" width="1000" height="200"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-<?php endif; ?>
+
 
 <!-- Card Biểu Đồ Phổ Điểm -->
 <div class="col-xl-12 col-lg-7">
