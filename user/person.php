@@ -87,6 +87,9 @@ $dia_chi = $_SESSION['dia_chi'] ?? 'Chưa có địa chỉ';
         <a href="./chinh_sua_thong_tin.php" class="btn btn-primary btn-lg px-4 fw-bold">
             <i class="bi bi-pencil-square me-2"></i>Chỉnh sửa thông tin
         </a>
+        <a href="./doi_mat_khau.php" class="btn btn-primary btn-lg px-4 fw-bold">
+            <i class="bi bi-pencil-square me-2"></i>Đổi mật khẩu
+        </a>
     </div>
 
 </div>

@@ -4,6 +4,17 @@ require_once 'gui_mail.php';
 ?>
 
 <?php
+
+$ho_ten = $_POST['ho_ten'] ?? '';
+$email = $_POST['email'] ?? '';
+$mat_khau = '';
+$re_mat_khau = '';
+$so_dien_thoai = $_POST['so_dien_thoai'] ?? '';
+$ngay_sinh = $_POST['ngay_sinh'] ?? '';
+$gioi_tinh = $_POST['gioi_tinh'] ?? '';
+$dia_chi = $_POST['dia_chi'] ?? '';
+
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ho_ten = isset($_POST['ho_ten']) ? trim($_POST['ho_ten']) : '';
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
@@ -150,31 +161,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="mb-3">
         <label for="hoTen" class="form-label">Họ tên</label>
-        <input type="text" class="form-control" id="hoTen" name="ho_ten" required>
+        <input type="text" class="form-control" id="hoTen" name="ho_ten" value="<?= htmlspecialchars($ho_ten) ?>"
+            required>
     </div>
     <div class="mb-3">
         <label for="ngaySinh" class="form-label">Ngày sinh</label>
-        <input type="date" class="form-control" id="ngaySinh" name="ngay_sinh">
+        <input type="date" class="form-control" id="ngaySinh" name="ngay_sinh"
+            value="<?= htmlspecialchars($ngay_sinh) ?>">
     </div>
 
     <div class="mb-3">
         <label for="gioiTinh" class="form-label">Giới tính</label>
         <select class="form-select" id="gioiTinh" name="gioi_tinh">
             <option value="">Chọn giới tính</option>
-            <option value="Nam">Nam</option>
-            <option value="Nữ">Nữ</option>
+            <option value="Nam" <?= $gioi_tinh === 'Nam' ? 'selected' : '' ?>>Nam</option>
+            <option value="Nữ" <?= $gioi_tinh === 'Nữ' ? 'selected' : '' ?>>Nữ</option>
         </select>
+
     </div>
 
     <div class="mb-3">
         <label for="diaChi" class="form-label">Địa chỉ</label>
-        <textarea class="form-control" id="diaChi" name="dia_chi" rows="2"></textarea>
+        <textarea class="form-control" id="diaChi" name="dia_chi" rows="2"><?= htmlspecialchars($dia_chi) ?></textarea>
     </div>
 
 
     <div class="mb-3">
         <label for="email" class="form-label">Email đăng nhập</label>
-        <input type="email" class="form-control" id="email" name="email" required>
+        <input type="email" class="form-control" id="email" name="email" value="<?= htmlspecialchars($email) ?>"
+            required>
     </div>
 
     <div class="mb-3">
@@ -189,8 +204,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="mb-3">
         <label for="soDienThoai" class="form-label">Số điện thoại</label>
-        <input type="text" class="form-control" id="soDienThoai" name="so_dien_thoai" maxlength="11" required
+        <input type="text" class="form-control" id="soDienThoai" name="so_dien_thoai"
+            value="<?= htmlspecialchars($so_dien_thoai) ?>" maxlength="11" required
             oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+
     </div>
 
 
