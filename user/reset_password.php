@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <div class="text-center">
         <button type="submit" class="btn btn-primary">
-            <i class="bi bi-key"></i> Đặt lại mật khẩu
+            Đặt lại mật khẩu
         </button>
     </div>
 
