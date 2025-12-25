@@ -171,20 +171,12 @@ try {
             mysqli_stmt_close($stmt);
         }
 
-        // Bước 3: Tính mức điểm tương ứng với % cho danh mục này
-        $diem_gioi_min = round($thang_diem_danh_muc * 0.8);        // 80%
-        $diem_kha_min = round($thang_diem_danh_muc * 0.6);         // 60%
-        $diem_kha_max = round($thang_diem_danh_muc * 0.7999);      // 79.99%
-        $diem_tb_min = round($thang_diem_danh_muc * 0.4);          // 40%
-        $diem_tb_max = round($thang_diem_danh_muc * 0.5999);       // 59.99%
-        $diem_yeu_max = round($thang_diem_danh_muc * 0.3999);      // 39.99%
-
-        // Tạo labels với mức điểm thực tế
+        // Labels đơn giản (giống như "Tất cả")
         $labels = [
-            'Giỏi (' . $diem_gioi_min . '-' . $thang_diem_danh_muc . ' điểm)',
-            'Khá (' . $diem_kha_min . '-' . $diem_kha_max . ' điểm)',
-            'Trung bình (' . $diem_tb_min . '-' . $diem_tb_max . ' điểm)',
-            'Yếu (0-' . $diem_yeu_max . ' điểm)'
+            'Giỏi',
+            'Khá',
+            'Trung bình',
+            'Yếu'
         ];
     }
 
