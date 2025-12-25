@@ -29,11 +29,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ngay_tao = date("Y-m-d H:i:s");
 
     if ($mat_khau !== $re_mat_khau) {
-        echo "<div class='alert alert-danger'>Mật khẩu không khớp!</div>";
+        echo "<div class='alert alert-danger text-center'>Mật khẩu không khớp!</div>";
     } elseif ($ho_ten == '' || $email == '' || $mat_khau == '') {
-        echo "<div class='alert alert-danger'>Vui lòng điền đầy đủ thông tin bắt buộc!</div>";
+        echo "<div class='alert alert-danger text-center'>Vui lòng điền đầy đủ thông tin bắt buộc!</div>";
     } elseif (strlen($mat_khau) < 6) {
-        echo "<div class='alert alert-danger'>Mật khẩu phải có ít nhất 6 ký tự!</div>";
+        echo "<div class='alert alert-danger text-center'>Mật khẩu phải có ít nhất 6 ký tự!</div>";
     }else {
         // Escape dữ liệu đầu vào
         $email_escaped = mysqli_real_escape_string($dbc, $email);

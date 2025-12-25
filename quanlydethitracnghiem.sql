@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 24, 2025 at 10:13 AM
+-- Generation Time: Dec 25, 2025 at 10:09 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -69,7 +69,9 @@ INSERT INTO `cau_hoi` (`id`, `id_de_thi`, `noi_dung`, `hinh_anh`, `muc_do`) VALU
 ('CH1', 'DT1', 'Chữ trong hình sau có nghĩa là gì ?', 'images.jpg', 'dễ'),
 ('CH2', 'DT1', '照片里有多少人？', 'hinh-anh-gia-dinh-hanh-phuc-cute-1.jpg', 'trung bình'),
 ('CH3', 'DT2', '1+1 = ?', NULL, 'khó'),
-('CH4', 'DT3', 'Lớp 1A có 30 học sinh lớp 1B có 20 học sinh hỏi có tất cả bao nhiêu học sinh ở 2 lướp', '1766550414_42d5806e0d8bb423c977cd87b44e3202.jpg', 'dễ');
+('CH4', 'DT3', 'Lớp 1A có 30 học sinh lớp 1B có 20 học sinh hỏi có tất cả bao nhiêu học sinh ở 2 lướp', '1766550414_42d5806e0d8bb423c977cd87b44e3202.jpg', 'dễ'),
+('CH5', 'DT3', 'Con bò nặng 60kg con heo nặng 50kg hỏi hiệu số cân nặng của hai con là bao nhiêu ?', '', 'dễ'),
+('CH6', 'DT3', 'Những câu trả lời đúng về a Jack', '', 'dễ');
 
 -- --------------------------------------------------------
 
@@ -94,7 +96,9 @@ INSERT INTO `cau_hoi_nguoi_dung` (`id`, `noi_dung`, `anh_dinh_kem`, `id_nguoi_ho
 ('CHND_20251211_3e3007cd52', 'Nên học trong bao lâu thì đi thi lấy chứng chỉ HSK được ạ', NULL, 'ND8', '2025-12-11 11:55:29'),
 ('CHND_20251211_7a206e4836', 'Mọi người ơi , có ai học tốt tiếng Nhật không ạ , em săp đi nhật rồi ạ.', NULL, 'ND6', '2025-12-11 12:01:28'),
 ('CHND_20251211_81c1a011ca', 'Chữ trong ảnh này đọc thế nào ạ', 'CHND_20251211_81c1a011ca.jpg', 'ND6', '2025-12-11 14:06:05'),
-('CHND_20251211_e3201d6b8f', 'Làm sao để nhớ được từ vựng nhanh vậy mọi người \nMong được giải đáp ạ.', NULL, 'ND8', '2025-12-11 11:54:33');
+('CHND_20251211_e3201d6b8f', 'Làm sao để nhớ được từ vựng nhanh vậy mọi người \nMong được giải đáp ạ.', NULL, 'ND8', '2025-12-11 11:54:33'),
+('CHND_20251225_3905ab5b07', 'Chắc không anh Dũng', 'CHND_20251225_3905ab5b07.jpg', 'ND11', '2025-12-25 16:05:29'),
+('CHND_20251225_eb82ac63ec', 'Anh Dũng báo vãi lolll', 'CHND_20251225_eb82ac63ec.png', 'ND11', '2025-12-25 16:08:08');
 
 -- --------------------------------------------------------
 
@@ -116,7 +120,8 @@ CREATE TABLE `cau_tra_loi_nguoi_dung` (
 --
 
 INSERT INTO `cau_tra_loi_nguoi_dung` (`id`, `id_cau_hoi`, `id_nguoi_tra_loi`, `noi_dung`, `anh_dinh_kem`, `thoi_gian_tao`) VALUES
-('05a350d28267658c8427', 'CHND_20251211_23a9652133', 'ND6', 'Có nha bạn', '1765439929_736462.png', '2025-12-11 14:58:49');
+('05a350d28267658c8427', 'CHND_20251211_23a9652133', 'ND6', 'Có nha bạn', '1765439929_736462.png', '2025-12-11 14:58:49'),
+('60c1354714ceee1511d3', 'CHND_20251211_23a9652133', 'ND11', 'Có nha cậu liên hệ số điện thoại này để lấy nha : 4267346w12321', '', '2025-12-25 16:08:56');
 
 -- --------------------------------------------------------
 
@@ -165,7 +170,7 @@ CREATE TABLE `de_thi` (
 INSERT INTO `de_thi` (`id`, `id_danh_muc`, `ten_de_thi`, `mo_ta`, `thoi_gian`, `id_bai_hoc`, `thang_diem`, `ngay_tao`, `trang_thai`) VALUES
 ('DT1', 1, 'Đề thi 1', 'Mô tả đề thi 1', 1, 'BH1', 10, '2025-12-01 04:37:38', 0),
 ('DT2', 2, 'Đề thi 2', 'Mô tả đề thi 2', 45, 'BH2', 10, '2025-12-01 04:37:38', 0),
-('DT3', 4, 'Đề thi Toán lớp 1', 'Đề thi dành cho học sinh tiểu học', 5, NULL, 10, '2025-12-24 10:32:58', 1);
+('DT3', 4, 'Đề thi Toán lớp 1', 'Đề thi dành cho học sinh tiểu học', 1, NULL, 10, '2025-12-24 10:32:58', 1);
 
 -- --------------------------------------------------------
 
@@ -186,7 +191,48 @@ CREATE TABLE `ket_qua_chi_tiet` (
 
 INSERT INTO `ket_qua_chi_tiet` (`id`, `id_ket_qua`, `id_cau_hoi`, `id_lua_chon`) VALUES
 (58, 'KQ1', 'CH1', 'LC1'),
-(59, 'KQ1', 'CH2', 'LC3');
+(59, 'KQ1', 'CH2', 'LC3'),
+(61, 'KQ3', 'CH4', 'LC8'),
+(62, 'KQ3', 'CH5', 'LC11'),
+(63, 'KQ4', 'CH4', 'LC8'),
+(64, 'KQ4', 'CH5', 'LC11'),
+(65, 'KQ5', 'CH4', 'LC7'),
+(66, 'KQ5', 'CH5', 'LC12'),
+(67, 'KQ6', 'CH4', 'LC8'),
+(68, 'KQ6', 'CH5', 'LC12'),
+(69, 'KQ7', 'CH4', 'LC8'),
+(70, 'KQ7', 'CH5', 'LC11'),
+(71, 'KQ8', 'CH4', 'LC7'),
+(72, 'KQ8', 'CH5', 'LC13'),
+(73, 'KQ9', 'CH4', 'LC8'),
+(74, 'KQ9', 'CH5', 'LC11'),
+(75, 'KQ10', 'CH4', 'LC8'),
+(76, 'KQ10', 'CH5', 'LC11'),
+(77, 'KQ11', 'CH5', 'LC11'),
+(78, 'KQ12', 'CH4', 'LC8'),
+(79, 'KQ12', 'CH5', 'LC11'),
+(80, 'KQ12', 'CH6', 'LC15'),
+(82, 'KQ13', 'CH4', 'LC8'),
+(83, 'KQ13', 'CH5', 'LC11'),
+(84, 'KQ13', 'CH6', 'LC15'),
+(85, 'KQ13', 'CH6', 'LC16'),
+(86, 'KQ14', 'CH6', 'LC15'),
+(87, 'KQ14', 'CH6', 'LC16'),
+(88, 'KQ14', 'CH6', 'LC18'),
+(89, 'KQ15', 'CH4', 'LC8'),
+(90, 'KQ15', 'CH5', 'LC11'),
+(91, 'KQ15', 'CH6', 'LC15'),
+(92, 'KQ15', 'CH6', 'LC16'),
+(93, 'KQ17', 'CH4', 'LC8'),
+(94, 'KQ18', 'CH5', 'LC12'),
+(95, 'KQ20', 'CH5', 'LC11'),
+(96, 'KQ21', 'CH4', 'LC8'),
+(97, 'KQ21', 'CH5', 'LC12'),
+(98, 'KQ21', 'CH6', 'LC15'),
+(99, 'KQ22', 'CH4', 'LC8'),
+(100, 'KQ22', 'CH5', 'LC11'),
+(101, 'KQ22', 'CH6', 'LC15'),
+(102, 'KQ23', 'CH6', 'LC15');
 
 -- --------------------------------------------------------
 
@@ -209,7 +255,29 @@ CREATE TABLE `ket_qua_thi` (
 
 INSERT INTO `ket_qua_thi` (`id`, `id_nguoi_dung`, `id_de_thi`, `diem_so`, `thoi_gian_nop`, `thoi_gian_bat_dau`) VALUES
 ('KQ1', 'ND6', 'DT1', 5, '2025-12-24 11:07:09', '2025-12-24 11:07:09'),
-('KQ2', 'ND6', 'DT1', 0, '2025-12-24 11:26:44', '2025-12-24 11:26:44');
+('KQ10', 'ND11', 'DT3', 10, '2025-12-25 14:59:22', '2025-12-25 08:57:40'),
+('KQ11', 'ND11', 'DT3', 5, '2025-12-25 15:13:07', '2025-12-25 09:13:00'),
+('KQ12', 'ND3', 'DT3', 0, '2025-12-25 15:14:57', '2025-12-25 09:14:44'),
+('KQ13', 'ND3', 'DT3', 10, '2025-12-25 15:31:19', '2025-12-25 09:14:44'),
+('KQ14', 'ND3', 'DT3', 0, '2025-12-25 15:40:26', '0000-00-00 00:00:00'),
+('KQ15', 'ND3', 'DT3', 10, '2025-12-25 15:40:51', '0000-00-00 00:00:00'),
+('KQ16', 'ND3', 'DT3', 0, '2025-12-25 15:45:03', '2025-12-25 15:45:03'),
+('KQ17', 'ND11', 'DT3', 3.33, '2025-12-25 15:48:16', '2025-12-25 15:48:16'),
+('KQ18', 'ND11', 'DT3', 0, '2025-12-25 15:48:51', '2025-12-25 15:48:51'),
+('KQ19', 'ND11', 'DT3', 0, '2025-12-25 15:53:23', '2025-12-25 15:53:23'),
+('KQ2', 'ND6', 'DT1', 0, '2025-12-24 11:26:44', '2025-12-24 11:26:44'),
+('KQ20', 'ND11', 'DT3', 3.33, '2025-12-25 15:54:23', '2025-12-25 15:54:23'),
+('KQ21', 'ND11', 'DT3', 3.33, '2025-12-25 16:00:14', '2025-12-25 10:00:02'),
+('KQ22', 'ND11', 'DT3', 6.67, '2025-12-25 16:02:09', '2025-12-25 16:01:57'),
+('KQ23', 'ND11', 'DT3', 0, '2025-12-25 16:02:53', '2025-12-25 16:02:21'),
+('KQ24', 'ND11', 'DT3', 0, '2025-12-25 16:04:23', '2025-12-25 16:03:21'),
+('KQ3', 'ND11', 'DT3', 10, '2025-12-25 14:10:34', '2025-12-25 14:10:34'),
+('KQ4', 'ND11', 'DT3', 10, '2025-12-25 14:16:02', '2025-12-25 14:16:02'),
+('KQ5', 'ND11', 'DT3', 0, '2025-12-25 14:27:27', '2025-12-25 08:27:08'),
+('KQ6', 'ND11', 'DT3', 5, '2025-12-25 14:30:56', '2025-12-25 14:30:56'),
+('KQ7', 'ND11', 'DT3', 10, '2025-12-25 14:35:22', '2025-12-25 14:35:22'),
+('KQ8', 'ND11', 'DT3', 0, '2025-12-25 14:37:41', '2025-12-25 14:37:41'),
+('KQ9', 'ND11', 'DT3', 10, '2025-12-25 14:47:47', '2025-12-25 08:47:14');
 
 -- --------------------------------------------------------
 
@@ -245,6 +313,14 @@ CREATE TABLE `lua_chon` (
 INSERT INTO `lua_chon` (`id`, `id_cau_hoi`, `noi_dung`, `dung_sai`) VALUES
 ('LC1', 'CH1', 'Bạn bè', 0),
 ('LC10', 'CH4', '100', 0),
+('LC11', 'CH5', '10kg', 1),
+('LC12', 'CH5', '30kg', 0),
+('LC13', 'CH5', '35kg', 0),
+('LC14', 'CH5', '15kg', 0),
+('LC15', 'CH6', 'Anh ấy đẹp trai', 1),
+('LC16', 'CH6', 'Anh ấy dễ thương', 1),
+('LC17', 'CH6', 'Anh ấy bỏ con', 0),
+('LC18', 'CH6', 'Anh ấy chu cấp 5 triệu', 0),
 ('LC2', 'CH1', 'Chúng ta', 1),
 ('LC3', 'CH2', '六个人', 1),
 ('LC4', 'CH2', '四个人', 0),
@@ -284,11 +360,15 @@ CREATE TABLE `nguoi_dung` (
 
 INSERT INTO `nguoi_dung` (`id`, `ho_ten`, `email`, `mat_khau`, `so_dien_thoai`, `anh_dai_dien`, `id_quyen`, `ngay_sinh`, `gioi_tinh`, `dia_chi`, `ngay_tao`, `is_verified`, `verify_token`, `reset_token`, `reset_token_expiry`) VALUES
 ('ND1', 'Hv', 'hv@gmail.com', '$2y$10$IKwGeijwumwxkIJRQdIvuOiEXqHAv4iYbNhy3XWjjyDtKErCpxYIy', '0123456789', NULL, 'Q2', NULL, NULL, NULL, '2025-12-01 04:37:38', 0, NULL, NULL, NULL),
-('ND10', 'Phạm Nhật Trường', 'truongpham28124@gmail.com', '$2y$10$Jt1EJtGC.ftKzKCijwgi8ODK.dv8RIjK23pkKt5.Djb2LzoGlGZj6', '0377875294', '1766567178_ChatGPT Image 12_34_34 15 thg 4, 2025.png', 'Q2', '2004-01-28', 0, 'Ninh Thuận', '2025-12-24 10:06:18', 1, NULL, NULL, NULL),
-('ND3', 'Admin', 'admin@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0123000000', NULL, 'Q1', NULL, NULL, NULL, '2025-12-01 04:37:38', 0, NULL, NULL, NULL),
+('ND10', 'Trần Đại Dũng', 'dung.td.64cntt@ntu.edu.vn', '$2y$10$gHRP6CuRcnqAWGC6euAbJ.VZmJHtnyfO3kMxcun9Nwj1YuvQgPnUq', '0377875294', '1766629440_54k.png', 'Q2', '2004-07-23', 0, 'Nha Trang', '2025-12-25 03:24:00', 0, '2d6bdfd4d0e73ab1fea2ad30a4b4e5bd056140ad276cbc61cfd622ab5a124ebd', NULL, NULL),
+('ND11', 'Phạm Nhật Trường', 'truongpham28124@gmail.com', '$2y$10$0OnhTQxtnEY94vMkQ1QlfeVNoYH429qVu6Peyb3JM4C6g9AcZ.yQu', '0377875296', '1766632954_ChatGPT Image 13_44_29 16 thg 4, 2025.png', 'Q2', '2004-01-28', 0, 'Ninh Thuận', '2025-12-25 04:22:34', 1, NULL, NULL, NULL),
+('ND12', 'Trúc Mai', 'trucma1672@gmail.com', '$2y$10$2A79v/AN54rhGg1Zvsfvw.BfL2ktMBrcVocHO3ysi7626L3pXJZm6', '01897321231', '1766633605_329153497_1527737297736766_819603327207651751_n.jpg', 'Q2', '2004-08-23', 0, 'Nha Trang', '2025-12-25 04:33:25', 0, '71e820ac8400bab4d4addda8ad350f69f9106b548066a0026dfdfcc948238283', NULL, NULL),
+('ND13', 'Trúc Mai', 'maitruc123@gmail.com', '$2y$10$sOqvWt7ZcnYE84JoJt2nEOKtG93uMhFj/MHOk4llGHpySPshW8ad.', '1576224142', '1766633856_736462.png', 'Q2', '2005-05-23', 0, 'Nha Trang', '2025-12-25 04:37:36', 0, 'd9531eb70b60b90363fe806de476f41831b2eaaca5485bbb7e43ed074b2a7831', NULL, NULL),
+('ND14', 'Châu Huệ Mẫn', 'chauhueman123@gmail.com', '$2y$10$gCZewwu2sUJHTkkSIbL8ouvOXoSBeVJsKwghMYYw7Pz7g7pEnRY8u', '18627182', '1766633954_doraemon.jpg', 'Q2', '2002-07-01', 0, 'Nha Trang', '2025-12-25 04:39:14', 0, 'a0fc3f80590788e0818f13f08ba9ef226886a48f7790277bfc9b504359f2b555', NULL, NULL),
+('ND3', 'Admin', 'admin@gmail.com', '$2y$10$dvLvwVID0SirYZ2/F.DBge.jKlkcY.wmPKAM0a6iRUnz67pI6BOqG', '0123000000', NULL, 'Q1', NULL, NULL, NULL, '2025-12-01 04:37:38', 1, NULL, NULL, NULL),
 ('ND6', 'Nguyễn Hoàng Huy Phong', 'trucmai124@gmail.com', '$2y$10$/eKlII/ePr30VH0Cnj/zxO07ejKnivbp33XNTLCz3uWBWk.cGJyIO', '0377875291', '1766549459_images.jpg', 'Q2', '0000-00-00', 0, '', '2025-12-01 07:01:15', 0, NULL, NULL, NULL),
 ('ND7', 'Nguyễn Vũ Huy Hoàng', 'hoang.nvh.66cnnt@ntu.edu.vn', '$2y$10$.XHNfTlebGyy5Wc9oWrUzu..gu1tuvqudvqAB4IuhsR.M8EI5fY22', '187641784', '1765356153_images.jpg', 'Q2', NULL, NULL, NULL, '2025-12-10 09:42:33', 0, NULL, NULL, NULL),
-('ND8', 'Phạm Nhật Trường', 'truong.pn.64cntt@ntu.edu.vn', '$2y$10$Qgh0uan3FB8aw9UZrRZdR.HevB5cDj/rXPE3gB2c4XtIQz/0rd1/O', '0377875295', '1765421826_z6269562799673_7ef78d977acba491d670974db406e681.jpg', 'Q2', '2004-01-28', 0, 'Ninh Thuận', '2025-12-11 03:57:06', 0, NULL, NULL, NULL),
+('ND8', 'Phạm Nhật Trường', 'truong.pn.64cntt@ntu.edu.vn', '$2y$10$G8qFHHdJ1Kzzd888G5K3medTVdUZ.9bcw93zai.8CMqT2lZYhkMq.', '0377875295', '1765421826_z6269562799673_7ef78d977acba491d670974db406e681.jpg', 'Q2', '2004-01-28', 0, 'Ninh Thuận', '2025-12-11 03:57:06', 1, NULL, NULL, NULL),
 ('ND9', 'hgcvhg', 'truong@gmail.com', '$2y$10$gPhTdnobU5GRq331UMIhfuT6tG4Of0ddY2vfVJi8bZMQ51DimA40y', '75576576576', '1766551608_images.jpg', 'Q2', '2007-04-02', 0, 'vftfc', '2025-12-24 05:46:48', 0, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
@@ -387,9 +467,9 @@ ALTER TABLE `de_thi`
 --
 ALTER TABLE `ket_qua_chi_tiet`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id_ket_qua` (`id_ket_qua`,`id_cau_hoi`),
   ADD KEY `id_cau_hoi` (`id_cau_hoi`),
-  ADD KEY `id_lua_chon` (`id_lua_chon`);
+  ADD KEY `id_lua_chon` (`id_lua_chon`),
+  ADD KEY `id_ket_qua_2` (`id_ket_qua`);
 
 --
 -- Indexes for table `ket_qua_thi`
@@ -450,7 +530,7 @@ ALTER TABLE `danh_muc_de_thi`
 -- AUTO_INCREMENT for table `ket_qua_chi_tiet`
 --
 ALTER TABLE `ket_qua_chi_tiet`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- Constraints for dumped tables
