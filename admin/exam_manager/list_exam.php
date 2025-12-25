@@ -83,7 +83,9 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                         <td><?= $row['id'] ?></td>
                         <td><?= $row['ten_danh_muc'] ?></td>
                         <td><?= $row['ten_de_thi'] ?></td>
-                        <td class="text-start"><?= $row['mo_ta'] ?></td>
+                        <td class="text-start text-ellipsis">
+                            <?= $row['mo_ta'] ?>
+                        </td>
                         <td><?= $row['thoi_gian'] ?></td>
                         <td><?= $row['thang_diem'] ?></td>
                         <td><?= $row['ngay_tao'] ?></td>

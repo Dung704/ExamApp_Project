@@ -52,7 +52,7 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                         <td><?= $i ?></td>
                         <td><?= $row['id'] ?></td>
                         <td><?= $row['ten_danh_muc'] ?></td>
-                        <td class="text-start"><?= $row['mo_ta'] ?></td>
+                        <td class="text-start text-ellipsis"><?= $row['mo_ta'] ?></td>
                         <td>
                             <a href="index_admin.php?page=edit_exam_category&id=<?= $row['id'] ?>"
                                 class="btn btn-sm btn-warning">Sửa</a>

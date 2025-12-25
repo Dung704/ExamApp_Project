@@ -313,3 +313,9 @@ input[type="number"] {
   font-size: 40px;
   color: #4e73df;
 }
+.text-ellipsis {
+  max-width: 200px; /* chỉnh theo ý */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
