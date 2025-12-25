@@ -279,3 +279,37 @@ input[type="number"] {
 .ck-editor__editable {
   min-height: 300px;
 }
+
+.dropdown-item.active {
+  background-color: #4e73df !important;
+  color: white !important;
+}
+
+.dropdown-item:hover {
+  background-color: #e3e6f0;
+  cursor: pointer;
+}
+
+.chart-container {
+  position: relative;
+  margin: auto;
+}
+
+.badge-info {
+  font-size: 14px;
+  padding: 8px 15px;
+}
+
+#myChart_phoDiem {
+  max-height: 300px;
+}
+
+.loading-spinner {
+  text-align: center;
+  padding: 50px;
+}
+
+.loading-spinner i {
+  font-size: 40px;
+  color: #4e73df;
+}

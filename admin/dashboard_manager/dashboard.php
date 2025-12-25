@@ -62,6 +62,8 @@ WHERE YEARWEEK(ngay_tao, 1) = YEARWEEK(CURDATE(), 1)
 $result_nguoi_dung_moi = mysqli_query($conn, $sql_nguoi_dung_moi);
 $row_nguoi_dung_moi = mysqli_fetch_assoc($result_nguoi_dung_moi);
 $so_nguoi_dung_moi = $row_nguoi_dung_moi['so_nguoi_dung_moi'];
+
+
 ?>
 
 <div class="row">
@@ -247,629 +249,338 @@ $so_nguoi_dung_moi = $row_nguoi_dung_moi['so_nguoi_dung_moi'];
     </div>
 
 </div>
+<?php if (false): ?>
+    <div class="row">
+        <div class="col-xl-12 col-lg-12">
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary" id="chartTitle_doanhThu">
+                        Doanh thu theo giờ (Hôm nay)
+                    </h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle btn btn-sm btn-outline-primary" href="#" role="button"
+                            id="dropdownTime_doanhThu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-calendar-alt"></i> <span id="timeLabel_doanhThu">Theo giờ</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                            aria-labelledby="dropdownTime_doanhThu">
+                            <div class="dropdown-header">Chọn thời gian:</div>
+                            <a class="dropdown-item" href="#" onclick="changeTimeFilter_doanhThu('gio'); return false;">
+                                <i class="fas fa-clock"></i> Theo giờ (Hôm nay)
+                            </a>
+                            <a class="dropdown-item" href="#" onclick="changeTimeFilter_doanhThu('ngay'); return false;">
+                                <i class="fas fa-calendar-day"></i> Theo ngày (Tháng này)
+                            </a>
+                            <a class="dropdown-item" href="#" onclick="changeTimeFilter_doanhThu('thang'); return false;">
+                                <i class="fas fa-calendar"></i> Theo tháng (Năm nay)
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <canvas id="myChart_doanhThu" width="1000" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
 
-<div class="row">
-    <div class="col-xl-12 col-lg-12">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary" id="chartTitle_doanhThu">
-                    Doanh thu theo giờ (Hôm nay)
-                </h6>
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle btn btn-sm btn-outline-primary" href="#" role="button"
-                        id="dropdownTime_doanhThu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-calendar-alt"></i> <span id="timeLabel_doanhThu">Theo giờ</span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                        aria-labelledby="dropdownTime_doanhThu">
-                        <div class="dropdown-header">Chọn thời gian:</div>
-                        <a class="dropdown-item" href="#" onclick="changeTimeFilter_doanhThu('gio'); return false;">
-                            <i class="fas fa-clock"></i> Theo giờ (Hôm nay)
-                        </a>
-                        <a class="dropdown-item" href="#" onclick="changeTimeFilter_doanhThu('ngay'); return false;">
-                            <i class="fas fa-calendar-day"></i> Theo ngày (Tháng này)
-                        </a>
-                        <a class="dropdown-item" href="#" onclick="changeTimeFilter_doanhThu('thang'); return false;">
-                            <i class="fas fa-calendar"></i> Theo tháng (Năm nay)
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <canvas id="myChart_doanhThu" width="1000" height="200"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-xl-6 col-lg-7">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary" id="chartTitle_sanPham">
-                    5 sản phẩm có trong kho nhiều nhất
-                </h6>
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink_sanPham"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                        aria-labelledby="dropdownMenuLink_sanPham">
-                        <div class="dropdown-header">Thay đổi sắp xếp:</div>
-                        <a class="dropdown-item" href="#" onclick="toggleChartSanPham('nhieu'); return false;">
-                            <i class="fas fa-sort-amount-down"></i> Nhiều nhất
-                        </a>
-                        <a class="dropdown-item" href="#" onclick="toggleChartSanPham('it'); return false;">
-                            <i class="fas fa-sort-amount-up"></i> Ít nhất
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <canvas id="myChart_sanPham" width="600" height="200"></canvas>
+<!-- Card Biểu Đồ Phổ Điểm -->
+<div class="col-xl-12 col-lg-7">
+    <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h6 class="m-0 font-weight-bold text-primary" id="chartTitle_phoDiem">
+                <i class="fas fa-chart-pie mr-2"></i>Phổ điểm theo danh mục - Tất cả
+            </h6>
+            <div class="dropdown no-arrow">
+                <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuLink_phoDiem"
+                    data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none; color: inherit;">
+                    <i class="fas fa-filter fa-sm fa-fw text-gray-400"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end shadow animated--fade-in"
+                    aria-labelledby="dropdownMenuLink_phoDiem">
+                    <li>
+                        <h6 class="dropdown-header">Chọn danh mục:</h6>
+                    </li>
+                    <li><a class="dropdown-item active" href="javascript:void(0);" onclick="changePhoDiemCategory('all', this); return false;">
+                            <i class="fas fa-globe me-2"></i> Tất cả
+                        </a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="changePhoDiemCategory('HSK', this); return false;">
+                            <i class="fas fa-language me-2"></i> HSK (Tiếng Trung)
+                        </a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="changePhoDiemCategory('TOPIK', this); return false;">
+                            <i class="fas fa-flag me-2"></i> TOPIK (Tiếng Hàn)
+                        </a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="changePhoDiemCategory('TOEIC', this); return false;">
+                            <i class="fas fa-book me-2"></i> TOEIC (Tiếng Anh)
+                        </a></li>
+                    <li><a class="dropdown-item" href="javascript:void(0);" onclick="changePhoDiemCategory('JPN', this); return false;">
+                            <i class="fas fa-torii-gate me-2"></i> JPN (Tiếng Nhật)
+                        </a></li>
+                </ul>
             </div>
         </div>
-    </div>
-    <div class="col-xl-6 col-lg-7">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary" id="chartTitle_sanPhamSeller">
-                    5 sản phẩm bán nhiều nhất
-                </h6>
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink_sanPhamSeller"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                        aria-labelledby="dropdownMenuLink_sanPhamSeller">
-                        <div class="dropdown-header">Thay đổi sắp xếp:</div>
-                        <a class="dropdown-item" href="#" onclick="toggleChartSeller('nhieu'); return false;">
-                            <i class="fas fa-sort-amount-down"></i> Nhiều nhất
-                        </a>
-                        <a class="dropdown-item" href="#" onclick="toggleChartSeller('it'); return false;">
-                            <i class="fas fa-sort-amount-up"></i> Ít nhất
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <canvas id="myChart_sanPhamSeller" width="600" height="200"></canvas>
-            </div>
-        </div>
-    </div>
 
-    <div class="col-xl-6 col-lg-7">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary" id="chartTitle_loaiSanPhamSeller">
-                    5 loại sản phẩm bán nhiều nhất
-                </h6>
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink_loaiSanPhamSeller"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                        aria-labelledby="dropdownMenuLink_loaiSanPhamSeller">
-                        <div class="dropdown-header">Thay đổi sắp xếp:</div>
-                        <a class="dropdown-item" href="#" onclick="toggleChartLoaiSanPhamSeller('nhieu'); return false;">
-                            <i class="fas fa-sort-amount-down"></i> Nhiều nhất
-                        </a>
-                        <a class="dropdown-item" href="#" onclick="toggleChartLoaiSanPhamSeller('it'); return false;">
-                            <i class="fas fa-sort-amount-up"></i> Ít nhất
-                        </a>
-                    </div>
-                </div>
+        <!-- Card Body -->
+        <div class="card-body">
+            <!-- Loading Spinner -->
+            <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p class="mt-2 text-muted">Đang tải dữ liệu...</p>
             </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <canvas id="myChart_loaiSanPhamSeller" width="600" height="200"></canvas>
+
+            <!-- Chart Container -->
+            <div class="chart-container" id="chartContainer" style="height: 300px;">
+                <canvas id="myChart_phoDiem"></canvas>
             </div>
-        </div>
-    </div>
-    <div class="col-xl-6 col-lg-7">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary" id="chartTitle_nhaCungCapSeller">
-                    5 nhà cung cấp bán nhiều nhất
-                </h6>
-                <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink_nhaCungCapSeller"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                        aria-labelledby="dropdownMenuLink_nhaCungCapSeller">
-                        <div class="dropdown-header">Thay đổi sắp xếp:</div>
-                        <a class="dropdown-item" href="#" onclick="toggleChartnhaCungCapSeller('nhieu'); return false;">
-                            <i class="fas fa-sort-amount-down"></i> Nhiều nhất
-                        </a>
-                        <a class="dropdown-item" href="#" onclick="toggleChartnhaCungCapSeller('it'); return false;">
-                            <i class="fas fa-sort-amount-up"></i> Ít nhất
-                        </a>
-                    </div>
-                </div>
+
+            <!-- Thông tin tổng số bài thi -->
+            <div class="mt-3 text-center">
+                <span class="badge badge-info" id="totalExams">
+                    <i class="fas fa-file-alt mr-1"></i>Tổng: 0 bài thi
+                </span>
             </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <canvas id="myChart_nhaCungCapSeller" width="600" height="200"></canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-6 col-lg-7">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary" id="chartTitle_sanphamOnOff_Tien">
-                    Tổng Tiền theo nền tảng
-                </h6>
-            </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <canvas id="myChart_sanphamOnOff_Tien" width="600" height="200"></canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-6 col-lg-7">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary" id="chartTitle_sanphamOnOff_hoaDon_Tien">
-                    Tổng hoá đơn theo nền tảng
-                </h6>
-            </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <canvas id="myChart_sanphamOnOff_hoaDon" width="600" height="200"></canvas>
+
+            <!-- Bảng thống kê chi tiết (tùy chọn) -->
+            <div class="mt-3" id="detailStats" style="display: none;">
+                <table class="table table-sm table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Xếp loại</th>
+                            <th class="text-center">Số lượng</th>
+                            <th class="text-center">Tỷ lệ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="statsTableBody">
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
 
 
-<!-- Top 5 sản phẩm tồn kho ít/nhiều nhất (start) -->
+
 <script>
-    // Dữ liệu từ PHP - Chart Tồn Kho
-    const dataSource_sanPham = {
-        nhieu: {
-            labels: <?php echo json_encode($labels_topNhieu_sanPham); ?>,
-            data: <?php echo json_encode($data_topNhieu_sanPham); ?>,
-            title: '5 sản phẩm có trong kho nhiều nhất'
-        },
-        it: {
-            labels: <?php echo json_encode($labels_topIt_sanPham); ?>,
-            data: <?php echo json_encode($data_topIt_sanPham); ?>,
-            title: '5 sản phẩm có trong kho ít nhất'
-        }
+    // ==================== BIỂU ĐỒ PHỔ ĐIỂM ====================
+
+    let chartPhoDiem = null;
+    let currentCategory = 'all';
+
+    // Màu sắc cho từng xếp loại
+    const colors = {
+        gioi: '#28a745', // Xanh lá - Giỏi
+        kha: '#17a2b8', // Xanh dương - Khá
+        trung_binh: '#ffc107', // Vàng - Trung bình
+        yeu: '#dc3545' // Đỏ - Yếu
     };
 
-    // Khởi tạo chart Tồn Kho
-    const ctx_sanPham = document.getElementById('myChart_sanPham').getContext('2d');
-    const myChart_sanPham = new Chart(ctx_sanPham, {
-        type: 'bar',
-        data: {
-            labels: dataSource_sanPham.nhieu.labels,
-            datasets: [{
-                label: 'Số lượng tồn kho',
-                data: dataSource_sanPham.nhieu.data,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+    // Tên danh mục đầy đủ
+    const categoryNames = {
+        'all': 'Tất cả',
+        'HSK': 'HSK (Tiếng Trung)',
+        'TOPIK': 'TOPIK (Tiếng Hàn)',
+        'TOEIC': 'TOEIC (Tiếng Anh)',
+        'JPN': 'JPN (Tiếng Nhật)'
+    };
+
+    /**
+     * Load dữ liệu phổ điểm từ API
+     */
+    function loadPhoDiemData(category) {
+        // Hiển thị loading
+        document.getElementById('loadingSpinner').style.display = 'block';
+        document.getElementById('chartContainer').style.display = 'none';
+
+        // Xác định đường dẫn API (điều chỉnh theo cấu trúc project)
+        const apiPath = 'dashboard_manager/api_pho_diem.php'; // Đường dẫn từ thư mục admin/
+
+        // Gọi API (file cùng thư mục với dashboard.php)
+        fetch(`${apiPath}?danh_muc=${category}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-            },
-            animation: {
-                duration: 750
-            }
-        }
-    });
-
-    // Hàm toggle chart Tồn Kho
-    function toggleChartSanPham(type) {
-        const source = dataSource_sanPham[type];
-
-        // Update dữ liệu chart
-        myChart_sanPham.data.labels = source.labels;
-        myChart_sanPham.data.datasets[0].data = source.data;
-
-        // Update tiêu đề
-        document.getElementById('chartTitle_sanPham').textContent = source.title;
-
-        // Đổi màu theo loại
-        if (type === 'it') {
-            myChart_sanPham.data.datasets[0].backgroundColor = 'rgba(255, 99, 132, 0.2)';
-            myChart_sanPham.data.datasets[0].borderColor = 'rgba(255, 99, 132, 1)';
-        } else {
-            myChart_sanPham.data.datasets[0].backgroundColor = 'rgba(75, 192, 192, 0.2)';
-            myChart_sanPham.data.datasets[0].borderColor = 'rgba(75, 192, 192, 1)';
-        }
-        myChart_sanPham.update();
+                return response.json();
+            })
+            .then(data => {
+                // Kiểm tra nếu có lỗi
+                if (data.error || (data.success === false)) {
+                    showError(data.error || 'Có lỗi xảy ra khi tải dữ liệu');
+                } else {
+                    // Có dữ liệu hợp lệ - cập nhật biểu đồ
+                    updatePhoDiemChart(data);
+                    updateDetailStats(data);
+                }
+            })
+            .catch(error => {
+                console.error('Lỗi khi tải dữ liệu:', error);
+                showError('Không thể kết nối đến máy chủ. Vui lòng thử lại sau.');
+            })
+            .finally(() => {
+                // Ẩn loading
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('chartContainer').style.display = 'block';
+            });
     }
-</script>
-<!-- Top 5 sản phẩm tồn kho ít/nhiều nhất (end) -->
 
-<!-- Top 5 sản phẩm bán ít/nhiều nhất (start) -->
-<script>
-    // Dữ liệu từ PHP - Chart Bán Hàng
-    const dataSource_sanPhamSeller = {
-        nhieu: {
-            labels: <?php echo json_encode($labels_topNhieu_sanPhamSeller); ?>,
-            data: <?php echo json_encode($data_topNhieu_sanPhamSeller); ?>,
-            title: '5 sản phẩm bán nhiều nhất'
-        },
-        it: {
-            labels: <?php echo json_encode($labels_topIt_sanPhamSeller); ?>,
-            data: <?php echo json_encode($data_topIt_sanPhamSeller); ?>,
-            title: '5 sản phẩm bán ít nhất'
+    /**
+     * Cập nhật biểu đồ với dữ liệu mới
+     */
+    function updatePhoDiemChart(data) {
+        const ctx = document.getElementById('myChart_phoDiem').getContext('2d');
+
+        // Hủy chart cũ nếu có
+        if (chartPhoDiem) {
+            chartPhoDiem.destroy();
         }
-    };
 
-    // Khởi tạo chart Bán Hàng
-    const ctx_sanPhamSeller = document.getElementById('myChart_sanPhamSeller').getContext('2d');
-    const myChart_sanPhamSeller = new Chart(ctx_sanPhamSeller, {
-        type: 'bar',
-        data: {
-            labels: dataSource_sanPhamSeller.nhieu.labels,
-            datasets: [{
-                label: 'Số lượng đã bán',
-                data: dataSource_sanPhamSeller.nhieu.data,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        // Tạo chart mới
+        chartPhoDiem = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    data: data.data,
+                    backgroundColor: [
+                        colors.gioi,
+                        colors.kha,
+                        colors.trung_binh,
+                        colors.yeu
+                    ],
+                    borderColor: '#fff',
+                    borderWidth: 2,
+                    hoverOffset: 10
+                }]
             },
-            animation: {
-                duration: 750
-            }
-        }
-    });
-
-    // Hàm toggle chart Bán Hàng
-    function toggleChartSeller(type) {
-        const source = dataSource_sanPhamSeller[type];
-
-        // Update dữ liệu chart
-        myChart_sanPhamSeller.data.labels = source.labels;
-        myChart_sanPhamSeller.data.datasets[0].data = source.data;
-
-        // Update tiêu đề
-        document.getElementById('chartTitle_sanPhamSeller').textContent = source.title;
-
-        // Đổi màu theo loại
-        if (type === 'it') {
-            myChart_sanPhamSeller.data.datasets[0].backgroundColor = 'rgba(255, 99, 132, 0.2)';
-            myChart_sanPhamSeller.data.datasets[0].borderColor = 'rgba(255, 99, 132, 1)';
-        } else {
-            myChart_sanPhamSeller.data.datasets[0].backgroundColor = 'rgba(75, 192, 192, 0.2)';
-            myChart_sanPhamSeller.data.datasets[0].borderColor = 'rgba(75, 192, 192, 1)';
-        }
-        myChart_sanPhamSeller.update();
-    }
-</script>
-<!-- Top 5 sản phẩm bán ít/nhiều nhất (end) -->
-
-<!-- Tổng tiền theo nền tảng (start) -->
-<script>
-    const labels_sanphamOnOff_Tien = <?php echo json_encode($labels_sanphamOnOff_Tien); ?>;
-    const data_sanphamOnOff_Tien = <?php echo json_encode($data_sanphamOnOff_Tien); ?>;
-    const ctx_sanphamOnOff_Tien = document.getElementById('myChart_sanphamOnOff_Tien').getContext('2d');
-    const myChart_sanphamOnOff_Tien = new Chart(ctx_sanphamOnOff_Tien, {
-        type: 'bar',
-        data: {
-            labels: labels_sanphamOnOff_Tien,
-            datasets: [{
-                label: 'Tổng tiền',
-                data: data_sanphamOnOff_Tien,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-
-                }
-            },
-            animation: {
-                duration: 750
-            }
-        }
-    });
-</script>
-<!-- Tổng tiền theo nền tảng (end) -->
-
-<!-- Tổng hoá đơn theo nền tảng (start) -->
-<script>
-    const labels_sanphamOnOff_hoaDon = <?php echo json_encode($labels_sanphamOnOff_hoaDon); ?>;
-    const data_sanphamOnOff_hoaDon = <?php echo json_encode($data_sanphamOnOff_hoaDon); ?>;
-
-    const ctx_sanphamOnOff_hoaDon = document.getElementById('myChart_sanphamOnOff_hoaDon').getContext('2d');
-    const myChart_sanphamOnOff_hoaDon = new Chart(ctx_sanphamOnOff_hoaDon, {
-        type: 'bar',
-        data: {
-            labels: labels_sanphamOnOff_hoaDon,
-            datasets: [{
-                label: 'Số lượng hóa đơn',
-                data: data_sanphamOnOff_hoaDon,
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1 // bắt trục Y nhảy 1 đơn vị
-                    }
-                }
-            },
-            animation: {
-                duration: 750
-            }
-        }
-    });
-</script>
-<!-- Tổng hoá đơn theo nền tảng (end) -->
-
-<!-- Top 5 loại sản phẩm bán ít/nhiều nhất (start) -->
-<script>
-    // Dữ liệu từ PHP - Chart Bán Hàng
-    const dataSource_loaiSanPhamSeller = {
-        nhieu: {
-            labels: <?php echo json_encode($labels_topNhieu_loaiSanPhamSeller); ?>,
-            data: <?php echo json_encode($data_topNhieu_loaiSanPhamSeller); ?>,
-            title: '5 loại sản phẩm bán nhiều nhất'
-        },
-        it: {
-            labels: <?php echo json_encode($labels_topIt_loaiSanPhamSeller); ?>,
-            data: <?php echo json_encode($data_topIt_loaiSanPhamSeller); ?>,
-            title: '5 loại sản phẩm bán ít nhất'
-        }
-    };
-
-    // Khởi tạo chart Bán Hàng
-    const ctx_loaiSanPhamSeller = document.getElementById('myChart_loaiSanPhamSeller').getContext('2d');
-    const myChart_loaiSanPhamSeller = new Chart(ctx_loaiSanPhamSeller, {
-        type: 'bar',
-        data: {
-            labels: dataSource_loaiSanPhamSeller.nhieu.labels,
-            datasets: [{
-                label: 'Số lượng đã bán',
-                data: dataSource_loaiSanPhamSeller.nhieu.data,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            },
-            animation: {
-                duration: 750
-            }
-        }
-    });
-
-    // Hàm toggle chart Bán Hàng
-    function toggleChartLoaiSanPhamSeller(type) {
-        const source = dataSource_loaiSanPhamSeller[type];
-
-        // Update dữ liệu chart
-        myChart_loaiSanPhamSeller.data.labels = source.labels;
-        myChart_loaiSanPhamSeller.data.datasets[0].data = source.data;
-
-        // Update tiêu đề
-        document.getElementById('chartTitle_loaiSanPhamSeller').textContent = source.title;
-
-        // Đổi màu theo loại
-        if (type === 'it') {
-            myChart_loaiSanPhamSeller.data.datasets[0].backgroundColor = 'rgba(255, 99, 132, 0.2)';
-            myChart_loaiSanPhamSeller.data.datasets[0].borderColor = 'rgba(255, 99, 132, 1)';
-        } else {
-            myChart_loaiSanPhamSeller.data.datasets[0].backgroundColor = 'rgba(75, 192, 192, 0.2)';
-            myChart_loaiSanPhamSeller.data.datasets[0].borderColor = 'rgba(75, 192, 192, 1)';
-        }
-        myChart_loaiSanPhamSeller.update();
-    }
-</script>
-<!-- Top 5 loại sản phẩm bán ít/nhiều nhất (end) -->
-
-<!-- Top 5 nhà cung cấp bán ít/nhiều nhất (start) -->
-<script>
-    // Dữ liệu từ PHP - Chart Bán Hàng
-    const dataSource_nhaCungCapSeller = {
-        nhieu: {
-            labels: <?php echo json_encode($labels_topNhieu_nhaCungCapSeller); ?>,
-            data: <?php echo json_encode($data_topNhieu_nhaCungCapSeller); ?>,
-            title: '5 nhà cung cấp bán nhiều nhất'
-        },
-        it: {
-            labels: <?php echo json_encode($labels_topIt_nhaCungCapSeller); ?>,
-            data: <?php echo json_encode($data_topIt_nhaCungCapSeller); ?>,
-            title: '5 nhà cung cấp bán ít nhất'
-        }
-    };
-
-    // Khởi tạo chart Bán Hàng
-    const ctx_nhaCungCapSeller = document.getElementById('myChart_nhaCungCapSeller').getContext('2d');
-    const myChart_nhaCungCapSeller = new Chart(ctx_nhaCungCapSeller, {
-        type: 'bar',
-        data: {
-            labels: dataSource_nhaCungCapSeller.nhieu.labels,
-            datasets: [{
-                label: 'Số lượng đã bán',
-                data: dataSource_nhaCungCapSeller.nhieu.data,
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            },
-            animation: {
-                duration: 750
-            }
-        }
-    });
-
-    // Hàm toggle chart Bán Hàng
-    function toggleChartnhaCungCapSeller(type) {
-        const source = dataSource_nhaCungCapSeller[type];
-
-        // Update dữ liệu chart
-        myChart_nhaCungCapSeller.data.labels = source.labels;
-        myChart_nhaCungCapSeller.data.datasets[0].data = source.data;
-
-        // Update tiêu đề
-        document.getElementById('chartTitle_nhaCungCapSeller').textContent = source.title;
-
-        // Đổi màu theo loại
-        if (type === 'it') {
-            myChart_nhaCungCapSeller.data.datasets[0].backgroundColor = 'rgba(255, 99, 132, 0.2)';
-            myChart_nhaCungCapSeller.data.datasets[0].borderColor = 'rgba(255, 99, 132, 1)';
-        } else {
-            myChart_nhaCungCapSeller.data.datasets[0].backgroundColor = 'rgba(75, 192, 192, 0.2)';
-            myChart_nhaCungCapSeller.data.datasets[0].borderColor = 'rgba(75, 192, 192, 1)';
-        }
-        myChart_nhaCungCapSeller.update();
-    }
-</script>
-<!-- Top 5 nhà cung cấp bán ít/nhiều nhất (end) -->
-<!-- Doanh thu theo giờ/ngày/tháng (start) -->
-<script>
-    // Dữ liệu từ PHP - Doanh thu theo thời gian
-    const dataSource_doanhThu = {
-        gio: {
-            labels: <?php echo json_encode($labels_doanhThu_gio); ?>,
-            data: <?php echo json_encode($data_doanhThu_gio); ?>,
-            title: 'Doanh thu theo giờ (Hôm nay)',
-            labelText: 'Theo giờ',
-            xAxisLabel: 'Giờ'
-        },
-        ngay: {
-            labels: <?php echo json_encode($labels_doanhThu_ngay); ?>,
-            data: <?php echo json_encode($data_doanhThu_ngay); ?>,
-            title: 'Doanh thu theo ngày (Tháng <?php echo date("m/Y"); ?>)',
-            labelText: 'Theo ngày',
-            xAxisLabel: 'Ngày'
-        },
-        thang: {
-            labels: <?php echo json_encode($labels_doanhThu_thang); ?>,
-            data: <?php echo json_encode($data_doanhThu_thang); ?>,
-            title: 'Doanh thu theo tháng (Năm <?php echo date("Y"); ?>)',
-            labelText: 'Theo tháng',
-            xAxisLabel: 'Tháng'
-        }
-    };
-
-    // Biến lưu trạng thái hiện tại
-    let currentTimeFilter_doanhThu = 'gio';
-
-    // Khởi tạo chart
-    const ctx_doanhThu = document.getElementById('myChart_doanhThu').getContext('2d');
-    const myChart_doanhThu = new Chart(ctx_doanhThu, {
-        type: 'line',
-        data: {
-            labels: dataSource_doanhThu.gio.labels,
-            datasets: [{
-                label: 'Doanh thu (VNĐ)',
-                data: dataSource_doanhThu.gio.data,
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 2,
-                tension: 0.4,
-                fill: true,
-                pointRadius: 4,
-                pointHoverRadius: 6
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return value.toLocaleString('vi-VN') + ' đ';
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 12,
+                                family: "'Nunito', sans-serif"
+                            },
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.label || '';
+                                let value = context.parsed;
+                                let percentage = data.percentages[context.dataIndex];
+                                return `${label}: ${value} bài (${percentage}%)`;
+                            }
                         }
                     }
                 },
-                x: {
-                    title: {
-                        display: true,
-                        text: dataSource_doanhThu.gio.xAxisLabel
-                    }
+                animation: {
+                    animateRotate: true,
+                    animateScale: true
                 }
-            },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return 'Doanh thu: ' + context.parsed.y.toLocaleString('vi-VN') + ' đ';
-                        }
-                    }
-                },
-                legend: {
-                    display: true
-                }
-            },
-            animation: {
-                duration: 750
             }
+        });
+
+        // Cập nhật tổng số bài thi
+        document.getElementById('totalExams').innerHTML =
+            `<i class="fas fa-file-alt mr-1"></i>Tổng: ${data.total} bài thi`;
+    }
+
+    /**
+     * Cập nhật bảng thống kê chi tiết
+     */
+    function updateDetailStats(data) {
+        const tbody = document.getElementById('statsTableBody');
+        tbody.innerHTML = '';
+
+        // Tạo các hàng cho bảng
+        data.labels.forEach((label, index) => {
+            const row = document.createElement('tr');
+            const colorKeys = ['gioi', 'kha', 'trung_binh', 'yeu'];
+            const color = colors[colorKeys[index]];
+
+            row.innerHTML = `
+            <td>
+                <span class="badge" style="background-color: ${color}; color: white;">
+                    ${label}
+                </span>
+            </td>
+            <td class="text-center font-weight-bold">${data.data[index]}</td>
+            <td class="text-center">${data.percentages[index]}%</td>
+        `;
+            tbody.appendChild(row);
+        });
+
+        // Hiển thị bảng nếu có dữ liệu
+        if (data.total > 0) {
+            document.getElementById('detailStats').style.display = 'block';
         }
+    }
+
+    /**
+     * Hiển thị thông báo lỗi
+     */
+    function showError(message) {
+        const container = document.getElementById('chartContainer');
+        container.innerHTML = `
+        <div class="alert alert-danger text-center" role="alert">
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            ${message}
+        </div>
+    `;
+    }
+
+    /**
+     * Thay đổi danh mục
+     */
+    function changePhoDiemCategory(category, element) {
+        currentCategory = category;
+
+        // Cập nhật title
+        document.getElementById('chartTitle_phoDiem').innerHTML =
+            `<i class="fas fa-chart-pie mr-2"></i>Phổ điểm theo danh mục - ${categoryNames[category]}`;
+
+        // Cập nhật active class cho dropdown
+        const dropdownItems = document.querySelectorAll('#dropdownMenuLink_phoDiem + .dropdown-menu .dropdown-item');
+        dropdownItems.forEach(item => {
+            item.classList.remove('active');
+        });
+        element.classList.add('active');
+
+        // Load dữ liệu mới
+        loadPhoDiemData(category);
+    }
+
+    // ==================== EVENT LISTENERS ====================
+
+    // Khởi tạo khi trang load xong
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load dữ liệu ban đầu
+        loadPhoDiemData('all');
     });
 
-    // Hàm thay đổi bộ lọc thời gian
-    function changeTimeFilter_doanhThu(timeType) {
-        currentTimeFilter_doanhThu = timeType;
-
-        const source = dataSource_doanhThu[timeType];
-
-        // Update dữ liệu chart
-        myChart_doanhThu.data.labels = source.labels;
-        myChart_doanhThu.data.datasets[0].data = source.data;
-
-        // Update tiêu đề
-        document.getElementById('chartTitle_doanhThu').textContent = source.title;
-
-        // Update label thời gian
-        document.getElementById('timeLabel_doanhThu').textContent = source.labelText;
-
-        // Update label trục X
-        myChart_doanhThu.options.scales.x.title.text = source.xAxisLabel;
-
-        myChart_doanhThu.update();
-    }
+    // Tự động refresh dữ liệu mỗi 5 phút (tùy chọn)
+    // setInterval(() => {
+    //     loadPhoDiemData(currentCategory);
+    // }, 300000); // 300000ms = 5 phút
 </script>
-<!-- Doanh thu theo giờ/ngày/tháng (end) -->
