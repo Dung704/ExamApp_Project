@@ -58,6 +58,11 @@ if (isset($_POST['submit'])) {
             Giới hạn: ' . $max_post_size . '. Vui lòng chọn ít file hơn hoặc file nhỏ hơn.
         </div>';
     } else {
+        foreach ($_POST as $key => $value) {
+            if (is_string($value)) {
+                $_POST[$key] = mysqli_real_escape_string($conn, trim($value));
+            }
+        }
         $tieu_de = trim($_POST['tieu_de']);
         $noi_dung = trim($_POST['noi_dung']);
         $id_danh_muc = $_POST['id_danh_muc'];
@@ -204,62 +209,62 @@ $query_files_result = mysqli_query($conn, $query_files);
     <form method="post" action="" enctype="multipart/form-data" id="mainForm">
         <h3>Cập nhật bài học</h3>
         <?php while ($u = mysqli_fetch_assoc($query_detail_result)) { ?>
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label>ID:</label>
-                <input type="text" readonly class="form-control" value="<?php echo $u['id']; ?>" disabled>
-            </div>
-            <div class="col-md-4">
-                <label>Tiêu đề:</label>
-                <input type="text" name="tieu_de" class="form-control" required
-                    value="<?php echo htmlspecialchars($u['tieu_de']); ?>">
-            </div>
-            <div class="col-md-4">
-                <label>Link bài học</label>
-                <textarea name="link_bai_hoc" class="form-control" rows="3"
-                    required><?php echo htmlspecialchars($u['link_bai_hoc']); ?></textarea>
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label>ID:</label>
+                    <input type="text" readonly class="form-control" value="<?php echo $u['id']; ?>" disabled>
+                </div>
+                <div class="col-md-4">
+                    <label>Tiêu đề:</label>
+                    <input type="text" name="tieu_de" class="form-control" required
+                        value="<?php echo htmlspecialchars($u['tieu_de']); ?>">
+                </div>
+                <div class="col-md-4">
+                    <label>Link bài học</label>
+                    <textarea name="link_bai_hoc" class="form-control" rows="3"
+                        required><?php echo htmlspecialchars($u['link_bai_hoc']); ?></textarea>
+                </div>
+
             </div>
 
-        </div>
-
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <label>Nội dung bài học</label>
-                <textarea class="form-control" rows="4"
-                    name="noi_dung"><?php echo htmlspecialchars($u['noi_dung']) ?></textarea>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label>Nội dung bài học</label>
+                    <textarea class="form-control" rows="4"
+                        name="noi_dung"><?php echo htmlspecialchars($u['noi_dung']) ?></textarea>
+                </div>
             </div>
-        </div>
 
-        <div class="row mb-3">
-            <div class="col-md-4">
-                <label>Danh mục bài học:</label>
-                <select name="id_danh_muc" class="form-select" required>
-                    <?php
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label>Danh mục bài học:</label>
+                    <select name="id_danh_muc" class="form-select" required>
+                        <?php
                         mysqli_data_seek($query_id_danh_muc_result, 0);
                         while ($r = mysqli_fetch_assoc($query_id_danh_muc_result)):
                         ?>
-                    <option value="<?php echo $r['id']; ?>"
-                        <?php echo $u['id_danh_muc'] == $r['id'] ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($r['ten_danh_muc']); ?>
-                    </option>
-                    <?php endwhile; ?>
-                </select>
-            </div>
-            <div class="col-md-8">
-                <label>Ảnh bài học:</label>
-                <div class="row">
-                    <div class="col">
-                        <input type="file" name="anh_bai_hoc" id="anh_bai_hoc" class="form-control" accept="image/*">
-                        <input type="hidden" name="anh_bai_hoc_cu" value="<?= htmlspecialchars($u['anh_bai_hoc']) ?>">
-                    </div>
+                            <option value="<?php echo $r['id']; ?>"
+                                <?php echo $u['id_danh_muc'] == $r['id'] ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($r['ten_danh_muc']); ?>
+                            </option>
+                        <?php endwhile; ?>
+                    </select>
                 </div>
+                <div class="col-md-8">
+                    <label>Ảnh bài học:</label>
+                    <div class="row">
+                        <div class="col">
+                            <input type="file" name="anh_bai_hoc" id="anh_bai_hoc" class="form-control" accept="image/*">
+                            <input type="hidden" name="anh_bai_hoc_cu" value="<?= htmlspecialchars($u['anh_bai_hoc']) ?>">
+                        </div>
+                    </div>
 
-                <!-- Hiển thị ảnh cũ và ảnh mới preview -->
-                <div class="row mt-3">
-                    <!-- Ảnh hiện tại -->
-                    <div class="col-md-6">
-                        <label class="text-muted">Ảnh hiện tại:</label>
-                        <?php
+                    <!-- Hiển thị ảnh cũ và ảnh mới preview -->
+                    <div class="row mt-3">
+                        <!-- Ảnh hiện tại -->
+                        <div class="col-md-6">
+                            <label class="text-muted">Ảnh hiện tại:</label>
+                            <?php
                             $avatarPath = "../user/image_baihoc/" . $u['anh_bai_hoc'];
                             if (!empty($u['anh_bai_hoc'])) {
                                 echo '<img id="current_image" src="' . htmlspecialchars($avatarPath) . '" 
@@ -270,28 +275,28 @@ $query_files_result = mysqli_query($conn, $query_files);
                 </div>';
                             }
                             ?>
-                    </div>
+                        </div>
 
-                    <!-- Preview ảnh mới -->
-                    <div class="col-md-6">
-                        <label class="text-success">Preview ảnh mới:</label>
-                        <img id="preview_image" src="" alt=""
-                            style="width:100%;max-width:600px;object-fit:cover;border-radius:8px;border:2px solid #28a745;display:none;">
-                        <div id="no_preview_text"
-                            style="width:100%;max-width:300px;height:300px;display:flex;align-items:center;justify-content:center;border:2px dashed #ccc;border-radius:8px;color:#999;">
-                            Chọn ảnh để xem preview
+                        <!-- Preview ảnh mới -->
+                        <div class="col-md-6">
+                            <label class="text-success">Preview ảnh mới:</label>
+                            <img id="preview_image" src="" alt=""
+                                style="width:100%;max-width:600px;object-fit:cover;border-radius:8px;border:2px solid #28a745;display:none;">
+                            <div id="no_preview_text"
+                                style="width:100%;max-width:300px;height:300px;display:flex;align-items:center;justify-content:center;border:2px dashed #ccc;border-radius:8px;color:#999;">
+                                Chọn ảnh để xem preview
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- File hiện có -->
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <label><strong>Tập tin hiện có:</strong></label>
-                <div style="border: 1px solid #ddd; padding: 10px; border-radius: 5px; background: #f9f9f9;">
-                    <?php
+            <!-- File hiện có -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label><strong>Tập tin hiện có:</strong></label>
+                    <div style="border: 1px solid #ddd; padding: 10px; border-radius: 5px; background: #f9f9f9;">
+                        <?php
                         $has_files = false;
                         while ($file = mysqli_fetch_assoc($query_files_result)):
                             $has_files = true;
@@ -301,182 +306,182 @@ $query_files_result = mysqli_query($conn, $query_files);
                                 $display_name = $matches[1];
                             }
                         ?>
-                    <div
-                        style="display: flex; align-items: center; justify-content: space-between; padding: 8px; border-bottom: 1px solid #eee;">
-                        <div>
-                            <strong><?php echo htmlspecialchars($display_name); ?></strong>
-                            <span class="badge bg-info"><?php echo strtoupper($file['loai_tap_tin']); ?></span>
-                            <a href="../user/file_pdf/<?php echo htmlspecialchars($file['duong_dan']); ?>"
-                                target="_blank" class="btn btn-sm btn-outline-primary ms-2">
-                                Tải xuống
-                            </a>
-                        </div>
-                        <a href="index_admin.php?page=edit_lesson&id=<?php echo $id_detail; ?>&delete_file_id=<?php echo $file['id']; ?>"
-                            class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa file này?');">
-                            Xóa
-                        </a>
-                    </div>
-                    <?php endwhile; ?>
+                            <div
+                                style="display: flex; align-items: center; justify-content: space-between; padding: 8px; border-bottom: 1px solid #eee;">
+                                <div>
+                                    <strong><?php echo htmlspecialchars($display_name); ?></strong>
+                                    <span class="badge bg-info"><?php echo strtoupper($file['loai_tap_tin']); ?></span>
+                                    <a href="../user/file_pdf/<?php echo htmlspecialchars($file['duong_dan']); ?>"
+                                        target="_blank" class="btn btn-sm btn-outline-primary ms-2">
+                                        Tải xuống
+                                    </a>
+                                </div>
+                                <a href="index_admin.php?page=edit_lesson&id=<?php echo $id_detail; ?>&delete_file_id=<?php echo $file['id']; ?>"
+                                    class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa file này?');">
+                                    Xóa
+                                </a>
+                            </div>
+                        <?php endwhile; ?>
 
-                    <?php if (!$has_files): ?>
-                    <p class="text-muted mb-0">Chưa có file nào được tải lên.</p>
-                    <?php endif; ?>
+                        <?php if (!$has_files): ?>
+                            <p class="text-muted mb-0">Chưa có file nào được tải lên.</p>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Upload file mới -->
-        <div class="row mb-3">
-            <div class="col-md-12">
-                <label><strong>Thêm tập tin mới:</strong></label>
-                <input type="file" name="files[]" id="files" class="form-control" multiple
-                    accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
-                <small class="text-muted">
-                    Chọn nhiều file PDF, Word, Excel, PowerPoint... (File trùng tên sẽ bị bỏ qua)<br>
-                    <strong>Giới hạn tổng dung lượng: <?php echo ini_get('post_max_size'); ?></strong>
-                </small>
-                <div id="preview_files" style="margin-top:10px; display:flex; flex-direction:column; gap:5px;"></div>
+            <!-- Upload file mới -->
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <label><strong>Thêm tập tin mới:</strong></label>
+                    <input type="file" name="files[]" id="files" class="form-control" multiple
+                        accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
+                    <small class="text-muted">
+                        Chọn nhiều file PDF, Word, Excel, PowerPoint... (File trùng tên sẽ bị bỏ qua)<br>
+                        <strong>Giới hạn tổng dung lượng: <?php echo ini_get('post_max_size'); ?></strong>
+                    </small>
+                    <div id="preview_files" style="margin-top:10px; display:flex; flex-direction:column; gap:5px;"></div>
+                </div>
             </div>
-        </div>
 
-        <button type="submit" name="submit" id="btnSubmit" class="btn btn-primary">Cập nhật</button>
-        <a href="index_admin.php?page=list_lesson" class="btn btn-secondary">Về trang danh sách</a>
+            <button type="submit" name="submit" id="btnSubmit" class="btn btn-primary">Cập nhật</button>
+            <a href="index_admin.php?page=list_lesson" class="btn btn-secondary">Về trang danh sách</a>
         <?php } ?>
     </form>
 </div>
 
 <script>
-let selectedFiles = [];
-const MAX_SIZE = <?php echo return_bytes(ini_get('post_max_size')); ?>;
+    let selectedFiles = [];
+    const MAX_SIZE = <?php echo return_bytes(ini_get('post_max_size')); ?>;
 
-const filesInput = document.getElementById('files');
-const previewContainer = document.getElementById('preview_files');
-const btnSubmit = document.getElementById('btnSubmit');
+    const filesInput = document.getElementById('files');
+    const previewContainer = document.getElementById('preview_files');
+    const btnSubmit = document.getElementById('btnSubmit');
 
-// Preview ảnh bài học
-const anhBaiHocInput = document.getElementById('anh_bai_hoc');
-const previewImage = document.getElementById('preview_image');
-const noPreviewText = document.getElementById('no_preview_text');
+    // Preview ảnh bài học
+    const anhBaiHocInput = document.getElementById('anh_bai_hoc');
+    const previewImage = document.getElementById('preview_image');
+    const noPreviewText = document.getElementById('no_preview_text');
 
-if (anhBaiHocInput) {
-    anhBaiHocInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
+    if (anhBaiHocInput) {
+        anhBaiHocInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
 
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
 
-            reader.onload = function(event) {
-                previewImage.src = event.target.result;
-                previewImage.style.display = 'block';
-                if (noPreviewText) noPreviewText.style.display = 'none';
-            };
+                reader.onload = function(event) {
+                    previewImage.src = event.target.result;
+                    previewImage.style.display = 'block';
+                    if (noPreviewText) noPreviewText.style.display = 'none';
+                };
 
-            reader.readAsDataURL(file);
-        } else {
-            // Nếu không chọn file hoặc file không hợp lệ
-            previewImage.style.display = 'none';
-            if (noPreviewText) noPreviewText.style.display = 'flex';
-        }
-    });
-}
-
-if (filesInput) {
-    filesInput.addEventListener('change', function(e) {
-        const newFiles = Array.from(e.target.files);
-
-        // Thêm file mới vào danh sách (không trùng tên và kích thước)
-        newFiles.forEach(file => {
-            if (!selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
-                selectedFiles.push(file);
+                reader.readAsDataURL(file);
+            } else {
+                // Nếu không chọn file hoặc file không hợp lệ
+                previewImage.style.display = 'none';
+                if (noPreviewText) noPreviewText.style.display = 'flex';
             }
         });
+    }
 
-        // Cập nhật lại input với tất cả file đã chọn
-        updateFileInput();
-        updatePreview();
-    });
-}
+    if (filesInput) {
+        filesInput.addEventListener('change', function(e) {
+            const newFiles = Array.from(e.target.files);
 
-function updateFileInput() {
-    // Tạo DataTransfer mới để chứa tất cả file
-    const dt = new DataTransfer();
-    selectedFiles.forEach(f => dt.items.add(f));
-    filesInput.files = dt.files;
-}
+            // Thêm file mới vào danh sách (không trùng tên và kích thước)
+            newFiles.forEach(file => {
+                if (!selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                    selectedFiles.push(file);
+                }
+            });
 
-function updatePreview() {
-    if (!previewContainer) return;
+            // Cập nhật lại input với tất cả file đã chọn
+            updateFileInput();
+            updatePreview();
+        });
+    }
 
-    previewContainer.innerHTML = '';
+    function updateFileInput() {
+        // Tạo DataTransfer mới để chứa tất cả file
+        const dt = new DataTransfer();
+        selectedFiles.forEach(f => dt.items.add(f));
+        filesInput.files = dt.files;
+    }
 
-    let totalSize = 0;
-    selectedFiles.forEach(file => totalSize += file.size);
+    function updatePreview() {
+        if (!previewContainer) return;
 
-    // Kiểm tra vượt quá giới hạn
-    const isOverLimit = totalSize > MAX_SIZE;
+        previewContainer.innerHTML = '';
 
-    // Disable/Enable nút submit
-    if (btnSubmit) {
+        let totalSize = 0;
+        selectedFiles.forEach(file => totalSize += file.size);
+
+        // Kiểm tra vượt quá giới hạn
+        const isOverLimit = totalSize > MAX_SIZE;
+
+        // Disable/Enable nút submit
+        if (btnSubmit) {
+            if (isOverLimit) {
+                btnSubmit.disabled = true;
+                btnSubmit.classList.remove('btn-primary');
+                btnSubmit.classList.add('btn-secondary');
+                btnSubmit.title = 'Vui lòng giảm dung lượng file';
+            } else {
+                btnSubmit.disabled = false;
+                btnSubmit.classList.remove('btn-secondary');
+                btnSubmit.classList.add('btn-primary');
+                btnSubmit.title = '';
+            }
+        }
+
+        // Cảnh báo nếu vượt quá giới hạn
         if (isOverLimit) {
-            btnSubmit.disabled = true;
-            btnSubmit.classList.remove('btn-primary');
-            btnSubmit.classList.add('btn-secondary');
-            btnSubmit.title = 'Vui lòng giảm dung lượng file';
-        } else {
-            btnSubmit.disabled = false;
-            btnSubmit.classList.remove('btn-secondary');
-            btnSubmit.classList.add('btn-primary');
-            btnSubmit.title = '';
+            const warning = document.createElement('div');
+            warning.className = 'alert alert-danger';
+            warning.innerHTML =
+                '<strong>❌ Lỗi:</strong> Tổng dung lượng file vượt quá giới hạn! Vui lòng bỏ bớt file để có thể cập nhật.';
+            previewContainer.appendChild(warning);
+        }
+
+        selectedFiles.forEach((file, index) => {
+            const div = document.createElement('div');
+            div.style.cssText =
+                'display: flex; align-items: center; gap: 10px; padding: 5px; background: #e9ecef; border-radius: 4px;';
+
+            const fileName = document.createElement('span');
+            fileName.textContent = file.name + ' (' + formatBytes(file.size) + ')';
+            fileName.style.flex = '1';
+
+            const removeBtn = document.createElement('button');
+            removeBtn.textContent = "Xóa";
+            removeBtn.type = "button";
+            removeBtn.className = "btn btn-sm btn-danger";
+            removeBtn.onclick = () => {
+                selectedFiles.splice(index, 1);
+                updateFileInput();
+                updatePreview();
+            };
+
+            div.appendChild(fileName);
+            div.appendChild(removeBtn);
+            previewContainer.appendChild(div);
+        });
+
+        // Hiển thị tổng dung lượng
+        if (selectedFiles.length > 0) {
+            const totalDiv = document.createElement('div');
+            totalDiv.style.cssText = 'padding: 5px; font-weight: bold; color: ' + (isOverLimit ? 'red' : 'green');
+            totalDiv.textContent = 'Tổng dung lượng: ' + formatBytes(totalSize) + ' / ' + formatBytes(MAX_SIZE);
+            previewContainer.appendChild(totalDiv);
         }
     }
 
-    // Cảnh báo nếu vượt quá giới hạn
-    if (isOverLimit) {
-        const warning = document.createElement('div');
-        warning.className = 'alert alert-danger';
-        warning.innerHTML =
-            '<strong>❌ Lỗi:</strong> Tổng dung lượng file vượt quá giới hạn! Vui lòng bỏ bớt file để có thể cập nhật.';
-        previewContainer.appendChild(warning);
+    function formatBytes(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
     }
-
-    selectedFiles.forEach((file, index) => {
-        const div = document.createElement('div');
-        div.style.cssText =
-            'display: flex; align-items: center; gap: 10px; padding: 5px; background: #e9ecef; border-radius: 4px;';
-
-        const fileName = document.createElement('span');
-        fileName.textContent = file.name + ' (' + formatBytes(file.size) + ')';
-        fileName.style.flex = '1';
-
-        const removeBtn = document.createElement('button');
-        removeBtn.textContent = "Xóa";
-        removeBtn.type = "button";
-        removeBtn.className = "btn btn-sm btn-danger";
-        removeBtn.onclick = () => {
-            selectedFiles.splice(index, 1);
-            updateFileInput();
-            updatePreview();
-        };
-
-        div.appendChild(fileName);
-        div.appendChild(removeBtn);
-        previewContainer.appendChild(div);
-    });
-
-    // Hiển thị tổng dung lượng
-    if (selectedFiles.length > 0) {
-        const totalDiv = document.createElement('div');
-        totalDiv.style.cssText = 'padding: 5px; font-weight: bold; color: ' + (isOverLimit ? 'red' : 'green');
-        totalDiv.textContent = 'Tổng dung lượng: ' + formatBytes(totalSize) + ' / ' + formatBytes(MAX_SIZE);
-        previewContainer.appendChild(totalDiv);
-    }
-}
-
-function formatBytes(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
-}
 </script>

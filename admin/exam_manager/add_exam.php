@@ -6,6 +6,11 @@ $new_dt = 'DT' . ($row_max['max_id'] + 1);
 
 // Xử lý submit form
 if (isset($_POST['submit'])) {
+    foreach ($_POST as $key => $value) {
+        if (is_string($value)) {
+            $_POST[$key] = mysqli_real_escape_string($conn, trim($value));
+        }
+    }
     $ten_dt = trim($_POST['ten_de_thi']);
     $mo_ta = trim($_POST['mo_ta']);
     $thoi_gian = trim($_POST['thoi_gian']);

@@ -15,6 +15,11 @@ $rs  = mysqli_query($conn, $sql);
 $row = mysqli_fetch_assoc($rs);
 // Xử lý submit form
 if (isset($_POST['submit'])) {
+    foreach ($_POST as $key => $value) {
+        if (is_string($value)) {
+            $_POST[$key] = mysqli_real_escape_string($conn, trim($value));
+        }
+    }
     $mo_ta = trim($_POST['mo_ta']);
     $muc_do = $_POST['muc_do'];
     $id_de_thi = $id_dThi;
@@ -110,28 +115,28 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                 <?php
                 $i = 1;
                 while ($row = mysqli_fetch_assoc($result_to_show)) { ?>
-                <tr>
-                    <td><?= $i ?></td>
+                    <tr>
+                        <td><?= $i ?></td>
 
-                    <!-- <td><?= $row['id'] ?></td> -->
+                        <!-- <td><?= $row['id'] ?></td> -->
 
-                    <!-- <td>
+                        <!-- <td>
                             <?= $row['id_de_thi'] ?>
                             <?= $row['ten_de_thi'] ? ' (' . $row['ten_de_thi'] . ')' : '' ?>
                         </td> -->
 
-                    <td>
-                        <?= mb_strimwidth($row['noi_dung'], 0, 100, '...') ?>
-                    </td>
+                        <td>
+                            <?= mb_strimwidth($row['noi_dung'], 0, 100, '...') ?>
+                        </td>
 
-                    <td>
-                        <?php if (!empty($row['hinh_anh'])): ?>
-                        <img src="../user/image_cauhoi/<?= $row['hinh_anh'] ?>"
-                            style="width:200px;object-fit:cover;border-radius:6px;">
-                        <?php else: ?>
-                        <span class="text-muted">Không có</span>
-                        <?php endif; ?>
-                    </td>
+                        <td>
+                            <?php if (!empty($row['hinh_anh'])): ?>
+                                <img src="../user/image_cauhoi/<?= $row['hinh_anh'] ?>"
+                                    style="width:200px;object-fit:cover;border-radius:6px;">
+                            <?php else: ?>
+                                <span class="text-muted">Không có</span>
+                            <?php endif; ?>
+                        </td>
 
                         <td><?= $row['muc_do'] ?? 'Chưa xác định' ?></td>
                         <td>
@@ -151,16 +156,16 @@ $result_to_show = mysqli_query($conn, $query_to_show);
 </div>
 
 <script>
-// Preview ảnh bài học
-document.getElementById('hinh_anh').addEventListener('change', function(event) {
-    const preview = document.getElementById('preview_img');
-    const file = event.target.files[0];
-    if (file) {
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = 'block';
-    } else {
-        preview.src = "";
-        preview.style.display = "none";
-    }
-});
+    // Preview ảnh bài học
+    document.getElementById('hinh_anh').addEventListener('change', function(event) {
+        const preview = document.getElementById('preview_img');
+        const file = event.target.files[0];
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        } else {
+            preview.src = "";
+            preview.style.display = "none";
+        }
+    });
 </script>
