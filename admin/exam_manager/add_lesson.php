@@ -93,7 +93,7 @@ if (isset($_POST['submit'])) {
 
                     for ($i = 0; $i < count($files['name']); $i++) {
                         if ($files['error'][$i] == 0) {
-                            $file_name = $files['name'][$i];
+                            $file_name = uniqid() . '_' . $files['name'][$i];
                             $tmp_name  = $files['tmp_name'][$i];
                             $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
@@ -191,7 +191,7 @@ $max_post_size = ini_get('post_max_size');
             <div class="col-md-4">
                 <label>Ảnh bài học:</label>
                 <input type="file" name="anh_bai_hoc" id="anh_bai_hoc" class="form-control" accept="image/*">
-                <img id="preview_img" src="#" style="display:none; width:600px;  object-fit:cover; margin-top:10px;">
+                <img id="preview_img" src="#" style="display:none; width:100%;  object-fit:cover; margin-top:10px;">
             </div>
 
             <div class="col-md-8">
@@ -219,127 +219,127 @@ $max_post_size = ini_get('post_max_size');
 </div>
 
 <script>
-// Preview ảnh bài học
-document.getElementById('anh_bai_hoc').addEventListener('change', function(event) {
-    const preview = document.getElementById('preview_img');
-    const file = event.target.files[0];
-    if (file) {
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = 'block';
-    } else {
-        preview.src = "";
-        preview.style.display = "none";
-    }
-});
+    // Preview ảnh bài học
+    document.getElementById('anh_bai_hoc').addEventListener('change', function(event) {
+        const preview = document.getElementById('preview_img');
+        const file = event.target.files[0];
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        } else {
+            preview.src = "";
+            preview.style.display = "none";
+        }
+    });
 </script>
 
 <script>
-let selectedFiles = [];
+    let selectedFiles = [];
 
-// Lấy giới hạn từ PHP (chuyển sang bytes)
-const maxPostSize = "<?= $max_post_size ?>";
-const maxBytes = parseSize(maxPostSize);
+    // Lấy giới hạn từ PHP (chuyển sang bytes)
+    const maxPostSize = "<?= $max_post_size ?>";
+    const maxBytes = parseSize(maxPostSize);
 
-const filesInput = document.getElementById('files');
-const previewContainer = document.getElementById('preview_files');
-const submitBtn = document.getElementById('submit_btn');
-const currentSizeSpan = document.getElementById('current_size');
+    const filesInput = document.getElementById('files');
+    const previewContainer = document.getElementById('preview_files');
+    const submitBtn = document.getElementById('submit_btn');
+    const currentSizeSpan = document.getElementById('current_size');
 
-//  Hàm chuyển đổi kích thước 
-function parseSize(size) {
-    const units = {
-        K: 1024,
-        M: 1024 * 1024,
-        G: 1024 * 1024 * 1024
-    };
-    const match = size.match(/^(\d+)([KMG])?$/i);
-    if (!match) return 0;
-    return parseInt(match[1]) * (units[match[2]?.toUpperCase()] || 1);
-}
-
-// Hàm format bytes → KB/MB/GB
-function formatBytes(bytes) {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return (bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i];
-}
-
-filesInput.addEventListener('change', function(e) {
-    const files = Array.from(e.target.files);
-
-    // Thêm file mới vào selectedFiles (tránh trùng)
-    files.forEach(file => {
-        if (!selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
-            selectedFiles.push(file);
-        }
-    });
-
-    //  Cập nhật lại input.files bằng DataTransfer
-    updateInputFiles();
-
-    //  Kiểm tra dung lượng
-    checkTotalSize();
-
-    // Hiển thị preview
-    renderPreview();
-});
-
-function updateInputFiles() {
-    const dataTransfer = new DataTransfer();
-    selectedFiles.forEach(file => {
-        dataTransfer.items.add(file);
-    });
-    filesInput.files = dataTransfer.files;
-}
-
-// Hàm kiểm tra tổng dung lượng
-function checkTotalSize() {
-    const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
-
-    currentSizeSpan.textContent = `Đã chọn: ${formatBytes(totalSize)} / ${maxPostSize}`;
-
-    if (totalSize > maxBytes) {
-        currentSizeSpan.style.color = '#dc3545'; // Đỏ
-        currentSizeSpan.style.fontWeight = 'bold';
-        submitBtn.disabled = true;
-        submitBtn.classList.add('btn-secondary');
-        submitBtn.classList.remove('btn-primary');
-        submitBtn.textContent = '⚠️ Vượt quá dung lượng cho phép';
-    } else {
-        currentSizeSpan.style.color = '#007bff'; // Xanh
-        currentSizeSpan.style.fontWeight = 'normal';
-        submitBtn.disabled = false;
-        submitBtn.classList.add('btn-primary');
-        submitBtn.classList.remove('btn-secondary');
-        submitBtn.textContent = 'Thêm bài học';
+    //  Hàm chuyển đổi kích thước 
+    function parseSize(size) {
+        const units = {
+            K: 1024,
+            M: 1024 * 1024,
+            G: 1024 * 1024 * 1024
+        };
+        const match = size.match(/^(\d+)([KMG])?$/i);
+        if (!match) return 0;
+        return parseInt(match[1]) * (units[match[2]?.toUpperCase()] || 1);
     }
-}
 
-function renderPreview() {
-    previewContainer.innerHTML = '';
-    selectedFiles.forEach((file, index) => {
-        const div = document.createElement('div');
-        div.style.cssText =
-            'display:flex; align-items:center; gap:10px; padding:5px; border:1px solid #ddd; border-radius:4px;';
+    // Hàm format bytes → KB/MB/GB
+    function formatBytes(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return (bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i];
+    }
 
-        div.innerHTML = `
+    filesInput.addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+
+        // Thêm file mới vào selectedFiles (tránh trùng)
+        files.forEach(file => {
+            if (!selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+                selectedFiles.push(file);
+            }
+        });
+
+        //  Cập nhật lại input.files bằng DataTransfer
+        updateInputFiles();
+
+        //  Kiểm tra dung lượng
+        checkTotalSize();
+
+        // Hiển thị preview
+        renderPreview();
+    });
+
+    function updateInputFiles() {
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(file => {
+            dataTransfer.items.add(file);
+        });
+        filesInput.files = dataTransfer.files;
+    }
+
+    // Hàm kiểm tra tổng dung lượng
+    function checkTotalSize() {
+        const totalSize = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+
+        currentSizeSpan.textContent = `Đã chọn: ${formatBytes(totalSize)} / ${maxPostSize}`;
+
+        if (totalSize > maxBytes) {
+            currentSizeSpan.style.color = '#dc3545'; // Đỏ
+            currentSizeSpan.style.fontWeight = 'bold';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('btn-secondary');
+            submitBtn.classList.remove('btn-primary');
+            submitBtn.textContent = '⚠️ Vượt quá dung lượng cho phép';
+        } else {
+            currentSizeSpan.style.color = '#007bff'; // Xanh
+            currentSizeSpan.style.fontWeight = 'normal';
+            submitBtn.disabled = false;
+            submitBtn.classList.add('btn-primary');
+            submitBtn.classList.remove('btn-secondary');
+            submitBtn.textContent = 'Thêm bài học';
+        }
+    }
+
+    function renderPreview() {
+        previewContainer.innerHTML = '';
+        selectedFiles.forEach((file, index) => {
+            const div = document.createElement('div');
+            div.style.cssText =
+                'display:flex; align-items:center; gap:10px; padding:5px; border:1px solid #ddd; border-radius:4px;';
+
+            div.innerHTML = `
             <span style="flex:1;">${file.name} <small>(${formatBytes(file.size)})</small></span>
             <button type="button" class="btn btn-sm btn-danger" onclick="removeFile(${index})">Xóa</button>
         `;
 
-        previewContainer.appendChild(div);
-    });
-}
+            previewContainer.appendChild(div);
+        });
+    }
 
-function removeFile(index) {
-    selectedFiles.splice(index, 1);
-    updateInputFiles();
-    checkTotalSize(); // Cập nhật lại kiểm tra dung lượng
-    renderPreview();
-}
+    function removeFile(index) {
+        selectedFiles.splice(index, 1);
+        updateInputFiles();
+        checkTotalSize(); // Cập nhật lại kiểm tra dung lượng
+        renderPreview();
+    }
 
-//  Kiểm tra ban đầu khi trang load
-checkTotalSize();
+    //  Kiểm tra ban đầu khi trang load
+    checkTotalSize();
 </script>
