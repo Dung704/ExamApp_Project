@@ -80,7 +80,7 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                             <?= $row['ten_de_thi'] ? ' (' . $row['ten_de_thi'] . ')' : '' ?>
                         </td> -->
 
-                        <td>
+                        <td class="text-start text-ellipsis">
                             <?= $row['noi_dung'] ?>
                         </td>
 
