@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "<div class='alert alert-danger'>Vui lòng điền đầy đủ thông tin bắt buộc!</div>";
     } elseif (strlen($mat_khau) < 6) {
         echo "<div class='alert alert-danger'>Mật khẩu phải có ít nhất 6 ký tự!</div>";
-    } else {
+    }else {
         // Escape dữ liệu đầu vào
         $email_escaped = mysqli_real_escape_string($dbc, $email);
         $so_dien_thoai_escaped = mysqli_real_escape_string($dbc, $so_dien_thoai);
@@ -167,22 +167,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="mb-3">
         <label for="ngaySinh" class="form-label">Ngày sinh</label>
         <input type="date" class="form-control" id="ngaySinh" name="ngay_sinh"
-            value="<?= htmlspecialchars($ngay_sinh) ?>">
+            value="<?= htmlspecialchars($ngay_sinh) ?>" required>
     </div>
 
     <div class="mb-3">
         <label for="gioiTinh" class="form-label">Giới tính</label>
-        <select class="form-select" id="gioiTinh" name="gioi_tinh">
+        <select name="gioi_tinh" class="form-control" required>
             <option value="">Chọn giới tính</option>
-            <option value="Nam" <?= $gioi_tinh === 'Nam' ? 'selected' : '' ?>>Nam</option>
-            <option value="Nữ" <?= $gioi_tinh === 'Nữ' ? 'selected' : '' ?>>Nữ</option>
+            <option value="1" <?= ($gioi_tinh == '1') ? 'selected' : '' ?>>Nam</option>
+            <option value="2" <?= ($gioi_tinh == '2') ? 'selected' : '' ?>>Nữ</option>
         </select>
 
     </div>
 
     <div class="mb-3">
         <label for="diaChi" class="form-label">Địa chỉ</label>
-        <textarea class="form-control" id="diaChi" name="dia_chi" rows="2"><?= htmlspecialchars($dia_chi) ?></textarea>
+        <textarea required class="form-control" id="diaChi" name="dia_chi"
+            rows="2"><?= htmlspecialchars($dia_chi) ?></textarea>
     </div>
 
 
