@@ -104,7 +104,11 @@ $result_to_show = mysqli_query($conn, $query_to_show);
                         <td><?= $i ?></td>
                         <td><?= $row['id'] ?></td>
                         <td><?= $row['tieu_de'] ?></td>
-                        <td class="text-start text-ellipsis"><?= $row['noi_dung'] ?></td>
+                        <td class="text-start">
+                            <div class="text-ellipsis">
+                                <?= $row['noi_dung'] ?>
+                            </div>
+                        </td>
                         <td>
                             <?php if ($row['anh_bai_hoc'] != null): ?>
                                 <img src="../user/image_baihoc/<?= $row['anh_bai_hoc'] ?>"
