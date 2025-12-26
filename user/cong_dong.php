@@ -32,7 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['noi_dung'])) {
     $rs_insert = mysqli_query($dbc, $sql_insert);
 
     if ($rs_insert) {
-        echo "<script>alert('Đăng câu hỏi thành công');window.location='cong_dong.php'</script>";
+        echo "<script>
+            Swal.fire({
+              icon: 'success',
+              title: 'Thành Công',
+              text: 'Câu hỏi của bạn đã được đăng tải lên hệ thống'
+            }).then(() => {
+              window.location.href = 'cong_dong.php';
+            });
+          </script>";
         exit();
     } else {
         echo "<script>alert('Lỗi khi đăng câu hỏi');window.location='cong_dong.php'</script>";

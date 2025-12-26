@@ -10,6 +10,8 @@ $id_de_thi = $_GET['id'];
 // Đánh dấu bắt đầu phiên thi
 $_SESSION['exam_active'] = true;
 $_SESSION['exam_id'] = $id_de_thi;
+$thoi_gian_bat_dau = date('Y-m-d H:i:s');
+
 
 /* ================= LẤY THÔNG TIN ĐỀ THI ================= */
 $dt = mysqli_fetch_assoc(mysqli_query($dbc,
@@ -51,6 +53,8 @@ $result_q = mysqli_query($dbc,
     <form action="nop_bai.php" method="POST" id="examForm">
         <input type="hidden" name="id_de_thi" value="<?= $id_de_thi ?>">
         <input type="hidden" name="id_kq" value="<?= $id_kq ?>">
+        <input type="hidden" name="thoi_gian_bat_dau" value="<?= $thoi_gian_bat_dau ?>">
+
 
         <div class="exam-container">
             <?php
@@ -129,13 +133,9 @@ $result_q = mysqli_query($dbc,
 </div>
 
 <script>
-function beforeUnloadHandler(e) {
-    navigator.sendBeacon("huy_phien_thi.php");
-
-    e.preventDefault();
-    e.returnValue = "";
-}
-window.addEventListener("beforeunload", beforeUnloadHandler);
+/* ===== BIẾN KIỂM SOÁT ===== */
+let allowSubmit = false;
+let isUnloading = false;
 
 /* ===== TIMER ===== */
 var time = <?= (int)$dt['thoi_gian'] ?> * 60;
@@ -148,9 +148,7 @@ var timer = setInterval(function() {
         min + ":" + (sec < 10 ? "0" + sec : sec);
 
     if (time <= 0) {
-
-        window.removeEventListener("beforeunload", beforeUnloadHandler);
-
+        allowSubmit = true;
         clearInterval(timer);
         document.getElementById("examForm").submit();
     }
@@ -158,6 +156,43 @@ var timer = setInterval(function() {
     time--;
 }, 1000);
 
+/* ===== XỬ LÝ BEFOREUNLOAD ===== */
+function beforeUnloadHandler(e) {
+    if (!allowSubmit) {
+        // Đặt cờ để pagehide/visibilitychange xử lý
+        isUnloading = true;
+
+        e.preventDefault();
+        e.returnValue = "";
+        return "";
+    }
+}
+
+window.addEventListener("beforeunload", beforeUnloadHandler);
+
+/* ===== XỬ LÝ THỰC SỰ RỜI TRANG (quan trọng!) ===== */
+window.addEventListener("pagehide", function(e) {
+    if (!allowSubmit && isUnloading) {
+        navigator.sendBeacon(
+            "huy_phien_thi.php",
+            new URLSearchParams({
+                exam_id: "<?= $id_de_thi ?>"
+            })
+        );
+    }
+});
+
+/* ===== BACKUP: xử lý khi tab ẩn ===== */
+document.addEventListener("visibilitychange", function() {
+    if (document.visibilityState === 'hidden' && !allowSubmit && isUnloading) {
+        navigator.sendBeacon(
+            "huy_phien_thi.php",
+            new URLSearchParams({
+                exam_id: "<?= $id_de_thi ?>"
+            })
+        );
+    }
+});
 
 /* ===== ĐIỀU HƯỚNG CÂU HỎI ===== */
 let currentQuestion = 1;
@@ -181,6 +216,7 @@ document.getElementById('nextBtn').onclick = function() {
         showQuestion(currentQuestion);
     }
 };
+
 document.getElementById('prevBtn').onclick = function() {
     if (currentQuestion > 1) {
         currentQuestion--;
@@ -204,17 +240,14 @@ document.querySelectorAll(".answer-input").forEach(input => {
         item.classList.add("answered");
     });
 });
+
 /* ===== ĐÁNH DẤU CÂU ĐANG LÀM ===== */
 document.querySelectorAll(".exam-question").forEach(q => {
-
     q.addEventListener("click", function() {
-
-        // Bỏ trạng thái current của tất cả câu
         document.querySelectorAll(".q-item").forEach(i => {
             i.classList.remove("current");
         });
 
-        // Lấy index câu hiện tại
         let qIndex = this.dataset.index;
         let item = document.getElementById("q_item_" + qIndex);
 
@@ -224,9 +257,7 @@ document.querySelectorAll(".exam-question").forEach(q => {
     });
 });
 
-
-
-
+/* ===== XÁC NHẬN NỘP BÀI ===== */
 document.getElementById("examForm").addEventListener("submit", function(e) {
     e.preventDefault();
 
@@ -241,31 +272,11 @@ document.getElementById("examForm").addEventListener("submit", function(e) {
         cancelButtonColor: "#d33"
     }).then((result) => {
         if (result.isConfirmed) {
-
+            allowSubmit = true;
             window.removeEventListener("beforeunload", beforeUnloadHandler);
-
             this.submit();
         }
     });
-});
-
-let allowSubmit = false;
-
-/* Khi người dùng rời trang mà KHÔNG nộp bài */
-window.addEventListener("beforeunload", function() {
-    if (!allowSubmit) {
-        navigator.sendBeacon(
-            "huy_phien_thi.php",
-            new URLSearchParams({
-                exam_id: "<?= $id_de_thi ?>"
-            })
-        );
-    }
-});
-
-/* Khi nộp bài hợp lệ */
-document.getElementById("examForm").addEventListener("submit", function() {
-    allowSubmit = true;
 });
 </script>
 

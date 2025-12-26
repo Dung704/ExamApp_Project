@@ -17,6 +17,7 @@ if (!isset($_POST['id_de_thi'])) {
 
 $id_de_thi = $_POST['id_de_thi'];
 $id_user   = $_SESSION['user_id'];
+$thoi_gian_bat_dau = $_POST['thoi_gian_bat_dau'];
 
 if ($_SESSION['exam_id'] != $id_de_thi) {
     die("Dữ liệu phiên không khớp.");
@@ -31,8 +32,8 @@ $so_moi = ($row_max['max_id'] ?? 0) + 1;
 $id_kq = 'KQ' . $so_moi;
 
 mysqli_query($dbc, "
-    INSERT INTO ket_qua_thi(id, id_nguoi_dung, id_de_thi, diem_so, thoi_gian_bat_dau)
-    VALUES('$id_kq', '$id_user', '$id_de_thi', 0, NOW())
+    INSERT INTO ket_qua_thi(id, id_nguoi_dung, id_de_thi, diem_so, thoi_gian_bat_dau, thoi_gian_nop)
+    VALUES('$id_kq', '$id_user', '$id_de_thi', 0, '$thoi_gian_bat_dau', NOW())
 ");
 
 /* ===== CHẤM BÀI ===== */
